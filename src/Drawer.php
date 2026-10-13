@@ -91,6 +91,9 @@ class Drawer extends Widget
     public bool $sheet = false;
     /**
      * Content of the `.drawer-title` element, or `null` to omit the title.
+     *
+     * The drawer references the title by `aria-labelledby` unless {@see $options} already sets `aria-label` or
+     * `aria-labelledby`, either flat (`aria-label`) or nested (`aria => ['label' => ...]`).
      */
     public string|Stringable|null $title = null;
     /**
@@ -194,7 +197,13 @@ class Drawer extends Widget
 
         $options['tabindex'] ??= '-1';
 
-        if ($this->title !== null && !isset($aria['label']) && !isset($aria['labelledby'])) {
+        if (
+            $this->title !== null
+            && !isset($options['aria-label'])
+            && !isset($options['aria-labelledby'])
+            && !isset($aria['label'])
+            && !isset($aria['labelledby'])
+        ) {
             $aria['labelledby'] = $this->titleId();
         }
 
@@ -316,7 +325,10 @@ class Drawer extends Widget
             $data['bs-target'] ??= '#' . $this->elementId();
         }
 
-        $aria['controls'] ??= $this->elementId();
+        if (!isset($options['aria-controls'])) {
+            $aria['controls'] ??= $this->elementId();
+        }
+
         $options['data'] = $data;
         $options['aria'] = $aria;
         $label = is_string($label) ? $label : '';

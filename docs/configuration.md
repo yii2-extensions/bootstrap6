@@ -403,8 +403,8 @@ Value objects: `CarouselItem::to($content)`, then `withOptions()` for the `.caro
 ### Chips
 
 `options` applies to the `.form-ghost` text input. A hidden input (`{id}-value`) submits the chips joined by the
-separator and is kept in sync by a `change.bs.chips` listener. Initial chips come from the attribute or `value`, as an
-array or a joined string.
+separator and is kept in sync by a `change.bs.chips` listener; it copies `disabled` and `form` from `options`, so a
+disabled field submits nothing. Initial chips come from the attribute or `value`, as an array or a joined string.
 
 | Property           | Type           | Default | Description                                                               |
 | ------------------ | -------------- | ------- | ------------------------------------------------------------------------- |
@@ -472,48 +472,48 @@ the user; in inline mode a hidden input keeps the `YYYY-MM-DD` value (comma-sepa
 
 Renders a native `<dialog class="dialog">`. Content captured between `begin()` and `end()` goes into `.dialog-body`.
 
-| Property          | Type                       | Default | Description                                                                |
-| ----------------- | -------------------------- | ------- | -------------------------------------------------------------------------- |
-| `backdrop`        | `bool\|string`             | `true`  | `true` closes on backdrop click, `false` hides it, `static` keeps it open. |
-| `bodyOptions`     | `array`                    | `[]`    | Attributes of `.dialog-body`.                                              |
-| `closeButton`     | `array\|false`             | `[]`    | Close button attributes (`Html::closeButton()`); `false` omits it.         |
-| `encodeTitle`     | `bool`                     | `true`  | HTML-encode `title`.                                                       |
-| `footer`          | `string\|Stringable\|null` | `null`  | Content of `.dialog-footer` (not encoded).                                 |
-| `footerOptions`   | `array`                    | `[]`    | Attributes of `.dialog-footer`.                                            |
-| `fullscreenBelow` | `Breakpoint\|string\|null` | `null`  | `md` renders `md-down:dialog-fullscreen`.                                  |
-| `headerOptions`   | `array`                    | `[]`    | Attributes of `.dialog-header`.                                            |
-| `instant`         | `bool`                     | `false` | Disable the animations (`.dialog-instant`).                                |
-| `keyboard`        | `bool`                     | `true`  | Close with Escape; `false` renders `data-bs-keyboard="false"`.             |
-| `nonModal`        | `bool`                     | `false` | Non-modal dialog (`data-bs-modal="false"`).                                |
-| `scrollable`      | `bool`                     | `false` | Scroll the body only (`.dialog-scrollable`).                               |
-| `size`            | `DialogSize\|string\|null` | `null`  | Size class.                                                                |
-| `slide`           | `string\|null`             | `null`  | `up` or `down` (`.dialog-slide-{value}`).                                  |
-| `title`           | `string\|Stringable\|null` | `null`  | `.dialog-title`, referenced by `aria-labelledby`.                          |
-| `titleOptions`    | `array`                    | `[]`    | Title attributes; `tag` defaults to `h1`, `id` to `{id}-label`.            |
-| `toggleButton`    | `array\|false`             | `false` | Toggle button with `label` (translated `Show`), `encode`, and `tag`.       |
+| Property          | Type                       | Default | Description                                                                                    |
+| ----------------- | -------------------------- | ------- | ---------------------------------------------------------------------------------------------- |
+| `backdrop`        | `bool\|string`             | `true`  | `true` closes on backdrop click, `false` hides it, `static` keeps it open.                     |
+| `bodyOptions`     | `array`                    | `[]`    | Attributes of `.dialog-body`.                                                                  |
+| `closeButton`     | `array\|false`             | `[]`    | Close button attributes (`Html::closeButton()`); `false` omits it.                             |
+| `encodeTitle`     | `bool`                     | `true`  | HTML-encode `title`.                                                                           |
+| `footer`          | `string\|Stringable\|null` | `null`  | Content of `.dialog-footer` (not encoded).                                                     |
+| `footerOptions`   | `array`                    | `[]`    | Attributes of `.dialog-footer`.                                                                |
+| `fullscreenBelow` | `Breakpoint\|string\|null` | `null`  | `md` renders `md-down:dialog-fullscreen`.                                                      |
+| `headerOptions`   | `array`                    | `[]`    | Attributes of `.dialog-header`.                                                                |
+| `instant`         | `bool`                     | `false` | Disable the animations (`.dialog-instant`).                                                    |
+| `keyboard`        | `bool`                     | `true`  | Close with Escape; `false` renders `data-bs-keyboard="false"`.                                 |
+| `nonModal`        | `bool`                     | `false` | Non-modal dialog (`data-bs-modal="false"`).                                                    |
+| `scrollable`      | `bool`                     | `false` | Scroll the body only (`.dialog-scrollable`).                                                   |
+| `size`            | `DialogSize\|string\|null` | `null`  | Size class.                                                                                    |
+| `slide`           | `string\|null`             | `null`  | `up` or `down` (`.dialog-slide-{value}`).                                                      |
+| `title`           | `string\|Stringable\|null` | `null`  | `.dialog-title`, referenced by `aria-labelledby` unless `aria-label`/`aria-labelledby` is set. |
+| `titleOptions`    | `array`                    | `[]`    | Title attributes; `tag` defaults to `h1`, `id` to `{id}-label`.                                |
+| `toggleButton`    | `array\|false`             | `false` | Toggle button with `label` (translated `Show`), `encode`, and `tag`.                           |
 
 ### Drawer
 
 Renders a native `<dialog class="drawer">`. Content captured between `begin()` and `end()` goes into `.drawer-body`.
 
-| Property        | Type                            | Default                  | Description                                          |
-| --------------- | ------------------------------- | ------------------------ | ---------------------------------------------------- |
-| `backdrop`      | `bool\|string`                  | `true`                   | Same values as `Dialog::$backdrop`.                  |
-| `bodyOptions`   | `array`                         | `[]`                     | Attributes of `.drawer-body`.                        |
-| `closeButton`   | `array\|false`                  | `[]`                     | Close button attributes; `false` omits it.           |
-| `encodeTitle`   | `bool`                          | `true`                   | HTML-encode `title`.                                 |
-| `footer`        | `string\|Stringable\|null`      | `null`                   | Content of `.drawer-footer` (not encoded).           |
-| `footerOptions` | `array`                         | `[]`                     | Attributes of `.drawer-footer`.                      |
-| `fullscreen`    | `bool`                          | `false`                  | Cover the viewport; replaces the placement class.    |
-| `headerOptions` | `array`                         | `[]`                     | Attributes of `.drawer-header`.                      |
-| `keyboard`      | `bool`                          | `true`                   | Close with Escape.                                   |
-| `placement`     | `DrawerPlacement\|string\|null` | `DrawerPlacement::START` | Placement class; `null` omits it.                    |
-| `responsive`    | `Breakpoint\|string\|null`      | `null`                   | Render inline from the breakpoint up (`lg:drawer`).  |
-| `scroll`        | `bool`                          | `false`                  | Keep the page scrollable (`data-bs-scroll="true"`).  |
-| `sheet`         | `bool`                          | `false`                  | Flush against the viewport edge (`.drawer-sheet`).   |
-| `title`         | `string\|Stringable\|null`      | `null`                   | `.drawer-title`, referenced by `aria-labelledby`.    |
-| `titleOptions`  | `array`                         | `[]`                     | Title attributes; `tag` defaults to `h5`.            |
-| `toggleButton`  | `array\|false`                  | `false`                  | Toggle button, same keys as `Dialog::$toggleButton`. |
+| Property        | Type                            | Default                  | Description                                                                                    |
+| --------------- | ------------------------------- | ------------------------ | ---------------------------------------------------------------------------------------------- |
+| `backdrop`      | `bool\|string`                  | `true`                   | Same values as `Dialog::$backdrop`.                                                            |
+| `bodyOptions`   | `array`                         | `[]`                     | Attributes of `.drawer-body`.                                                                  |
+| `closeButton`   | `array\|false`                  | `[]`                     | Close button attributes; `false` omits it.                                                     |
+| `encodeTitle`   | `bool`                          | `true`                   | HTML-encode `title`.                                                                           |
+| `footer`        | `string\|Stringable\|null`      | `null`                   | Content of `.drawer-footer` (not encoded).                                                     |
+| `footerOptions` | `array`                         | `[]`                     | Attributes of `.drawer-footer`.                                                                |
+| `fullscreen`    | `bool`                          | `false`                  | Cover the viewport; replaces the placement class.                                              |
+| `headerOptions` | `array`                         | `[]`                     | Attributes of `.drawer-header`.                                                                |
+| `keyboard`      | `bool`                          | `true`                   | Close with Escape.                                                                             |
+| `placement`     | `DrawerPlacement\|string\|null` | `DrawerPlacement::START` | Placement class; `null` omits it.                                                              |
+| `responsive`    | `Breakpoint\|string\|null`      | `null`                   | Render inline from the breakpoint up (`lg:drawer`).                                            |
+| `scroll`        | `bool`                          | `false`                  | Keep the page scrollable (`data-bs-scroll="true"`).                                            |
+| `sheet`         | `bool`                          | `false`                  | Flush against the viewport edge (`.drawer-sheet`).                                             |
+| `title`         | `string\|Stringable\|null`      | `null`                   | `.drawer-title`, referenced by `aria-labelledby` unless `aria-label`/`aria-labelledby` is set. |
+| `titleOptions`  | `array`                         | `[]`                     | Title attributes; `tag` defaults to `h5`.                                                      |
+| `toggleButton`  | `array\|false`                  | `false`                  | Toggle button, same keys as `Dialog::$toggleButton`.                                           |
 
 ### LinkPager
 
@@ -756,9 +756,11 @@ When no item is active, the first visible, enabled pane is activated.
 | `tabContentOptions` | `array`              | `[]`             | Attributes of `.tab-content`.                             |
 
 Item keys: `label` (required), `content`, `active`, `disabled`, `visible`, `encode`, `headerOptions`, `linkOptions`
-(`id` defaults to `{id}-tab{n}`), `options` (`id` defaults to `{id}-pane{n}`), `url` (plain link that takes `active`
-and `disabled`), and `items` (tabs inside a `Menu`; a nested item with `items` renders as a `.submenu` wrapped by its
-`headerOptions`, and an active nested tab activates the outer toggle only).
+(`id` defaults to `{id}-tab{n}`), `options` (`id` defaults to `{id}-pane{n}`), `url` (plain link that takes `active` and
+`disabled`), and `items` (tabs inside a `Menu`; nested arrays with a `url` key, even `null`, or without a `label` are
+`Menu` items, a nested item with `items` renders as a `.submenu` wrapped by its `headerOptions`, an active nested tab or
+`MenuItem` activates the outer toggle only, an `active` toggle renders active even when none of its items is, and a
+`disabled` toggle renders with the `disabled` attribute and is never active).
 
 Value objects: `TabItem::to($label, $content = null)`, `TabItem::link($label, $url)`, and `TabItem::menu($label, array
 $items)`, whose `$items` are `TabItem` objects (menu buttons with their panes, menu links for `TabItem::link()`,
@@ -788,7 +790,8 @@ The plugin is always initialized, but the toast stays hidden until `show()` is c
 ### ToggleButtonGroup
 
 Renders `<label class="btn-check ..."><input ...>Label</label>` items. With a model, a hidden input submits an empty
-value when nothing is selected; the `unselect` key of `options` changes it.
+value when nothing is selected; the `unselect` key of `options` changes it, and the hidden input is disabled together
+with the inputs when `inputOptions` carries `disabled`.
 
 | Property       | Type                       | Default                  | Description                                       |
 | -------------- | -------------------------- | ------------------------ | ------------------------------------------------- |

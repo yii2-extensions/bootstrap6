@@ -62,6 +62,34 @@ final class DrawerTest extends TestCase
             ),
             'Configured `aria-labelledby` must be kept.',
         );
+        self::assertSameHtml(
+            <<<HTML
+            <dialog id="w2" class="drawer drawer-start" aria-label="Custom" tabindex="-1">
+            <div class="drawer-header">
+            <h5 id="w2-label" class="drawer-title">Title</h5>
+            </div>
+            <div class="drawer-body">
+            body
+            </div>
+            </dialog>
+            HTML,
+            self::render(['closeButton' => false, 'options' => ['aria-label' => 'Custom'], 'title' => 'Title']),
+            'Flat `aria-label` must replace `aria-labelledby`.',
+        );
+        self::assertSameHtml(
+            <<<HTML
+            <dialog id="w3" class="drawer drawer-start" aria-labelledby="other" tabindex="-1">
+            <div class="drawer-header">
+            <h5 id="w3-label" class="drawer-title">Title</h5>
+            </div>
+            <div class="drawer-body">
+            body
+            </div>
+            </dialog>
+            HTML,
+            self::render(['closeButton' => false, 'options' => ['aria-labelledby' => 'other'], 'title' => 'Title']),
+            'Flat `aria-labelledby` must be kept without a generated one.',
+        );
     }
 
     public function testBeginBuffersContentUntilEnd(): void
@@ -578,6 +606,18 @@ final class DrawerTest extends TestCase
             HTML,
             self::render(['closeButton' => false, 'toggleButton' => ['label' => null, 'tag' => 'span']]),
             'Non-string label must render empty content.',
+        );
+        self::assertSameHtml(
+            <<<HTML
+            <button type="button" class="btn-solid theme-primary" aria-controls="other" data-bs-toggle="drawer" data-bs-target="#w3">Show</button>
+            <dialog id="w3" class="drawer drawer-start" tabindex="-1">
+            <div class="drawer-body">
+            body
+            </div>
+            </dialog>
+            HTML,
+            self::render(['closeButton' => false, 'toggleButton' => ['aria-controls' => 'other']]),
+            'Flat `aria-controls` must be kept without a generated one.',
         );
     }
 

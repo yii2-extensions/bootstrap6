@@ -20,7 +20,8 @@ use function trim;
  * Renders a Bootstrap chip input: a `.chip-input` container with the initial chips, a `.form-ghost` text input and a
  * hidden input that submits the chip values.
  *
- * {@see $options} applies to the ghost input, so labels target the visible field. The container receives the `id`
+ * {@see $options} applies to the ghost input, so labels target the visible field; the hidden input copies its
+ * `disabled` and `form` attributes, so a disabled field submits nothing. The container receives the `id`
  * `{id}-chips`, carries the plugin `data-bs-*` attributes and the client events. The chips come from the model
  * attribute or {@see $value} (an array, or a string joined by {@see $separator}) and are submitted joined by the same
  * separator, kept in sync by a `change.bs.chips` listener.
@@ -135,16 +136,25 @@ class Chips extends InputWidget
     /**
      * Renders the hidden input that submits the chip values.
      *
+     * The hidden input copies the `disabled` and `form` attributes of the ghost input, so a disabled field submits
+     * nothing.
+     *
      * @param string $id `id` of the hidden input.
      * @param string $value Chip values joined by the separator.
      */
     protected function renderHiddenInput(string $id, string $value): string
     {
+        $hiddenOptions = [
+            'id' => $id,
+            'disabled' => $this->options['disabled'] ?? null,
+            'form' => $this->options['form'] ?? null,
+        ];
+
         if ($this->model instanceof Model && is_string($this->attribute)) {
-            return Html::activeHiddenInput($this->model, $this->attribute, ['id' => $id, 'value' => $value]);
+            return Html::activeHiddenInput($this->model, $this->attribute, [...$hiddenOptions, 'value' => $value]);
         }
 
-        return Html::hiddenInput((string) $this->name, $value, ['id' => $id]);
+        return Html::hiddenInput((string) $this->name, $value, $hiddenOptions);
     }
 
     /**

@@ -96,6 +96,9 @@ class Dialog extends Widget
     public string|null $slide = null;
     /**
      * Content of the `.dialog-title` element, or `null` to omit the title.
+     *
+     * The dialog references the title by `aria-labelledby` unless {@see $options} already sets `aria-label` or
+     * `aria-labelledby`, either flat (`aria-label`) or nested (`aria => ['label' => ...]`).
      */
     public string|Stringable|null $title = null;
     /**
@@ -210,7 +213,13 @@ class Dialog extends Widget
             Html::addCssClass($options, ['instant' => 'dialog-instant']);
         }
 
-        if ($this->title !== null && !isset($aria['label']) && !isset($aria['labelledby'])) {
+        if (
+            $this->title !== null
+            && !isset($options['aria-label'])
+            && !isset($options['aria-labelledby'])
+            && !isset($aria['label'])
+            && !isset($aria['labelledby'])
+        ) {
             $aria['labelledby'] = $this->titleId();
         }
 

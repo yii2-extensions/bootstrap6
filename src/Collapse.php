@@ -147,7 +147,11 @@ class Collapse extends Widget
         }
 
         $aria['expanded'] = $this->show ? 'true' : 'false';
-        $aria['controls'] ??= $id;
+
+        if (!isset($options['aria-controls'])) {
+            $aria['controls'] ??= $id;
+        }
+
         $options['data'] = $data;
         $options['aria'] = $aria;
         $label = is_string($label) ? $label : '';

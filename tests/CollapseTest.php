@@ -240,6 +240,16 @@ final class CollapseTest extends TestCase
             self::render(['toggleButton' => ['label' => null, 'tag' => 'span']]),
             'Non-string label must render empty content.',
         );
+        self::assertSameHtml(
+            <<<HTML
+            <button type="button" class="btn-solid theme-primary" aria-controls="other" data-bs-toggle="collapse" data-bs-target="#w3" aria-expanded="false">Show</button>
+            <div id="w3" class="collapse">
+            body
+            </div>
+            HTML,
+            self::render(['toggleButton' => ['aria-controls' => 'other']]),
+            'Flat `aria-controls` must be kept without a generated one.',
+        );
     }
 
     public function testTogglerMethodsEnableToggleButton(): void

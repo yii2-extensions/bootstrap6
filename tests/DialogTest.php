@@ -62,6 +62,34 @@ final class DialogTest extends TestCase
             ),
             'Configured `aria-labelledby` must be kept.',
         );
+        self::assertSameHtml(
+            <<<HTML
+            <dialog id="w2" class="dialog" aria-label="Custom">
+            <div class="dialog-header">
+            <h1 id="w2-label" class="dialog-title">Title</h1>
+            </div>
+            <div class="dialog-body">
+            body
+            </div>
+            </dialog>
+            HTML,
+            self::render(['closeButton' => false, 'options' => ['aria-label' => 'Custom'], 'title' => 'Title']),
+            'Flat `aria-label` must replace `aria-labelledby`.',
+        );
+        self::assertSameHtml(
+            <<<HTML
+            <dialog id="w3" class="dialog" aria-labelledby="other">
+            <div class="dialog-header">
+            <h1 id="w3-label" class="dialog-title">Title</h1>
+            </div>
+            <div class="dialog-body">
+            body
+            </div>
+            </dialog>
+            HTML,
+            self::render(['closeButton' => false, 'options' => ['aria-labelledby' => 'other'], 'title' => 'Title']),
+            'Flat `aria-labelledby` must be kept without a generated one.',
+        );
     }
 
     public function testBeginBuffersContentUntilEnd(): void

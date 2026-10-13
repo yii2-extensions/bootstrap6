@@ -81,6 +81,50 @@ final class ChipsTest extends TestCase
         );
     }
 
+    public function testRenderHiddenInputCopiesDisabledAndForm(): void
+    {
+        $this->mockWebApplication();
+
+        self::assertSameHtml(
+            <<<HTML
+            <div id="w0-chips" class="chip-input" data-bs-chips>
+            <span class="chip">a</span>
+            <input type="text" id="w0" class="form-ghost" form="f1" disabled>
+            <input type="hidden" id="w0-value" name="tags" value="a" form="f1" disabled>
+            </div>
+            HTML,
+            Chips::widget(['name' => 'tags', 'options' => ['disabled' => true, 'form' => 'f1'], 'value' => 'a']),
+            'Named hidden input must be disabled and bound to the form.',
+        );
+
+        $user = new User();
+
+        $user->username = 'a';
+
+        self::assertSameHtml(
+            <<<HTML
+            <div id="user-username-chips" class="chip-input" data-bs-chips>
+            <span class="chip">a</span>
+            <input type="text" id="user-username" class="form-ghost" disabled>
+            <input type="hidden" id="user-username-value" name="User[username]" value="a" disabled>
+            </div>
+            HTML,
+            Chips::widget(['model' => $user, 'attribute' => 'username', 'options' => ['disabled' => true]]),
+            'Model hidden input must be disabled.',
+        );
+        self::assertSameHtml(
+            <<<HTML
+            <div id="w1-chips" class="chip-input" data-bs-chips>
+            <span class="chip">a</span>
+            <input type="text" id="w1" class="form-ghost">
+            <input type="hidden" id="w1-value" name="tags" value="a">
+            </div>
+            HTML,
+            Chips::widget(['name' => 'tags', 'options' => ['disabled' => false], 'value' => 'a']),
+            'Enabled field must leave the hidden input submittable.',
+        );
+    }
+
     public function testRenderHiddenInputIsOverridable(): void
     {
         $this->mockWebApplication();
