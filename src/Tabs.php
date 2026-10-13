@@ -50,7 +50,8 @@ class Tabs extends Widget
      * - `label`: `string|Stringable`, required.
      * - `content`: `string|Stringable`, HTML content of the pane.
      * - `active`: `bool`, whether the tab and its pane, or the link tab, are active.
-     * - `disabled`: `bool`, disables the tab button, or the link tab, which loses its `href`.
+     * - `disabled`: `bool`, disables the tab button, the link tab, which loses its `href`, or the menu toggle; a
+     *   disabled toggle is never marked active.
      * - `visible`: `bool`, whether to render the tab and its pane. Defaults to `true`.
      * - `encode`: `bool`, whether to HTML-encode the label.
      * - `headerOptions`: `array`, HTML attributes of the `.nav-item` element.
@@ -254,7 +255,7 @@ class Tabs extends Widget
      *
      * @param array<array-key, MenuItem|string|TabItem> $items Children of the menu toggle.
      * @param string $menuSuffix Suffix inserted in the default `id` values of the tab buttons and panes.
-     * @param bool $active Set to `true` when a tab or link at any depth is explicitly active.
+     * @param bool $active Set to `true` when a tab, link, or menu item at any depth is explicitly active.
      *
      * @return list<MenuItem|string>
      */
@@ -264,6 +265,7 @@ class Tabs extends Widget
 
         foreach ($items as $m => $child) {
             if (!$child instanceof TabItem) {
+                $active = $active || $this->hasActiveTab([$child]);
                 $menuItems[] = $child;
 
                 continue;
@@ -375,7 +377,9 @@ class Tabs extends Widget
         $active = false;
         $menuItems = $this->menuItems($item->items, $menuSuffix, $active);
 
-        if ($active) {
+        if ($item->disabled) {
+            $linkOptions['disabled'] = true;
+        } elseif ($active) {
             Html::addCssClass($linkOptions, ['activate' => 'active']);
         }
 

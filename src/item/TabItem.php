@@ -25,8 +25,8 @@ final readonly class TabItem
      * {@see \yii\helpers\Url::to()}, or `null` for a tab with a pane.
      * @param bool|null $active Whether the tab and its pane, or the link, are active, or `null` to let `Tabs` activate
      * the first eligible tab when none is active.
-     * @param bool $disabled Whether the tab button, or the link, is disabled; a disabled link loses its `href` and
-     * takes precedence over {@see $active}.
+     * @param bool $disabled Whether the tab button, the link, or the menu toggle is disabled; a disabled link loses its
+     * `href` and takes precedence over {@see $active}, and a disabled toggle is never marked active.
      * @param bool $visible Whether to render the tab and its pane.
      * @param bool|null $encode Whether to HTML-encode {@see $label}, or `null` to use `Tabs::$encodeLabels`.
      * @param array<array-key, mixed> $headerOptions HTML attributes of the `.nav-item` element.

@@ -66,6 +66,32 @@ final class TabsTest extends TestCase
         );
     }
 
+    public function testRenderDisabledMenuToggle(): void
+    {
+        $this->mockWebApplication();
+
+        self::assertSameHtml(
+            <<<HTML
+            <ul id="w0" class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button type="button" class="nav-link" disabled data-bs-toggle="menu" aria-expanded="false">M</button><div id="w1" class="menu"><button type="button" id="w0-dd0-tab0" class="active menu-item" data-bs-toggle="tab" data-bs-target="#w0-dd0-pane0" role="tab" aria-controls="w0-dd0-pane0" aria-selected="true">A</button></div></li>
+            <li class="nav-item" role="presentation"><button type="button" class="nav-link" disabled data-bs-toggle="menu" aria-expanded="false">N</button><div id="w2" class="menu"><button type="button" id="w0-dd1-tab0" class="menu-item" data-bs-toggle="tab" data-bs-target="#w0-dd1-pane0" role="tab" aria-controls="w0-dd1-pane0" aria-selected="false">B</button></div></li>
+            <li class="nav-item" role="presentation"><button type="button" id="w0-tab2" class="nav-link" data-bs-toggle="tab" data-bs-target="#w0-pane2" role="tab" aria-controls="w0-pane2" aria-selected="false">C</button></li></ul>
+            <div class="tab-content"><div id="w0-dd0-pane0" class="tab-pane active" role="tabpanel" aria-labelledby="w0-dd0-tab0" tabindex="0">a</div>
+            <div id="w0-dd1-pane0" class="tab-pane" role="tabpanel" aria-labelledby="w0-dd1-tab0" tabindex="0">b</div>
+            <div id="w0-pane2" class="tab-pane" role="tabpanel" aria-labelledby="w0-tab2" tabindex="0">c</div></div>
+            HTML,
+            Tabs::widget(
+                [
+                    'items' => [
+                        TabItem::menu('M', [TabItem::to('A', 'a')->withActive(true)])->withDisabled(true),
+                        ['label' => 'N', 'disabled' => true, 'items' => [['label' => 'B', 'content' => 'b']]],
+                        TabItem::to('C', 'c'),
+                    ],
+                ],
+            ),
+            'Disabled toggle must carry `disabled`, never `active`, and keep its menu and panes.',
+        );
+    }
+
     public function testRenderExplicitActiveMenuItem(): void
     {
         $this->mockWebApplication();
@@ -189,6 +215,65 @@ final class TabsTest extends TestCase
         );
     }
 
+    public function testRenderMenuItemActivatesToggle(): void
+    {
+        $this->mockWebApplication();
+
+        self::assertSameHtml(
+            <<<HTML
+            <ul id="w0" class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button type="button" class="nav-link active" data-bs-toggle="menu" aria-expanded="false">Links</button><div id="w1" class="menu"><button type="button" id="w0-dd0-tab0" class="menu-item" data-bs-toggle="tab" data-bs-target="#w0-dd0-pane0" role="tab" aria-controls="w0-dd0-pane0" aria-selected="false">A</button>
+            <a class="menu-item active" href="/docs" aria-current="true">Docs</a></div></li>
+            <li class="nav-item" role="presentation"><button type="button" class="nav-link active" data-bs-toggle="menu" aria-expanded="false">More</button><div id="w2" class="menu"><div class="submenu"><button type="button" class="menu-item">Sub</button>
+            <div class="menu"><button type="button" class="menu-item active" aria-current="true">X</button></div></div>
+            <hr class="menu-divider"></div></li>
+            <li class="nav-item" role="presentation"><button type="button" id="w0-tab2" class="nav-link" data-bs-toggle="tab" data-bs-target="#w0-pane2" role="tab" aria-controls="w0-pane2" aria-selected="false">B</button></li></ul>
+            <div class="tab-content"><div id="w0-dd0-pane0" class="tab-pane" role="tabpanel" aria-labelledby="w0-dd0-tab0" tabindex="0">a</div>
+            <div id="w0-pane2" class="tab-pane" role="tabpanel" aria-labelledby="w0-tab2" tabindex="0">b</div></div>
+            HTML,
+            Tabs::widget(
+                [
+                    'items' => [
+                        TabItem::menu(
+                            'Links',
+                            [TabItem::to('A', 'a'), MenuItem::link('Docs', '/docs')->withActive(true)],
+                        ),
+                        TabItem::menu(
+                            'More',
+                            [MenuItem::submenu('Sub', [MenuItem::button('X')->withActive(true)]), '-'],
+                        ),
+                        TabItem::to('B', 'b'),
+                    ],
+                ],
+            ),
+            'Active raw menu item at any depth must activate its toggle.',
+        );
+        self::assertSameHtml(
+            <<<HTML
+            <ul id="w3" class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button type="button" class="nav-link" data-bs-toggle="menu" aria-expanded="false">Hidden</button><div id="w4" class="menu"><hr class="menu-divider">
+            <button type="button" id="w3-dd0-tab2" class="menu-item" data-bs-toggle="tab" data-bs-target="#w3-dd0-pane2" role="tab" aria-controls="w3-dd0-pane2" aria-selected="false">C</button></div></li>
+            <li class="nav-item" role="presentation"><button type="button" id="w3-tab1" class="nav-link active" data-bs-toggle="tab" data-bs-target="#w3-pane1" role="tab" aria-controls="w3-pane1" aria-selected="true">D</button></li></ul>
+            <div class="tab-content"><div id="w3-dd0-pane2" class="tab-pane" role="tabpanel" aria-labelledby="w3-dd0-tab2" tabindex="0">c</div>
+            <div id="w3-pane1" class="tab-pane active" role="tabpanel" aria-labelledby="w3-tab1" tabindex="0">d</div></div>
+            HTML,
+            Tabs::widget(
+                [
+                    'items' => [
+                        TabItem::menu(
+                            'Hidden',
+                            [
+                                MenuItem::link('H', '/h')->withActive(true)->withVisible(false),
+                                '-',
+                                TabItem::to('C', 'c'),
+                            ],
+                        ),
+                        TabItem::to('D', 'd'),
+                    ],
+                ],
+            ),
+            'Invisible active menu item and strings must leave the toggle inactive and the first pane active.',
+        );
+    }
+
     public function testRenderMenuTabLinks(): void
     {
         $this->mockWebApplication();
@@ -232,7 +317,7 @@ final class TabsTest extends TestCase
             <ul id="w0" class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button type="button" id="w0-tab0" class="nav-link" data-bs-toggle="tab" data-bs-target="#w0-pane0" role="tab" aria-controls="w0-pane0" aria-selected="false">A</button></li>
             <li class="nav-item" role="presentation"><button type="button" id="w0-tab1" class="nav-link" data-bs-toggle="tab" data-bs-target="#w0-pane1" role="tab" aria-controls="w0-pane1" aria-selected="false">B</button></li>
             <li class="nav-item" role="presentation"><span class="navbar-text">Raw</span></li>
-            <li class="nav-item" role="presentation"><button type="button" class="nav-link" data-bs-toggle="menu" aria-expanded="false">M</button><div id="w1" class="menu"><button type="button" id="w0-dd3-tab0" class="menu-item" data-bs-toggle="tab" data-bs-target="#w0-dd3-pane0" role="tab" aria-controls="w0-dd3-pane0" aria-selected="false">C</button>
+            <li class="nav-item" role="presentation"><button type="button" class="nav-link active" data-bs-toggle="menu" aria-expanded="false">M</button><div id="w1" class="menu"><button type="button" id="w0-dd3-tab0" class="menu-item" data-bs-toggle="tab" data-bs-target="#w0-dd3-pane0" role="tab" aria-controls="w0-dd3-pane0" aria-selected="false">C</button>
             <a class="menu-item active" href="/l" aria-current="true">L</a>
             <hr class="menu-divider"></div></li></ul>
             <div class="tab-content"><div id="w0-pane0" class="tab-pane" role="tabpanel" aria-labelledby="w0-tab0" tabindex="0">a</div>
