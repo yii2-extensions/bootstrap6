@@ -581,8 +581,9 @@ MenuItem::link('Profile', ['user/profile']), '-', MenuItem::button('Sign out')->
 | `route`           | `string\|null`            | `null`        | Route for active detection; `null` uses the current route.                                                 |
 | `style`           | `NavStyle\|string\|null`  | `null`        | Style class; `PILLS_VERTICAL` also adds `nav-pills`.                                                       |
 
-Item keys: `label` (required), `url` (default `#`), `active`, `disabled`, `visible`, `encode`, `linkOptions`,
-`options`, `items` (`Menu` items or menu HTML), and `menuOptions` (attributes of the `.menu` panel).
+Item keys: `label` (required), `url` (default `#`; `null` renders no `href`), `active`, `disabled`, `visible`,
+`encode`, `linkOptions`, `options`, `items` (`Menu` items or menu HTML), and `menuOptions` (attributes of the `.menu`
+panel).
 
 Value objects: `NavItem::to($label, $url = '#')` and `NavItem::menu($label, array|string $items)`, whose `$items` are
 `MenuItem` objects and strings, or the menu HTML, then `withActive()`, `withDisabled()`, `withVisible()`,
@@ -755,9 +756,9 @@ When no item is active, the first visible, enabled pane is activated.
 | `tabContentOptions` | `array`              | `[]`             | Attributes of `.tab-content`.                             |
 
 Item keys: `label` (required), `content`, `active`, `disabled`, `visible`, `encode`, `headerOptions`, `linkOptions`
-(`id` defaults to `{id}-tab{n}`), `options` (`id` defaults to `{id}-pane{n}`), `url` (plain link), and `items` (tabs
-inside a `Menu`; a nested item with `items` renders as a `.submenu` wrapped by its `headerOptions`, and an active nested
-tab activates the outer toggle only).
+(`id` defaults to `{id}-tab{n}`), `options` (`id` defaults to `{id}-pane{n}`), `url` (plain link that takes `active`
+and `disabled`), and `items` (tabs inside a `Menu`; a nested item with `items` renders as a `.submenu` wrapped by its
+`headerOptions`, and an active nested tab activates the outer toggle only).
 
 Value objects: `TabItem::to($label, $content = null)`, `TabItem::link($label, $url)`, and `TabItem::menu($label, array
 $items)`, whose `$items` are `TabItem` objects (menu buttons with their panes, menu links for `TabItem::link()`,

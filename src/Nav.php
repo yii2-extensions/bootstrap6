@@ -49,7 +49,8 @@ class Nav extends Widget
      * An array item accepts the following options:
      *
      * - `label`: `string|Stringable`, required.
-     * - `url`: `array|string`, processed by {@see \yii\helpers\Url::to()}. Defaults to `#`.
+     * - `url`: `array|string|null`, processed by {@see \yii\helpers\Url::to()}; `null` renders no `href`.
+     *   Defaults to `#`.
      * - `active`: `bool`, forces the active state; otherwise it is detected from `url`.
      * - `disabled`: `bool`, renders the link without `href` and with `aria-disabled="true"`.
      * - `visible`: `bool`, whether to render the item. Defaults to `true`.

@@ -49,14 +49,15 @@ class Tabs extends Widget
      *
      * - `label`: `string|Stringable`, required.
      * - `content`: `string|Stringable`, HTML content of the pane.
-     * - `active`: `bool`, whether the tab and its pane are active.
-     * - `disabled`: `bool`, disables the tab button.
+     * - `active`: `bool`, whether the tab and its pane, or the link tab, are active.
+     * - `disabled`: `bool`, disables the tab button, or the link tab, which loses its `href`.
      * - `visible`: `bool`, whether to render the tab and its pane. Defaults to `true`.
      * - `encode`: `bool`, whether to HTML-encode the label.
      * - `headerOptions`: `array`, HTML attributes of the `.nav-item` element.
      * - `linkOptions`: `array`, HTML attributes of the tab button; its `id` defaults to `{id}-tab{n}`.
      * - `options`: `array`, HTML attributes of the pane; its `id` defaults to `{id}-pane{n}`.
-     * - `url`: `array|string`, renders a plain link instead of a tab, processed by {@see \yii\helpers\Url::to()}.
+     * - `url`: `array|string`, renders a plain link that takes the `active` and `disabled` state instead of a tab,
+     *   processed by {@see \yii\helpers\Url::to()}.
      * - `items`: `array`, tab items rendered inside a {@see Menu}, with the same options; items with a `url` or without
      *   a `label` are {@see Menu::$items}. A nested item with its own `items` renders as a `.submenu` (its
      *   `headerOptions` apply to the `.submenu` wrapper), and an active nested tab activates the outer toggle only.
@@ -349,7 +350,20 @@ class Tabs extends Widget
         Html::addCssClass($linkOptions, ['widget' => 'nav-link']);
 
         if ($item->url !== null) {
-            return Html::tag('li', Html::a($label, $item->url, $linkOptions), $headerOptions);
+            $url = $item->url;
+
+            if ($item->disabled) {
+                Html::addCssClass($linkOptions, ['disable' => 'disabled']);
+
+                $linkOptions['aria-disabled'] = 'true';
+                $url = null;
+            } elseif ($item->active === true) {
+                Html::addCssClass($linkOptions, ['activate' => 'active']);
+
+                $linkOptions['aria-current'] = 'page';
+            }
+
+            return Html::tag('li', Html::a($label, $url, $linkOptions), $headerOptions);
         }
 
         if ($item->items === []) {

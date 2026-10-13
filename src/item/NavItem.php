@@ -8,6 +8,7 @@ use Stringable;
 use yii\base\InvalidConfigException;
 use yii2\extensions\bootstrap6\exception\Message;
 
+use function array_key_exists;
 use function is_array;
 use function is_string;
 
@@ -20,8 +21,8 @@ final readonly class NavItem
 
     /**
      * @param string|Stringable $label Label of the `.nav-link` element.
-     * @param array<array-key, mixed>|string|null $url URL processed by {@see \yii\helpers\Url::to()}; a route array
-     * also drives the active state detection.
+     * @param array<array-key, mixed>|string|null $url URL processed by {@see \yii\helpers\Url::to()}, or `null` for no
+     * `href`; a route array also drives the active state detection.
      * @param bool|null $active Whether the item is active, or `null` to detect it from the {@see $url} route.
      * @param bool $disabled Whether the item is disabled; it takes precedence over {@see $active}.
      * @param bool $visible Whether to render the item.
@@ -48,8 +49,8 @@ final readonly class NavItem
     /**
      * Creates an item from the array configuration documented in `Nav::$items`.
      *
-     * A missing or `null` `url` defaults to `#`; nested `items` arrays are converted through
-     * {@see MenuItem::fromArray()}.
+     * A missing `url` defaults to `#`; an explicit `null` renders no `href`. Nested `items` arrays are converted
+     * through {@see MenuItem::fromArray()}.
      *
      * @param array<array-key, mixed> $config Item configuration.
      *
@@ -59,8 +60,8 @@ final readonly class NavItem
     {
         $label = self::textValue($config, 'label', Message::ITEM_LABEL_REQUIRED);
 
-        /** @var array<array-key, mixed>|string $url */
-        $url = $config['url'] ?? '#';
+        /** @var array<array-key, mixed>|string|null $url */
+        $url = array_key_exists('url', $config) ? $config['url'] : '#';
         /** @var array<array-key, mixed>|string $items */
         $items = $config['items'] ?? [];
         $items = self::normalize($items);

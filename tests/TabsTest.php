@@ -163,6 +163,32 @@ final class TabsTest extends TestCase
         );
     }
 
+    public function testRenderLinkTabsCarryItemState(): void
+    {
+        $this->mockWebApplication();
+
+        self::assertSameHtml(
+            <<<HTML
+            <ul id="w0" class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" href="/docs" aria-current="page">Docs</a></li>
+            <li class="nav-item" role="presentation"><a class="nav-link disabled" aria-disabled="true">Off</a></li>
+            <li class="nav-item" role="presentation"><a class="nav-link disabled" aria-disabled="true">Both</a></li>
+            <li class="nav-item" role="presentation"><button type="button" id="w0-tab3" class="nav-link" data-bs-toggle="tab" data-bs-target="#w0-pane3" role="tab" aria-controls="w0-pane3" aria-selected="false">Pane</button></li></ul>
+            <div class="tab-content"><div id="w0-pane3" class="tab-pane" role="tabpanel" aria-labelledby="w0-tab3" tabindex="0">p</div></div>
+            HTML,
+            Tabs::widget(
+                [
+                    'items' => [
+                        TabItem::link('Docs', '/docs')->withActive(true),
+                        ['label' => 'Off', 'url' => '/off', 'disabled' => true],
+                        ['label' => 'Both', 'url' => '/both', 'active' => true, 'disabled' => true],
+                        TabItem::to('Pane', 'p'),
+                    ],
+                ],
+            ),
+            'Disabled must win over active, and an active link must block pane activation.',
+        );
+    }
+
     public function testRenderMenuTabLinks(): void
     {
         $this->mockWebApplication();

@@ -238,7 +238,8 @@ final class NavTest extends TestCase
             <li class="nav-item"><a class="nav-link disabled" aria-disabled="true">Disabled</a></li>
             <li class="nav-item"><a class="nav-link" href="#">Enabled</a></li>
             <li class="nav-item"><span class="navbar-text">Raw</span></li>
-            <li class="nav-item"><a class="nav-link" href="#">Visible</a></li></ul>
+            <li class="nav-item"><a class="nav-link" href="#">Visible</a></li>
+            <li class="nav-item"><a class="nav-link">No URL</a></li></ul>
             HTML,
             Nav::widget(
                 [
@@ -256,6 +257,7 @@ final class NavTest extends TestCase
                         '<li class="nav-item"><span class="navbar-text">Raw</span></li>',
                         ['label' => 'Hidden', 'visible' => false],
                         ['label' => 'Visible', 'visible' => true],
+                        ['label' => 'No URL', 'url' => null],
                     ],
                     'options' => ['class' => 'custom', 'id' => 'main'],
                 ],

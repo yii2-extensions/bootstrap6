@@ -36,7 +36,7 @@ final class NavItemProvider
         ];
         yield 'url `null`' => [
             ['label' => 'A', 'url' => null],
-            NavItem::to('A'),
+            NavItem::to('A', null),
         ];
         yield 'route' => [
             ['label' => 'A', 'url' => ['site/index']],
