@@ -1,7 +1,11 @@
 {
     "Exclude": [
+        "^\\.vscode/",
+        "^\\.claude/",
         "^composer\\.lock$",
+        "^node_modules/",
         "^runtime/",
+        "^package-lock\\.json$",
         "^vendor/"
     ]
 }

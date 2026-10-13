@@ -19,4 +19,18 @@ updates:
       interval: "daily"
     cooldown:
       default-days: 7
+    groups:
+      composer:
+        patterns: ["*"]
     versioning-strategy: increase-if-necessary
+
+  # Maintain dependencies for npm
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    cooldown:
+      default-days: 7
+    groups:
+      npm:
+        patterns: ["*"]

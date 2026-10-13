@@ -11,6 +11,16 @@ Tool references:
 - [PHPUnit](https://phpunit.de/) for unit tests.
 - [Rector](https://github.com/rectorphp/rector) for automated refactoring.
 
+## Prerequisites
+
+The asset tests publish the real `bootstrap` and `bootstrap-icons` packages from the package `node_modules` directory.
+`composer install` runs [`php-forge/foxy`](https://github.com/php-forge/foxy), which installs them from the root
+`package.json`, so a clean checkout only needs:
+
+```bash
+composer install
+```
+
 ## Automated refactoring (Rector)
 
 Run Rector to apply automated code refactoring.
@@ -37,7 +47,7 @@ composer check-dependencies
 
 ## Mutation testing (Infection)
 
-Run mutation testing.
+Run mutation testing (minimum MSI and covered MSI of 100%).
 
 ```bash
 composer mutation
@@ -51,7 +61,7 @@ composer mutation-static
 
 ## Static analysis (PHPStan)
 
-Run static analysis.
+Run static analysis at level `max` with the strict rules.
 
 ```bash
 composer static
@@ -65,6 +75,8 @@ Run the full test suite.
 composer tests
 ```
 
+The test classes are grouped with `#[Group]` attributes: `asset`, `enum`, `form`, `html`, `i18n`, and `widget`.
+
 ## Passing extra arguments
 
 Composer scripts support forwarding additional arguments using `--`.
@@ -75,8 +87,21 @@ Run PHPUnit with code coverage report generation.
 composer tests -- --coverage-html code_coverage
 ```
 
+Run a single test group.
+
+```bash
+composer tests -- --group form
+```
+
 Run PHPStan with a different memory limit.
 
 ```bash
 composer static -- --memory-limit=512M
 ```
+
+## Next steps
+
+- 📚 [Installation Guide](installation.md)
+- ⚙️ [Configuration Reference](configuration.md)
+- 💡 [Usage Examples](examples.md)
+- 🔄 [Migration Guide](migration.md)

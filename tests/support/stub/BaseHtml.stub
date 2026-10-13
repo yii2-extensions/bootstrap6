@@ -1,0 +1,62 @@
+<?php
+
+// Widens the documented `$content` and `$text` types to `Stringable`: the Yii implementation casts them to `string`
+// (`encode()`) or concatenates them (`tag()`, `a()`), so content properties typed `string|Stringable` pass through.
+// Keeps the key type of the `$options` array modified by `addCssClass()` and `addCssStyle()`, which only write the
+// `class` and `style` keys.
+
+namespace yii\helpers;
+
+class BaseHtml
+{
+    /**
+     * @param string|\Stringable $text
+     * @param array<mixed>|string|null $url
+     * @param array<mixed> $options
+     *
+     * @return string
+     */
+    public static function a($text, $url = null, $options = []) {}
+
+    /**
+     * @template TOptionKey of array-key
+     *
+     * @param array<TOptionKey, mixed> $options
+     * @param array<mixed>|string $class
+     *
+     * @param-out array<TOptionKey, mixed> $options
+     *
+     * @return void
+     */
+    public static function addCssClass(&$options, $class) {}
+
+    /**
+     * @template TKey of array-key
+     *
+     * @param array<TKey, mixed> $options
+     * @param array<string, string>|string $style
+     * @param bool $overwrite
+     *
+     * @param-out array<TKey, mixed> $options
+     *
+     * @return void
+     */
+    public static function addCssStyle(&$options, $style, $overwrite = true) {}
+
+    /**
+     * @param string|\Stringable $content
+     * @param bool $doubleEncode
+     *
+     * @return string
+     */
+    public static function encode($content, $doubleEncode = true) {}
+
+    /**
+     * @param string|bool|null $name
+     * @param string|\Stringable $content
+     * @param array<mixed> $options
+     *
+     * @return string
+     */
+    public static function tag($name, $content = '', $options = []) {}
+}
