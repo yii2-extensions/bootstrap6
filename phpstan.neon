@@ -3,7 +3,10 @@ includes:
 
 parameters:
     bootstrapFiles:
-        - tests/bootstrap.php
+        - tests/support/bootstrap.php
+
+    stubFiles:
+        - tests/support/stub/BaseHtml.stub
 
     level: max
 

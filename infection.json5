@@ -1,9 +1,17 @@
 {
     $schema: "./vendor/infection/infection/resources/schema.json",
+    timeout: 30,
     logs: {
         text: "php://stderr",
         stryker: {
             report: "main",
+        },
+    },
+    mutators: {
+        "@default": true,
+        ArrayItemRemoval: {
+            // Equivalent on Yii 22: the core `fileInput()` merges `inputOptions` again; the merge serves Yii 2.0.x.
+            ignore: ["yii2\\extensions\\bootstrap6\\ActiveField::fileInput"],
         },
     },
     source: {
