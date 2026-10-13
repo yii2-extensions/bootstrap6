@@ -163,6 +163,31 @@ final class ActiveFormTest extends TestCase
         );
     }
 
+    public function testFloatingLayoutEscapesSelectorIdentifiers(): void
+    {
+        $model = new DynamicModel(['attributeName']);
+
+        self::renderForm(
+            [
+                'errorCssClass' => 'is-invalid has:error',
+                'layout' => ActiveForm::LAYOUT_FLOATING,
+                'options' => ['id' => 'account:edit'],
+            ],
+            static function (ActiveForm $form) use ($model): void {
+                echo $form->field($model, 'attributeName');
+            },
+        );
+        self::assertSame(
+            [
+                'account:edit-floating-feedback' => <<<HTML
+                <style>#account\\:edit :is(.form-floating:has(.is-invalid.has\\:error), .is-invalid.has\\:error > .form-floating) ~ :is(.invalid-feedback, .invalid-tooltip) { display: block; }</style>
+                HTML,
+            ],
+            self::floatingFeedbackStyles(self::webView()),
+            'Selector must escape the `id` and each class; the key keeps the raw `id`.',
+        );
+    }
+
     public function testFloatingLayoutMarksWrapperInvalid(): void
     {
         $model = new DynamicModel(['attributeName']);
@@ -213,6 +238,23 @@ final class ActiveFormTest extends TestCase
             ],
             self::floatingFeedbackStyles(self::webView()),
             'Space-separated classes must be matched together.',
+        );
+    }
+
+    public function testFloatingLayoutOmitsFeedbackStyleWhenErrorCssClassIsEmpty(): void
+    {
+        $model = new DynamicModel(['attributeName']);
+
+        self::renderForm(
+            ['errorCssClass' => " \t ", 'layout' => ActiveForm::LAYOUT_FLOATING],
+            static function (ActiveForm $form) use ($model): void {
+                echo $form->field($model, 'attributeName');
+            },
+        );
+        self::assertSame(
+            [],
+            self::floatingFeedbackStyles(self::webView()),
+            'Whitespace-only class list must not produce a rule.',
         );
     }
 

@@ -33,7 +33,8 @@ final readonly class TabItem
      * `{id}-tab{n}`.
      * @param array<array-key, mixed> $options HTML attributes of the pane; its `id` defaults to `{id}-pane{n}`.
      * @param array<array-key, MenuItem|string|TabItem> $items Items of the menu toggled by the tab: tabs are rendered
-     * as menu buttons with their panes, menu items and strings are passed to the `Menu` as is.
+     * as menu buttons with their panes, tabs with a {@see $url} as menu links, tabs with their own items as nested
+     * `.submenu` panels; menu items and strings are passed to the `Menu` as is.
      */
     private function __construct(
         public string|Stringable $label,
@@ -107,8 +108,9 @@ final readonly class TabItem
      * Creates a toggle that opens a `Menu` of tabs.
      *
      * @param string|Stringable $label Toggle label.
-     * @param array<array-key, array<string, mixed>|MenuItem|string|TabItem> $items Tabs rendered as menu buttons, menu
-     * items, or strings; arrays are converted as in {@see fromArray()}.
+     * @param array<array-key, array<string, mixed>|MenuItem|string|TabItem> $items Tabs rendered as menu buttons (menu
+     * links when they have a URL, nested `.submenu` panels when they have items), menu items, or strings; arrays are
+     * converted as in {@see fromArray()}.
      */
     public static function menu(string|Stringable $label, array $items): self
     {
@@ -171,8 +173,9 @@ final readonly class TabItem
     /**
      * Returns a copy with the given menu items.
      *
-     * @param array<array-key, array<string, mixed>|MenuItem|string|TabItem> $items Tabs rendered as menu buttons, menu
-     * items, or strings; arrays are converted as in {@see fromArray()}.
+     * @param array<array-key, array<string, mixed>|MenuItem|string|TabItem> $items Tabs rendered as menu buttons (menu
+     * links when they have a URL, nested `.submenu` panels when they have items), menu items, or strings; arrays are
+     * converted as in {@see fromArray()}.
      */
     public function withItems(array $items): self
     {

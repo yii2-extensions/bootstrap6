@@ -11,8 +11,11 @@ use yii2\extensions\bootstrap6\asset\BootstrapAsset;
 use yii2\extensions\bootstrap6\enum\{NavLayout, NavStyle};
 use yii2\extensions\bootstrap6\item\{MenuItem, NavItem};
 
+use function array_key_exists;
+use function count;
 use function implode;
 use function is_array;
+use function is_scalar;
 use function is_string;
 use function ltrim;
 use function str_starts_with;
@@ -71,6 +74,9 @@ class Nav extends Widget
     public string $menuClass = Menu::class;
     /**
      * Query parameters used to detect active items, or `null` to use the current request parameters.
+     *
+     * Scalar values are compared with the item `url` parameters as strings, so `42` matches `'42'`; arrays are
+     * compared element by element.
      *
      * @var array<array-key, mixed>|null
      */
@@ -211,6 +217,9 @@ class Nav extends Widget
      * is the route {@see $route} and the other elements match {@see $params}. Relative routes are resolved against the
      * module of the current controller.
      *
+     * Parameters are compared by value: scalars as strings, so `['site/users', 'id' => 42]` matches the query string
+     * `id=42`, and arrays element by element with the same keys. A `null` parameter matches any value.
+     *
      * @param MenuItem|NavItem $item Nav item, or item of a menu toggled by the nav.
      */
     protected function isItemActive(MenuItem|NavItem $item): bool
@@ -243,7 +252,7 @@ class Nav extends Widget
         unset($url[0], $url['#']);
 
         foreach ($url as $name => $value) {
-            if ($value !== null && ($this->params[$name] ?? null) !== $value) {
+            if ($value !== null && !self::paramMatches($value, $this->params[$name] ?? null)) {
                 return false;
             }
         }
@@ -342,5 +351,37 @@ class Nav extends Widget
         }
 
         return $items;
+    }
+
+    /**
+     * Returns whether a parameter of an item `url` matches the request parameter.
+     *
+     * Arrays match when they have the same keys and every value matches, recursively. Scalars match when their `string`
+     * forms are identical, so `42` matches `'42'`. Any other pair, including `null`, does not match.
+     *
+     * @param mixed $expected Parameter of the item `url`.
+     * @param mixed $actual Request parameter, or `null` when it is missing.
+     */
+    private static function paramMatches(mixed $expected, mixed $actual): bool
+    {
+        if (is_array($expected) && is_array($actual)) {
+            if (count($expected) !== count($actual)) {
+                return false;
+            }
+
+            foreach ($expected as $key => $value) {
+                if (!array_key_exists($key, $actual) || !self::paramMatches($value, $actual[$key])) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        if (is_scalar($expected) && is_scalar($actual)) {
+            return (string) $expected === (string) $actual;
+        }
+
+        return false;
     }
 }

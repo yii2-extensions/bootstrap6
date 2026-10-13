@@ -58,8 +58,9 @@ class Tabs extends Widget
      * - `options`: `array`, HTML attributes of the pane; its `id` defaults to `{id}-pane{n}`.
      * - `url`: `array|string`, renders a plain link instead of a tab, processed by {@see \yii\helpers\Url::to()}.
      * - `items`: `array`, tab items rendered inside a {@see Menu}, with the same options; items with a `url` or without
-     *   a `label` are {@see Menu::$items}. The Bootstrap docs advise against menus in tabbed interfaces for
-     *   accessibility reasons.
+     *   a `label` are {@see Menu::$items}. A nested item with its own `items` renders as a `.submenu` (its
+     *   `headerOptions` apply to the `.submenu` wrapper), and an active nested tab activates the outer toggle only.
+     *   The Bootstrap docs advise against menus in tabbed interfaces for accessibility reasons.
      *
      * @var array<array-key, array<array-key, mixed>|string|TabItem>
      */
@@ -244,6 +245,73 @@ class Tabs extends Widget
     }
 
     /**
+     * Converts the children of a menu toggle into {@see Menu} items and adds the panes of their tabs to {@see $panes}.
+     *
+     * Tabs become menu buttons, tabs with a `url` menu links, and tabs with `items` submenus converted recursively,
+     * with `-dd{n}` appended to `$menuSuffix`. Invisible tabs and submenus without rendered children are skipped; menu
+     * items and strings are kept as is.
+     *
+     * @param array<array-key, MenuItem|string|TabItem> $items Children of the menu toggle.
+     * @param string $menuSuffix Suffix inserted in the default `id` values of the tab buttons and panes.
+     * @param bool $active Set to `true` when a tab or link at any depth is explicitly active.
+     *
+     * @return list<MenuItem|string>
+     */
+    private function menuItems(array $items, string $menuSuffix, bool &$active): array
+    {
+        $menuItems = [];
+
+        foreach ($items as $m => $child) {
+            if (!$child instanceof TabItem) {
+                $menuItems[] = $child;
+
+                continue;
+            }
+
+            if ($child->visible === false) {
+                continue;
+            }
+
+            if ($child->url !== null) {
+                $active = $active || $child->active === true;
+                $menuItems[] = MenuItem::link($child->label, $child->url)
+                    ->withEncode($child->encode)
+                    ->withDisabled($child->disabled)
+                    ->withActive($child->active)
+                    ->withLinkOptions($this->linkOptions($child));
+
+                continue;
+            }
+
+            if ($child->items !== []) {
+                $submenu = $this->menuItems($child->items, "{$menuSuffix}-dd{$m}", $active);
+
+                if ($submenu !== []) {
+                    $menuItems[] = MenuItem::submenu($child->label, $submenu)
+                        ->withEncode($child->encode)
+                        ->withDisabled($child->disabled)
+                        ->withOptions($child->headerOptions)
+                        ->withLinkOptions($this->linkOptions($child));
+                }
+
+                continue;
+            }
+
+            $active = $active || $child->active === true;
+            $menuItems[] = MenuItem::button($child->label)
+                ->withEncode($child->encode)
+                ->withLinkOptions($this->renderPane(
+                    $child,
+                    $this->linkOptions($child),
+                    "{$menuSuffix}-tab{$m}",
+                    "{$menuSuffix}-pane{$m}",
+                ));
+        }
+
+        return $menuItems;
+    }
+
+    /**
      * Converts the array items of {@see $items} through {@see TabItem::fromArray()}, keeping their keys.
      *
      * @throws InvalidConfigException if an item has no `label`.
@@ -290,24 +358,8 @@ class Tabs extends Widget
             return Html::tag('li', Html::tag('button', $label, $linkOptions), $headerOptions);
         }
 
-        $menuItems = [];
         $active = false;
-
-        foreach ($item->items as $m => $child) {
-            if (!$child instanceof TabItem) {
-                $menuItems[] = $child;
-            } elseif ($child->visible) {
-                $active = $active || $child->active === true;
-                $menuItems[] = MenuItem::button($child->label)
-                    ->withEncode($child->encode)
-                    ->withLinkOptions($this->renderPane(
-                        $child,
-                        $this->linkOptions($child),
-                        "{$menuSuffix}-tab{$m}",
-                        "{$menuSuffix}-pane{$m}",
-                    ));
-            }
-        }
+        $menuItems = $this->menuItems($item->items, $menuSuffix, $active);
 
         if ($active) {
             Html::addCssClass($linkOptions, ['activate' => 'active']);

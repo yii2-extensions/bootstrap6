@@ -18,7 +18,7 @@ use yii2\extensions\bootstrap6\tests\support\stub\{HtmlStub, StringableValue, St
 use yii2\extensions\bootstrap6\tests\support\TestCase;
 
 /**
- * Unit tests for {@see Html} form controls, badges, close buttons, and theme helpers.
+ * Unit tests for {@see Html} form controls, badges, close buttons, theme helpers, and CSS identifier escaping.
  *
  * {@see HtmlProvider} for test case data providers.
  */
@@ -401,6 +401,16 @@ final class HtmlTest extends TestCase
             '<p class="invalid-feedback">Some error message.</p>',
             Html::error($model, 'foo', ['tag' => 'p']),
             'Configured tag must be used.',
+        );
+    }
+
+    #[DataProviderExternal(HtmlProvider::class, 'escapeCssIdentifierCases')]
+    public function testEscapeCssIdentifier(string $identifier, string $expected): void
+    {
+        self::assertSame(
+            $expected,
+            Html::escapeCssIdentifier($identifier),
+            'Escaped identifier must equal the `CSS.escape()` output.',
         );
     }
 

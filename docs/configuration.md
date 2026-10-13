@@ -569,17 +569,17 @@ MenuItem::link('Profile', ['user/profile']), '-', MenuItem::button('Sign out')->
 
 ### Nav
 
-| Property          | Type                      | Default       | Description                                                        |
-| ----------------- | ------------------------- | ------------- | ------------------------------------------------------------------ |
-| `activateItems`   | `bool`                    | `true`        | Activate items whose route and parameters match.                   |
-| `activateParents` | `bool`                    | `false`       | Activate a parent when one of its menu items is active.            |
-| `encodeLabels`    | `bool`                    | `true`        | HTML-encode the labels; item `encode` overrides it.                |
-| `items`           | `array`                   | `[]`          | Items, see below; strings are rendered as is.                      |
-| `layout`          | `NavLayout\|string\|null` | `null`        | Layout class.                                                      |
-| `menuClass`       | `class-string<Menu>`      | `Menu::class` | Menu widget class.                                                 |
-| `params`          | `array\|null`             | `null`        | Parameters for active detection; `null` uses the query parameters. |
-| `route`           | `string\|null`            | `null`        | Route for active detection; `null` uses the current route.         |
-| `style`           | `NavStyle\|string\|null`  | `null`        | Style class; `PILLS_VERTICAL` also adds `nav-pills`.               |
+| Property          | Type                      | Default       | Description                                                                                                |
+| ----------------- | ------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------- |
+| `activateItems`   | `bool`                    | `true`        | Activate items whose route and parameters match.                                                           |
+| `activateParents` | `bool`                    | `false`       | Activate a parent when one of its menu items is active.                                                    |
+| `encodeLabels`    | `bool`                    | `true`        | HTML-encode the labels; item `encode` overrides it.                                                        |
+| `items`           | `array`                   | `[]`          | Items, see below; strings are rendered as is.                                                              |
+| `layout`          | `NavLayout\|string\|null` | `null`        | Layout class.                                                                                              |
+| `menuClass`       | `class-string<Menu>`      | `Menu::class` | Menu widget class.                                                                                         |
+| `params`          | `array\|null`             | `null`        | Parameters for active detection, compared by value (scalars as strings); `null` uses the query parameters. |
+| `route`           | `string\|null`            | `null`        | Route for active detection; `null` uses the current route.                                                 |
+| `style`           | `NavStyle\|string\|null`  | `null`        | Style class; `PILLS_VERTICAL` also adds `nav-pills`.                                                       |
 
 Item keys: `label` (required), `url` (default `#`), `active`, `disabled`, `visible`, `encode`, `linkOptions`,
 `options`, `items` (`Menu` items or menu HTML), and `menuOptions` (attributes of the `.menu` panel).
@@ -756,14 +756,15 @@ When no item is active, the first visible, enabled pane is activated.
 
 Item keys: `label` (required), `content`, `active`, `disabled`, `visible`, `encode`, `headerOptions`, `linkOptions`
 (`id` defaults to `{id}-tab{n}`), `options` (`id` defaults to `{id}-pane{n}`), `url` (plain link), and `items` (tabs
-inside a `Menu`).
+inside a `Menu`; a nested item with `items` renders as a `.submenu` wrapped by its `headerOptions`, and an active nested
+tab activates the outer toggle only).
 
-Value objects: `TabItem::to($label, $content = null)`, `TabItem::link($label, $url)`, and
-`TabItem::menu($label, array $items)`, whose `$items` are `TabItem` objects (menu buttons with their panes), `MenuItem`
-objects, and strings, then `withActive()`, `withDisabled()`, `withVisible()`, `withEncode()`, `withHeaderOptions()`,
-`withLinkOptions()`, `withOptions()`, `withContent()`, `withUrl()`, `withItems()`, and `withLabel()`. An `active` of
-`null` lets the widget activate the first eligible tab. Example: `'items' => [TabItem::to('Home', $home),
-TabItem::to('Profile', $profile)->withDisabled(true)]`.
+Value objects: `TabItem::to($label, $content = null)`, `TabItem::link($label, $url)`, and `TabItem::menu($label, array
+$items)`, whose `$items` are `TabItem` objects (menu buttons with their panes, menu links for `TabItem::link()`,
+`.submenu` panels for a nested `TabItem::menu()`), `MenuItem` objects, and strings, then `withActive()`,
+`withDisabled()`, `withVisible()`, `withEncode()`, `withHeaderOptions()`, `withLinkOptions()`, `withOptions()`,
+`withContent()`, `withUrl()`, `withItems()`, and `withLabel()`. An `active` of `null` lets the widget activate the first
+eligible tab. Example: `'items' => [TabItem::to('Home', $home), TabItem::to('Profile', $profile)->withDisabled(true)]`.
 
 ### Toast
 
@@ -889,6 +890,7 @@ Besides the core placeholders, templates accept `{beginLabel}`, `{labelTitle}`, 
 | `badge(string\|Stringable $label, Theme\|string\|null $theme, array $options)` | `<span class="badge theme-*">`; the `encode` option defaults to `true`.                                                                |
 | `closeButton(array $options = [])`                                             | `<button type="button" class="btn-close" aria-label="Close">`.                                                                         |
 | `enumValue(string $enum, $value, string $property, bool $responsive = false)`  | Enum case or validated `string` as `string`; unknown strings throw `InvalidConfigException`.                                           |
+| `escapeCssIdentifier(string $identifier)`                                      | Escapes an identifier for a CSS selector as `CSS.escape()` does; bytes from `0x80` up (UTF-8 characters) are kept.                     |
 | `theme(array &$options, Theme\|string\|null $theme)`                           | Adds the `theme-{value}` class.                                                                                                        |
 | `staticControl(string $value, array $options = [])`                            | Read-only `.form-control-plaintext` input.                                                                                             |
 | `activeStaticControl($model, $attribute, $options)`                            | Same for a model attribute; the `value` option overrides it.                                                                           |

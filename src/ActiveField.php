@@ -10,13 +10,17 @@ use yii2\extensions\bootstrap6\asset\BootstrapPluginAsset;
 use function array_filter;
 use function array_flip;
 use function array_intersect_key;
+use function array_map;
+use function implode;
 use function is_array;
 use function is_bool;
 use function is_string;
+use function preg_split;
 use function str_replace;
 use function strtr;
 
 use const ARRAY_FILTER_USE_KEY;
+use const PREG_SPLIT_NO_EMPTY;
 
 /**
  * Renders a Bootstrap 6 form field for the layouts of {@see ActiveForm}.
@@ -516,18 +520,28 @@ class ActiveField extends \yii\widgets\ActiveField
 
     /**
      * Registers, once per form, the style rule that displays the feedback following a `.form-floating` wrapper when
-     * its control or its container carries the error CSS class. Space-separated classes in
-     * {@see ActiveForm::$errorCssClass} are matched together.
+     * its control or its container carries the error CSS class. Whitespace-separated classes in
+     * {@see ActiveForm::$errorCssClass} are matched together; no rule is registered when it holds no class.
+     *
+     * The form `id` and each class are escaped through {@see Html::escapeCssIdentifier()}; the registration key keeps
+     * the raw `id`.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/CSS/:has
      */
     protected function registerFloatingFeedbackStyle(): void
     {
         $id = self::stringValue($this->form->options['id'] ?? null) ?? $this->form->getId();
-        $errorCssClass = str_replace(' ', '.', $this->form->errorCssClass);
+        $classes = preg_split('/\s+/', $this->form->errorCssClass, flags: PREG_SPLIT_NO_EMPTY);
+
+        if ($classes === false || $classes === []) {
+            return;
+        }
+
+        $selectorId = Html::escapeCssIdentifier($id ?? '');
+        $errorCssClass = implode('.', array_map(Html::escapeCssIdentifier(...), $classes));
 
         $css = <<<CSS
-            #{$id} :is(.form-floating:has(.{$errorCssClass}), .{$errorCssClass} > .form-floating)
+            #{$selectorId} :is(.form-floating:has(.{$errorCssClass}), .{$errorCssClass} > .form-floating)
             ~ :is(.invalid-feedback, .invalid-tooltip) { display: block; }
             CSS;
 

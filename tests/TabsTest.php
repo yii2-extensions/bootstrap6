@@ -163,6 +163,40 @@ final class TabsTest extends TestCase
         );
     }
 
+    public function testRenderMenuTabLinks(): void
+    {
+        $this->mockWebApplication();
+
+        self::assertSameHtml(
+            <<<HTML
+            <ul id="w0" class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button type="button" class="nav-link active" data-bs-toggle="menu" aria-expanded="false">Links</button><div id="w1" class="menu"><a class="menu-item active" href="/docs" rel="help" aria-current="true"><b>Docs</b></a>
+            <a class="menu-item disabled" aria-disabled="true">Off</a>
+            <button type="button" id="w0-dd0-tab2" class="menu-item" data-bs-toggle="tab" data-bs-target="#w0-dd0-pane2" role="tab" aria-controls="w0-dd0-pane2" aria-selected="false">Pane</button></div></li>
+            <li class="nav-item" role="presentation"><button type="button" class="nav-link" data-bs-toggle="menu" aria-expanded="false">More</button><div id="w2" class="menu"><a class="menu-item" href="/help">Help</a></div></li></ul>
+            <div class="tab-content"><div id="w0-dd0-pane2" class="tab-pane" role="tabpanel" aria-labelledby="w0-dd0-tab2" tabindex="0">p</div></div>
+            HTML,
+            Tabs::widget(
+                [
+                    'items' => [
+                        TabItem::menu(
+                            'Links',
+                            [
+                                TabItem::link('<b>Docs</b>', '/docs')
+                                    ->withActive(true)
+                                    ->withEncode(false)
+                                    ->withLinkOptions(['rel' => 'help']),
+                                TabItem::link('Off', '/off')->withDisabled(true),
+                                TabItem::to('Pane', 'p'),
+                            ],
+                        ),
+                        TabItem::menu('More', [TabItem::link('Help', '/help')]),
+                    ],
+                ],
+            ),
+            'Tab with a URL must render as a menu link.',
+        );
+    }
+
     public function testRenderMixedItems(): void
     {
         $this->mockWebApplication();
@@ -215,6 +249,101 @@ final class TabsTest extends TestCase
             . "\n"
             . Tabs::widget(['navType' => 'nav-pills-vertical', 'options' => ['aria-orientation' => 'horizontal']]),
             'Style classes and tab list attributes must be rendered.',
+        );
+    }
+
+    public function testRenderNestedMenu(): void
+    {
+        $this->mockWebApplication();
+
+        self::assertSameHtml(
+            <<<HTML
+            <ul id="w0" class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button type="button" class="nav-link active" data-bs-toggle="menu" aria-expanded="false">Outer</button><div id="w1" class="menu"><button type="button" id="w0-dd0-tab0" class="menu-item" data-bs-toggle="tab" data-bs-target="#w0-dd0-pane0" role="tab" aria-controls="w0-dd0-pane0" aria-selected="false">A</button>
+            <div class="submenu"><button type="button" class="menu-item" title="More">Inner</button>
+            <div class="menu"><button type="button" id="w0-dd0-dd1-tab0" class="active menu-item" data-bs-toggle="tab" data-bs-target="#w0-dd0-dd1-pane0" role="tab" aria-controls="w0-dd0-dd1-pane0" aria-selected="true">B</button></div></div>
+            <a class="menu-item" href="/docs">Docs</a></div></li>
+            <li class="nav-item" role="presentation"><button type="button" id="w0-tab1" class="nav-link" data-bs-toggle="tab" data-bs-target="#w0-pane1" role="tab" aria-controls="w0-pane1" aria-selected="false">C</button></li></ul>
+            <div class="tab-content"><div id="w0-dd0-pane0" class="tab-pane" role="tabpanel" aria-labelledby="w0-dd0-tab0" tabindex="0">a</div>
+            <div id="w0-dd0-dd1-pane0" class="tab-pane active" role="tabpanel" aria-labelledby="w0-dd0-dd1-tab0" tabindex="0">b</div>
+            <div id="w0-pane1" class="tab-pane" role="tabpanel" aria-labelledby="w0-tab1" tabindex="0">c</div></div>
+            HTML,
+            Tabs::widget(
+                [
+                    'items' => [
+                        TabItem::menu(
+                            'Outer',
+                            [
+                                TabItem::to('A', 'a'),
+                                TabItem::menu(
+                                    'Inner',
+                                    [
+                                        TabItem::to('B', 'b')->withActive(true),
+                                        TabItem::to('Hidden', 'h')->withVisible(false),
+                                    ],
+                                )->withLinkOptions(['title' => 'More']),
+                                TabItem::link('Docs', '/docs'),
+                            ],
+                        ),
+                        TabItem::to('C', 'c'),
+                    ],
+                ],
+            ),
+            'Nested active tab must activate the outer toggle only.',
+        );
+    }
+
+    public function testRenderNestedMenuFromArrays(): void
+    {
+        $this->mockWebApplication();
+
+        self::assertSameHtml(
+            <<<HTML
+            <ul id="w0" class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button type="button" class="nav-link" data-bs-toggle="menu" aria-expanded="false">Outer</button><div id="w1" class="menu"><button type="button" id="w0-dd0-tab0" class="menu-item" data-bs-toggle="tab" data-bs-target="#w0-dd0-pane0" role="tab" aria-controls="w0-dd0-pane0" aria-selected="false">A</button>
+            <div class="inner submenu"><button type="button" class="menu-item"><b>Inner</b></button>
+            <div class="menu"><button type="button" id="w0-dd0-dd1-tab0" class="menu-item" data-bs-toggle="tab" data-bs-target="#w0-dd0-dd1-pane0" role="tab" aria-controls="w0-dd0-dd1-pane0" aria-selected="false">B</button>
+            <div class="submenu"><button type="button" class="menu-item">Deep</button>
+            <div class="menu"><button type="button" id="w0-dd0-dd1-dd1-tab0" class="menu-item" data-bs-toggle="tab" data-bs-target="#w0-dd0-dd1-dd1-pane0" role="tab" aria-controls="w0-dd0-dd1-dd1-pane0" aria-selected="false">D</button></div></div></div></div>
+            <div class="submenu"><button type="button" class="menu-item" disabled>Locked</button>
+            <div class="menu"><button type="button" id="w0-dd0-dd2-tab0" class="menu-item" data-bs-toggle="tab" data-bs-target="#w0-dd0-dd2-pane0" role="tab" aria-controls="w0-dd0-dd2-pane0" aria-selected="false">L</button></div></div></div></li>
+            <li class="nav-item" role="presentation"><button type="button" id="w0-tab1" class="nav-link active" data-bs-toggle="tab" data-bs-target="#w0-pane1" role="tab" aria-controls="w0-pane1" aria-selected="true">First</button></li></ul>
+            <div class="tab-content"><div id="w0-dd0-pane0" class="tab-pane" role="tabpanel" aria-labelledby="w0-dd0-tab0" tabindex="0">a</div>
+            <div id="w0-dd0-dd1-pane0" class="tab-pane" role="tabpanel" aria-labelledby="w0-dd0-dd1-tab0" tabindex="0">b</div>
+            <div id="w0-dd0-dd1-dd1-pane0" class="tab-pane" role="tabpanel" aria-labelledby="w0-dd0-dd1-dd1-tab0" tabindex="0">d</div>
+            <div id="w0-dd0-dd2-pane0" class="tab-pane" role="tabpanel" aria-labelledby="w0-dd0-dd2-tab0" tabindex="0">l</div>
+            <div id="w0-pane1" class="tab-pane active" role="tabpanel" aria-labelledby="w0-tab1" tabindex="0">f</div></div>
+            HTML,
+            Tabs::widget(
+                [
+                    'items' => [
+                        [
+                            'label' => 'Outer',
+                            'items' => [
+                                ['label' => 'A', 'content' => 'a'],
+                                [
+                                    'label' => '<b>Inner</b>',
+                                    'encode' => false,
+                                    'headerOptions' => ['class' => 'inner'],
+                                    'items' => [
+                                        ['label' => 'B', 'content' => 'b'],
+                                        ['label' => 'Deep', 'items' => [['label' => 'D', 'content' => 'd']]],
+                                    ],
+                                ],
+                                [
+                                    'label' => 'Locked',
+                                    'disabled' => true,
+                                    'items' => [['label' => 'L', 'content' => 'l']],
+                                ],
+                                [
+                                    'label' => 'Empty',
+                                    'items' => [['label' => 'E', 'content' => 'e', 'visible' => false]],
+                                ],
+                            ],
+                        ],
+                        ['label' => 'First', 'content' => 'f'],
+                    ],
+                ],
+            ),
+            'Nested arrays must render as submenus without empty panels.',
         );
     }
 

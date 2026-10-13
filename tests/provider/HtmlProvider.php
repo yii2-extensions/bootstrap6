@@ -12,8 +12,6 @@ use yii2\extensions\bootstrap6\tests\support\stub\StringableValue;
 
 /**
  * Data provider for {@see \yii2\extensions\bootstrap6\tests\HtmlTest} test cases.
- *
- * Provides representative input/output pairs for the static control, badge, and theme helpers.
  */
 final class HtmlProvider
 {
@@ -118,6 +116,145 @@ final class HtmlProvider
             'bottom-start md:top-end 2xl:end',
             true,
             'bottom-start md:top-end 2xl:end',
+        ];
+    }
+
+    /**
+     * @return iterable<string, array{string, string}>
+     */
+    public static function escapeCssIdentifierCases(): iterable
+    {
+        yield 'empty' => [
+            '',
+            '',
+        ];
+        yield 'widget id' => [
+            'w0',
+            'w0',
+        ];
+        yield 'inner hyphen' => [
+            'login-form',
+            'login-form',
+        ];
+        yield 'colon' => [
+            'account:edit',
+            'account\\:edit',
+        ];
+        yield 'dot and hash' => [
+            'a.b#c',
+            'a\\.b\\#c',
+        ];
+        yield 'leading digit' => [
+            '0abc',
+            '\\30 abc',
+        ];
+        yield 'digit after leading hyphen' => [
+            '-0abc',
+            '-\\30 abc',
+        ];
+        yield 'hyphen alone' => [
+            '-',
+            '\\-',
+        ];
+        yield 'double hyphen' => [
+            '--a',
+            '--a',
+        ];
+        yield 'leading underscore' => [
+            '_x',
+            '_x',
+        ];
+        yield 'space' => [
+            'a b',
+            'a\\ b',
+        ];
+        yield 'double quotes' => [
+            '"quoted"',
+            '\\"quoted\\"',
+        ];
+        yield 'null character' => [
+            "a\0b",
+            "a\u{FFFD}b",
+        ];
+        yield 'control characters' => [
+            "a\x01b\x7Fc",
+            'a\\1 b\\7f c',
+        ];
+        yield 'two-byte character' => [
+            "nombre-\u{F1}",
+            "nombre-\u{F1}",
+        ];
+        yield 'non-ASCII only' => [
+            "\u{E9}",
+            "\u{E9}",
+        ];
+        yield 'brackets' => [
+            '()[]{}',
+            '\\(\\)\\[\\]\\{\\}',
+        ];
+        yield 'digit alone' => [
+            '9',
+            '\\39 ',
+        ];
+        yield 'hyphen and digit' => [
+            '-9',
+            '-\\39 ',
+        ];
+        yield 'digit after inner hyphen' => [
+            '1-0',
+            '\\31 -0',
+        ];
+        yield 'trailing digit' => [
+            'a-0',
+            'a-0',
+        ];
+        yield 'line feed' => [
+            "\n",
+            '\\a ',
+        ];
+        yield 'hyphen and letter' => [
+            '-a',
+            '-a',
+        ];
+        yield 'slash' => [
+            'a/b',
+            'a\\/b',
+        ];
+        yield 'backslash' => [
+            'a\\b',
+            'a\\\\b',
+        ];
+        yield 'four-byte character' => [
+            "\u{1F600}x",
+            "\u{1F600}x",
+        ];
+        yield 'style end tag' => [
+            '</style>',
+            '\\<\\/style\\>',
+        ];
+        yield 'error class' => [
+            'has:error',
+            'has\\:error',
+        ];
+        yield 'last control character' => [
+            "\x1f",
+            '\\1f ',
+        ];
+        yield 'digit after non-ASCII' => [
+            "\u{F1}0",
+            "\u{F1}0",
+        ];
+        yield 'nested tab id' => [
+            'w0-dd0-tab0',
+            'w0-dd0-tab0',
+        ];
+        yield 'ASCII letter bounds' => [
+            'AZaz',
+            'AZaz',
+        ];
+        yield 'ASCII letter neighbours' => [
+            '@`',
+            '\\@\\`',
         ];
     }
 

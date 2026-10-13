@@ -24,7 +24,10 @@ use function implode;
 use function is_array;
 use function is_scalar;
 use function is_string;
+use function ord;
+use function sprintf;
 use function str_contains;
+use function str_split;
 
 /**
  * Provides the Bootstrap 6 implementation of {@see Html}.
@@ -223,6 +226,47 @@ abstract class BaseHtml extends YiiHtml
         }
 
         return parent::error($model, $attribute, $options);
+    }
+
+    /**
+     * Escapes a string for use as a CSS identifier in a selector, as `CSS.escape()` does.
+     *
+     * Bytes from `0x80` up are kept verbatim, so every non-ASCII character of a UTF-8 string passes through unchanged.
+     *
+     * @param string $identifier Raw identifier, such as an element `id` or a class name.
+     *
+     * @return string Identifier safe to interpolate after `#` or `.`, for example `account\:edit` for `account:edit`.
+     *
+     * @see https://drafts.csswg.org/cssom/#serialize-an-identifier
+     */
+    public static function escapeCssIdentifier(string $identifier): string
+    {
+        if ($identifier === '-') {
+            return '\\-';
+        }
+
+        $escaped = '';
+
+        foreach (str_split($identifier) as $index => $char) {
+            $byte = ord($char);
+            $digit = $byte >= 0x30 && $byte <= 0x39;
+
+            $escaped .= match (true) {
+                $byte === 0 => "\u{FFFD}",
+                $byte <= 0x1F,
+                $byte === 0x7F,
+                $digit && ($index === 0 || ($index === 1 && $identifier[0] === '-')) => sprintf('\\%x ', $byte),
+                $digit,
+                $byte >= 0x80,
+                $char === '-',
+                $char === '_',
+                $byte >= 0x41 && $byte <= 0x5A,
+                $byte >= 0x61 && $byte <= 0x7A => $char,
+                default => '\\' . $char,
+            };
+        }
+
+        return $escaped;
     }
 
     /**

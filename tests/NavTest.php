@@ -145,7 +145,9 @@ final class NavTest extends TestCase
         $controller->action = new Action('users', $controller);
 
         Yii::$app->controller = $controller;
-        Yii::$app->getRequest()->setQueryParams(['id' => '42']);
+        Yii::$app->getRequest()->setQueryParams(
+            ['id' => '42', 'f' => '4.2', 'ids' => ['1', '2'], 'deep' => ['a' => ['x' => '1']], 'page' => 3],
+        );
 
         self::assertSameHtml(
             <<<HTML
@@ -159,7 +161,22 @@ final class NavTest extends TestCase
             <li class="nav-item"><a class="nav-link" href="/index.php?r=site%2Fusers">Absolute</a></li>
             <li class="nav-item"><a class="nav-link active" href="/index.php?r=admin%2Fsite%2Fusers" aria-current="page">Absolute match</a></li>
             <li class="nav-item"><a class="nav-link" href="/index.php?r=admin%2Fsite%2Fusers">Forced off</a></li>
-            <li class="nav-item"><a class="nav-link" href="/site/users">String URL</a></li></ul>
+            <li class="nav-item"><a class="nav-link" href="/site/users">String URL</a></li>
+            <li class="nav-item"><a class="nav-link active" href="/index.php?r=admin%2Fsite%2Fusers&amp;id=42" aria-current="page">Int 42</a></li>
+            <li class="nav-item"><a class="nav-link" href="/index.php?r=admin%2Fsite%2Fusers&amp;id=43">Int 43</a></li>
+            <li class="nav-item"><a class="nav-link active" href="/index.php?r=admin%2Fsite%2Fusers&amp;f=4.2" aria-current="page">Float 4.2</a></li>
+            <li class="nav-item"><a class="nav-link" href="/index.php?r=admin%2Fsite%2Fusers&amp;f=4.3">Float 4.3</a></li>
+            <li class="nav-item"><a class="nav-link active" href="/index.php?r=admin%2Fsite%2Fusers&amp;ids%5B0%5D=1&amp;ids%5B1%5D=2" aria-current="page">List 1 2</a></li>
+            <li class="nav-item"><a class="nav-link" href="/index.php?r=admin%2Fsite%2Fusers&amp;ids%5B0%5D=1&amp;ids%5B1%5D=3">List 1 3</a></li>
+            <li class="nav-item"><a class="nav-link" href="/index.php?r=admin%2Fsite%2Fusers&amp;ids%5B0%5D=1">List 1</a></li>
+            <li class="nav-item"><a class="nav-link" href="/index.php?r=admin%2Fsite%2Fusers&amp;ids%5B0%5D=1&amp;ids%5B1%5D=2&amp;ids%5B2%5D=3">List 1 2 3</a></li>
+            <li class="nav-item"><a class="nav-link" href="/index.php?r=admin%2Fsite%2Fusers&amp;ids%5Ba%5D=1&amp;ids%5Bb%5D=2">Keyed list</a></li>
+            <li class="nav-item"><a class="nav-link" href="/index.php?r=admin%2Fsite%2Fusers&amp;id%5B0%5D=42">Array id</a></li>
+            <li class="nav-item"><a class="nav-link" href="/index.php?r=admin%2Fsite%2Fusers&amp;ids=1">Scalar list</a></li>
+            <li class="nav-item"><a class="nav-link" href="/index.php?r=admin%2Fsite%2Fusers&amp;ids=Array">Array literal</a></li>
+            <li class="nav-item"><a class="nav-link active" href="/index.php?r=admin%2Fsite%2Fusers&amp;deep%5Ba%5D%5Bx%5D=1" aria-current="page">Deep match</a></li>
+            <li class="nav-item"><a class="nav-link" href="/index.php?r=admin%2Fsite%2Fusers&amp;deep%5Ba%5D%5Bx%5D=2">Deep mismatch</a></li>
+            <li class="nav-item"><a class="nav-link active" href="/index.php?r=admin%2Fsite%2Fusers&amp;page=3" aria-current="page">Page 3</a></li></ul>
             HTML,
             Nav::widget(
                 [
@@ -175,6 +192,21 @@ final class NavTest extends TestCase
                         ['label' => 'Absolute match', 'url' => ['/admin/site/users']],
                         ['label' => 'Forced off', 'url' => ['site/users'], 'active' => false],
                         ['label' => 'String URL', 'url' => '/site/users'],
+                        ['label' => 'Int 42', 'url' => ['site/users', 'id' => 42]],
+                        ['label' => 'Int 43', 'url' => ['site/users', 'id' => 43]],
+                        ['label' => 'Float 4.2', 'url' => ['site/users', 'f' => 4.2]],
+                        ['label' => 'Float 4.3', 'url' => ['site/users', 'f' => 4.3]],
+                        ['label' => 'List 1 2', 'url' => ['site/users', 'ids' => [1, 2]]],
+                        ['label' => 'List 1 3', 'url' => ['site/users', 'ids' => [1, 3]]],
+                        ['label' => 'List 1', 'url' => ['site/users', 'ids' => [1]]],
+                        ['label' => 'List 1 2 3', 'url' => ['site/users', 'ids' => [1, 2, 3]]],
+                        ['label' => 'Keyed list', 'url' => ['site/users', 'ids' => ['a' => 1, 'b' => 2]]],
+                        ['label' => 'Array id', 'url' => ['site/users', 'id' => [42]]],
+                        ['label' => 'Scalar list', 'url' => ['site/users', 'ids' => 1]],
+                        ['label' => 'Array literal', 'url' => ['site/users', 'ids' => 'Array']],
+                        ['label' => 'Deep match', 'url' => ['site/users', 'deep' => ['a' => ['x' => 1]]]],
+                        ['label' => 'Deep mismatch', 'url' => ['site/users', 'deep' => ['a' => ['x' => 2]]]],
+                        ['label' => 'Page 3', 'url' => ['site/users', 'page' => '3']],
                     ],
                 ],
             ),
