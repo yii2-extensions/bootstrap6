@@ -93,12 +93,25 @@ final class TabItemTest extends TestCase
 
     public function testMenuConvertsArrayItems(): void
     {
-        $item = TabItem::menu('M', [['label' => 'A', 'url' => '/a'], ['label' => 'B', 'content' => 'b'], '-']);
+        $item = TabItem::menu(
+            'M',
+            [
+                ['label' => 'A', 'url' => '/a'],
+                ['label' => 'P', 'url' => null],
+                ['label' => 'B', 'content' => 'b'],
+                '-',
+            ],
+        );
 
         self::assertSame(
-            [self::exportItem(MenuItem::link('A', '/a')), self::exportItem(TabItem::to('B', 'b')), '-'],
+            [
+                self::exportItem(MenuItem::link('A', '/a')),
+                self::exportItem(MenuItem::link('P', null)),
+                self::exportItem(TabItem::to('B', 'b')),
+                '-',
+            ],
             self::exportValue($item->items),
-            'Arrays with `url` become menu items, the others tabs; strings stay.',
+            'Arrays with a `url` key, even `null`, become menu items, the others tabs; strings stay.',
         );
     }
 

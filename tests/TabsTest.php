@@ -66,6 +66,35 @@ final class TabsTest extends TestCase
         );
     }
 
+    public function testRenderActiveMenuToggle(): void
+    {
+        $this->mockWebApplication();
+
+        self::assertSameHtml(
+            <<<HTML
+            <ul id="w0" class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button type="button" class="nav-link active" data-bs-toggle="menu" aria-expanded="false">M</button><div id="w1" class="menu"><button type="button" id="w0-dd0-tab0" class="menu-item" data-bs-toggle="tab" data-bs-target="#w0-dd0-pane0" role="tab" aria-controls="w0-dd0-pane0" aria-selected="false">A</button></div></li>
+            <li class="nav-item" role="presentation"><button type="button" class="nav-link active" data-bs-toggle="menu" aria-expanded="false">N</button><div id="w2" class="menu"><button type="button" id="w0-dd1-tab0" class="menu-item" data-bs-toggle="tab" data-bs-target="#w0-dd1-pane0" role="tab" aria-controls="w0-dd1-pane0" aria-selected="false">B</button></div></li>
+            <li class="nav-item" role="presentation"><button type="button" id="w0-tab2" class="nav-link" data-bs-toggle="tab" data-bs-target="#w0-pane2" role="tab" aria-controls="w0-pane2" aria-selected="false">C</button></li>
+            <li class="nav-item" role="presentation"><button type="button" class="nav-link" disabled data-bs-toggle="menu" aria-expanded="false">D</button><div id="w3" class="menu"><button type="button" id="w0-dd3-tab0" class="menu-item" data-bs-toggle="tab" data-bs-target="#w0-dd3-pane0" role="tab" aria-controls="w0-dd3-pane0" aria-selected="false">E</button></div></li></ul>
+            <div class="tab-content"><div id="w0-dd0-pane0" class="tab-pane" role="tabpanel" aria-labelledby="w0-dd0-tab0" tabindex="0">a</div>
+            <div id="w0-dd1-pane0" class="tab-pane" role="tabpanel" aria-labelledby="w0-dd1-tab0" tabindex="0">b</div>
+            <div id="w0-pane2" class="tab-pane" role="tabpanel" aria-labelledby="w0-tab2" tabindex="0">c</div>
+            <div id="w0-dd3-pane0" class="tab-pane" role="tabpanel" aria-labelledby="w0-dd3-tab0" tabindex="0">e</div></div>
+            HTML,
+            Tabs::widget(
+                [
+                    'items' => [
+                        TabItem::menu('M', [TabItem::to('A', 'a')])->withActive(true),
+                        ['label' => 'N', 'active' => true, 'items' => [['label' => 'B', 'content' => 'b']]],
+                        TabItem::to('C', 'c'),
+                        TabItem::menu('D', [TabItem::to('E', 'e')])->withActive(true)->withDisabled(true),
+                    ],
+                ],
+            ),
+            'Active toggle must carry `active` without activating panes; `disabled` must win.',
+        );
+    }
+
     public function testRenderDisabledMenuToggle(): void
     {
         $this->mockWebApplication();
@@ -363,6 +392,44 @@ final class TabsTest extends TestCase
         );
     }
 
+    public function testRenderNestedActiveMenu(): void
+    {
+        $this->mockWebApplication();
+
+        self::assertSameHtml(
+            <<<HTML
+            <ul id="w0" class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button type="button" class="nav-link active" data-bs-toggle="menu" aria-expanded="false">Outer</button><div id="w1" class="menu"><button type="button" id="w0-dd0-tab0" class="menu-item" data-bs-toggle="tab" data-bs-target="#w0-dd0-pane0" role="tab" aria-controls="w0-dd0-pane0" aria-selected="false">A</button>
+            <div class="submenu"><button type="button" class="menu-item">Inner</button>
+            <div class="menu"><button type="button" id="w0-dd0-dd1-tab0" class="menu-item" data-bs-toggle="tab" data-bs-target="#w0-dd0-dd1-pane0" role="tab" aria-controls="w0-dd0-dd1-pane0" aria-selected="false">B</button></div></div></div></li>
+            <li class="nav-item" role="presentation"><button type="button" class="nav-link active" data-bs-toggle="menu" aria-expanded="false">Other</button><div id="w2" class="menu"><button type="button" id="w0-dd1-tab1" class="menu-item" data-bs-toggle="tab" data-bs-target="#w0-dd1-pane1" role="tab" aria-controls="w0-dd1-pane1" aria-selected="false">E</button></div></li>
+            <li class="nav-item" role="presentation"><button type="button" id="w0-tab2" class="nav-link" data-bs-toggle="tab" data-bs-target="#w0-pane2" role="tab" aria-controls="w0-pane2" aria-selected="false">C</button></li></ul>
+            <div class="tab-content"><div id="w0-dd0-pane0" class="tab-pane" role="tabpanel" aria-labelledby="w0-dd0-tab0" tabindex="0">a</div>
+            <div id="w0-dd0-dd1-pane0" class="tab-pane" role="tabpanel" aria-labelledby="w0-dd0-dd1-tab0" tabindex="0">b</div>
+            <div id="w0-dd1-pane1" class="tab-pane" role="tabpanel" aria-labelledby="w0-dd1-tab1" tabindex="0">e</div>
+            <div id="w0-pane2" class="tab-pane" role="tabpanel" aria-labelledby="w0-tab2" tabindex="0">c</div></div>
+            HTML,
+            Tabs::widget(
+                [
+                    'items' => [
+                        TabItem::menu(
+                            'Outer',
+                            [TabItem::to('A', 'a'), TabItem::menu('Inner', [TabItem::to('B', 'b')])->withActive(true)],
+                        ),
+                        TabItem::menu(
+                            'Other',
+                            [
+                                TabItem::menu('Gone', [TabItem::to('H', 'h')->withVisible(false)])->withActive(true),
+                                TabItem::to('E', 'e'),
+                            ],
+                        ),
+                        TabItem::to('C', 'c'),
+                    ],
+                ],
+            ),
+            'Active nested menu must activate the outer toggle only, even when it renders no submenu.',
+        );
+    }
+
     public function testRenderNestedMenu(): void
     {
         $this->mockWebApplication();
@@ -400,6 +467,33 @@ final class TabsTest extends TestCase
                 ],
             ),
             'Nested active tab must activate the outer toggle only.',
+        );
+        self::assertSameHtml(
+            <<<HTML
+            <ul id="w2" class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button type="button" class="nav-link active" data-bs-toggle="menu" aria-expanded="false">Outer</button><div id="w3" class="menu"><button type="button" id="w2-dd0-tab0" class="active menu-item" data-bs-toggle="tab" data-bs-target="#w2-dd0-pane0" role="tab" aria-controls="w2-dd0-pane0" aria-selected="true">A</button>
+            <div class="submenu"><button type="button" class="menu-item">Inner</button>
+            <div class="menu"><button type="button" id="w2-dd0-dd1-tab0" class="menu-item" data-bs-toggle="tab" data-bs-target="#w2-dd0-dd1-pane0" role="tab" aria-controls="w2-dd0-dd1-pane0" aria-selected="false">B</button></div></div></div></li>
+            <li class="nav-item" role="presentation"><button type="button" class="nav-link" data-bs-toggle="menu" aria-expanded="false">Other</button><div id="w4" class="menu"><div class="submenu"><button type="button" class="menu-item">Deep</button>
+            <div class="menu"><button type="button" id="w2-dd1-dd0-tab0" class="menu-item" data-bs-toggle="tab" data-bs-target="#w2-dd1-dd0-pane0" role="tab" aria-controls="w2-dd1-dd0-pane0" aria-selected="false">D</button></div></div></div></li>
+            <li class="nav-item" role="presentation"><button type="button" id="w2-tab2" class="nav-link" data-bs-toggle="tab" data-bs-target="#w2-pane2" role="tab" aria-controls="w2-pane2" aria-selected="false">C</button></li></ul>
+            <div class="tab-content"><div id="w2-dd0-pane0" class="tab-pane active" role="tabpanel" aria-labelledby="w2-dd0-tab0" tabindex="0">a</div>
+            <div id="w2-dd0-dd1-pane0" class="tab-pane" role="tabpanel" aria-labelledby="w2-dd0-dd1-tab0" tabindex="0">b</div>
+            <div id="w2-dd1-dd0-pane0" class="tab-pane" role="tabpanel" aria-labelledby="w2-dd1-dd0-tab0" tabindex="0">d</div>
+            <div id="w2-pane2" class="tab-pane" role="tabpanel" aria-labelledby="w2-tab2" tabindex="0">c</div></div>
+            HTML,
+            Tabs::widget(
+                [
+                    'items' => [
+                        TabItem::menu(
+                            'Outer',
+                            [TabItem::to('A', 'a')->withActive(true), TabItem::menu('Inner', [TabItem::to('B', 'b')])],
+                        ),
+                        TabItem::menu('Other', [TabItem::menu('Deep', [TabItem::to('D', 'd')])]),
+                        TabItem::to('C', 'c'),
+                    ],
+                ],
+            ),
+            'Inactive nested menu must neither clear nor set the outer toggle state.',
         );
     }
 

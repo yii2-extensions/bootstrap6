@@ -95,7 +95,7 @@ final class TabItemProvider
                     4 => '-',
                     5 => TabItem::to('V'),
                     6 => MenuItem::divider(),
-                    7 => TabItem::to('N'),
+                    7 => MenuItem::link('N', null),
                     8 => TabItem::menu('D', [TabItem::to('D2')]),
                 ],
             ),

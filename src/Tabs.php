@@ -49,7 +49,7 @@ class Tabs extends Widget
      *
      * - `label`: `string|Stringable`, required.
      * - `content`: `string|Stringable`, HTML content of the pane.
-     * - `active`: `bool`, whether the tab and its pane, or the link tab, are active.
+     * - `active`: `bool`, whether the tab and its pane, the link tab, or the menu toggle are active.
      * - `disabled`: `bool`, disables the tab button, the link tab, which loses its `href`, or the menu toggle; a
      *   disabled toggle is never marked active.
      * - `visible`: `bool`, whether to render the tab and its pane. Defaults to `true`.
@@ -59,10 +59,10 @@ class Tabs extends Widget
      * - `options`: `array`, HTML attributes of the pane; its `id` defaults to `{id}-pane{n}`.
      * - `url`: `array|string`, renders a plain link that takes the `active` and `disabled` state instead of a tab,
      *   processed by {@see \yii\helpers\Url::to()}.
-     * - `items`: `array`, tab items rendered inside a {@see Menu}, with the same options; items with a `url` or without
-     *   a `label` are {@see Menu::$items}. A nested item with its own `items` renders as a `.submenu` (its
-     *   `headerOptions` apply to the `.submenu` wrapper), and an active nested tab activates the outer toggle only.
-     *   The Bootstrap docs advise against menus in tabbed interfaces for accessibility reasons.
+     * - `items`: `array`, tab items rendered inside a {@see Menu}, with the same options; items with a `url` key, even
+     *   `null`, or without a `label` are {@see Menu::$items}. A nested item with its own `items` renders as a
+     *   `.submenu` (its `headerOptions` apply to the `.submenu` wrapper), and an active nested tab activates the outer
+     *   toggle only. The Bootstrap docs advise against menus in tabbed interfaces for accessibility reasons.
      *
      * @var array<array-key, array<array-key, mixed>|string|TabItem>
      */
@@ -255,7 +255,7 @@ class Tabs extends Widget
      *
      * @param array<array-key, MenuItem|string|TabItem> $items Children of the menu toggle.
      * @param string $menuSuffix Suffix inserted in the default `id` values of the tab buttons and panes.
-     * @param bool $active Set to `true` when a tab, link, or menu item at any depth is explicitly active.
+     * @param bool $active Set to `true` when a tab, link, menu item, or nested menu at any depth is explicitly active.
      *
      * @return list<MenuItem|string>
      */
@@ -287,6 +287,7 @@ class Tabs extends Widget
             }
 
             if ($child->items !== []) {
+                $active = $active || $child->active === true;
                 $submenu = $this->menuItems($child->items, "{$menuSuffix}-dd{$m}", $active);
 
                 if ($submenu !== []) {
@@ -374,7 +375,7 @@ class Tabs extends Widget
             return Html::tag('li', Html::tag('button', $label, $linkOptions), $headerOptions);
         }
 
-        $active = false;
+        $active = $item->active === true;
         $menuItems = $this->menuItems($item->items, $menuSuffix, $active);
 
         if ($item->disabled) {

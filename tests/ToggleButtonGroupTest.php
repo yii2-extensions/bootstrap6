@@ -100,7 +100,7 @@ final class ToggleButtonGroupTest extends TestCase
 
         self::assertSameHtml(
             <<<HTML
-            <input type="hidden" name="color" value="0"><div id="colors" class="btn-group btn-group-sm" aria-label="Colors" role="radiogroup"><label class="me-1 btn-check btn-solid theme-success"><input type="radio" name="color" value="r" checked disabled autocomplete="on"><b>Red</b></label>
+            <input type="hidden" name="color" value="0" disabled><div id="colors" class="btn-group btn-group-sm" aria-label="Colors" role="radiogroup"><label class="me-1 btn-check btn-solid theme-success"><input type="radio" name="color" value="r" checked disabled autocomplete="on"><b>Red</b></label>
             <label class="me-1 btn-check btn-solid theme-success"><input type="radio" name="color" value="g" disabled autocomplete="on"><i>Green</i></label></div>
             HTML,
             ToggleButtonGroup::widget(
@@ -216,6 +216,40 @@ final class ToggleButtonGroupTest extends TestCase
         );
 
         ToggleButtonGroup::widget(['name' => 'n', 'type' => 'select']);
+    }
+
+    public function testUnselectInputIsDisabledWithInputs(): void
+    {
+        $this->mockWebApplication();
+
+        self::assertSameHtml(
+            <<<HTML
+            <input type="hidden" name="Toggle[value]" value="" disabled><div id="toggle-value" class="btn-group" role="group"><label class="btn-check btn-outline"><input type="checkbox" name="Toggle[value][]" value="1" disabled autocomplete="off">item 1</label></div>
+            HTML,
+            ToggleButtonGroup::widget(
+                [
+                    'attribute' => 'value',
+                    'inputOptions' => ['disabled' => true],
+                    'items' => ['1' => 'item 1'],
+                    'model' => self::model(null),
+                ],
+            ),
+            'Hidden input must carry `disabled` like the inputs.',
+        );
+        self::assertSameHtml(
+            <<<HTML
+            <input type="hidden" name="Toggle[value]" value=""><div id="toggle-value" class="btn-group" role="group"><label class="btn-check btn-outline"><input type="checkbox" name="Toggle[value][]" value="1" autocomplete="off">item 1</label></div>
+            HTML,
+            ToggleButtonGroup::widget(
+                [
+                    'attribute' => 'value',
+                    'inputOptions' => ['disabled' => false],
+                    'items' => ['1' => 'item 1'],
+                    'model' => self::model(null),
+                ],
+            ),
+            'Hidden input must stay enabled when `disabled` is `false`.',
+        );
     }
 
     private static function model(mixed $value): Model

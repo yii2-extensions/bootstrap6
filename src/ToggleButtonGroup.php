@@ -21,7 +21,8 @@ use function is_scalar;
  *
  * Each item renders as `<label class="btn-check ..."><input type="checkbox" ...>Label</label>`; the input is nested in
  * the label, so no `id`/`for` pair is needed. With a model, a hidden input submits the empty value when nothing is
- * selected (configurable through the `unselect` key of {@see $options}).
+ * selected (configurable through the `unselect` key of {@see $options}); it is disabled together with the inputs when
+ * {@see $inputOptions} carries `disabled`.
  *
  * @see https://getbootstrap.com/docs/6.0/components/button-group/#toggle-buttons
  */
@@ -130,7 +131,8 @@ class ToggleButtonGroup extends InputWidget
             $items[] = $this->renderItem($label, $inputName, self::isSelected($value, $selection), $value);
         }
 
-        $hidden = is_scalar($unselect) ? Html::hiddenInput($name, (string) $unselect) : '';
+        $hiddenOptions = ['disabled' => $this->inputOptions['disabled'] ?? null];
+        $hidden = is_scalar($unselect) ? Html::hiddenInput($name, (string) $unselect, $hiddenOptions) : '';
 
         return $hidden
             . Html::tag(

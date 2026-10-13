@@ -23,8 +23,8 @@ final readonly class TabItem
      * @param string|Stringable|null $content HTML content of the pane, or `null` for an empty pane.
      * @param array<array-key, mixed>|string|null $url URL of a plain link tab, processed by
      * {@see \yii\helpers\Url::to()}, or `null` for a tab with a pane.
-     * @param bool|null $active Whether the tab and its pane, or the link, are active, or `null` to let `Tabs` activate
-     * the first eligible tab when none is active.
+     * @param bool|null $active Whether the tab and its pane, the link, or the menu toggle are active, or `null` to let
+     * `Tabs` activate the first eligible tab when none is active; an active menu toggle needs no active item.
      * @param bool $disabled Whether the tab button, the link, or the menu toggle is disabled; a disabled link loses its
      * `href` and takes precedence over {@see $active}, and a disabled toggle is never marked active.
      * @param bool $visible Whether to render the tab and its pane.
@@ -54,8 +54,8 @@ final readonly class TabItem
     /**
      * Creates an item from the array configuration documented in `Tabs::$items`.
      *
-     * An `active` key, even `null`, makes the state explicit. Nested `items` arrays with a `url` or without a `label`
-     * are converted through {@see MenuItem::fromArray()}, the others recursively through this method.
+     * An `active` key, even `null`, makes the state explicit. Nested `items` arrays with a `url` key, even `null`, or
+     * without a `label` are converted through {@see MenuItem::fromArray()}, the others recursively through this method.
      *
      * @param array<array-key, mixed> $config Item configuration.
      *
@@ -231,8 +231,9 @@ final readonly class TabItem
     }
 
     /**
-     * Converts the array items of a menu list, keeping keys, instances, and strings: arrays with a `url` or without a
-     * `label` become menu items through {@see MenuItem::fromArray()}, the others tabs through {@see fromArray()}.
+     * Converts the array items of a menu list, keeping keys, instances, and strings: arrays with a `url` key, even
+     * `null`, or without a `label` become menu items through {@see MenuItem::fromArray()}, the others tabs through
+     * {@see fromArray()}.
      *
      * @param array<array-key, mixed> $items Items to convert.
      *
@@ -244,7 +245,7 @@ final readonly class TabItem
     {
         foreach ($items as $key => $item) {
             if (is_array($item)) {
-                $items[$key] = isset($item['url']) || !isset($item['label'])
+                $items[$key] = array_key_exists('url', $item) || !isset($item['label'])
                     ? MenuItem::fromArray($item)
                     : self::fromArray($item);
             }
