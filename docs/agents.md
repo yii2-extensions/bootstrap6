@@ -28,11 +28,11 @@ make its skills automatically discoverable from the application root.
 This package checkout includes links to the same canonical skill in `.agents/skills/` and `.claude/skills/`. They
 provide native project discovery without separate editable copies:
 
-| Client      | Project skill path                                                                         | Explicit activation                                |
+pr| Client | Project skill path | Explicit activation |
 | ----------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------- |
-| Codex       | `.agents/skills/yii2-bootstrap6-widgets/SKILL.md`                                          | `$yii2-bootstrap6-widgets` or the skill selector   |
-| Claude Code | `.claude/skills/yii2-bootstrap6-widgets/SKILL.md`                                          | `/yii2-bootstrap6-widgets`                         |
-| OpenCode    | `.opencode/skills/`, `.agents/skills/`, or `.claude/skills/`, followed by the skill folder | Native `skill` tool with `yii2-bootstrap6-widgets` |
+| Codex | `.agents/skills/yii2-bootstrap6-widgets/SKILL.md` | `$yii2-bootstrap6-widgets` or the skill selector |
+| Claude Code | `.claude/skills/yii2-bootstrap6-widgets/SKILL.md` | `/yii2-bootstrap6-widgets` |
+| OpenCode | `.opencode/skills/`, `.agents/skills/`, or `.claude/skills/`, followed by the skill folder | Native `skill` tool with `yii2-bootstrap6-widgets` |
 
 OpenCode supports both shared paths; inspect its available skills and keep one effective entry if multiple aliases
 produce duplicates. The installer can create a destination or alias for the selected client. For project paths and

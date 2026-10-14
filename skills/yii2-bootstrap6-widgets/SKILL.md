@@ -24,13 +24,13 @@ Confirm the installed package version before using a recipe from a different rel
    `https://github.com/yii2-extensions/bootstrap6/tree/main/docs`. Do not assume a copied skill's parent directories
    still contain the package.
 
-| Task | Guide page under `https://yii2-framework.github.io/docs/` |
-| --- | --- |
-| Install packages, configure `@npm`, deliver local/CDN assets | `extensions/bootstrap6/installation/index.md` |
-| Combine widget options, items, icons, forms, or plugins | `extensions/bootstrap6/configuration/index.md` |
-| Select a widget or adapt a complete view recipe | `extensions/bootstrap6/examples/index.md` |
-| Replace Bootstrap 5 widgets, options, selectors, or scripts | `extensions/bootstrap6/migration/index.md` |
-| Confirm a specific property's type/default or a signature | `extensions/bootstrap6/reference/<class>/index.md` |
+| Task                                                         | Guide page under `https://yii2-framework.github.io/docs/` |
+| ------------------------------------------------------------ | --------------------------------------------------------- |
+| Install packages, configure `@npm`, deliver local/CDN assets | `extensions/bootstrap6/installation/index.md`             |
+| Combine widget options, items, icons, forms, or plugins      | `extensions/bootstrap6/configuration/index.md`            |
+| Select a widget or adapt a complete view recipe              | `extensions/bootstrap6/examples/index.md`                 |
+| Replace Bootstrap 5 widgets, options, selectors, or scripts  | `extensions/bootstrap6/migration/index.md`                |
+| Confirm a specific property's type/default or a signature    | `extensions/bootstrap6/reference/<class>/index.md`        |
 
 Read relevant sections and the specific class reference, rather than the entire gallery or API. For example, a
 Dialog task needs configuration's `Dialog` section and `reference/dialog/index.md`; an automatically shown Toast
