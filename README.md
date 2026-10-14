@@ -92,7 +92,19 @@ Practical guides and complete examples, with API details generated from PHPDoc.
 - 🔄 [Migration from Bootstrap 5](docs/migration.md)
 - 🧪 [Testing Guide](docs/testing.md)
 - 📖 [Generated API Reference](https://yii2-framework.github.io/docs/extensions/bootstrap6/reference/)
-- 🤖 [Agent Skill](docs/agents.md): installation for Claude Code, Codex, and OpenCode.
+
+## AI assistance
+
+AI agents: read <https://yii2-framework.github.io/docs/llms.txt>, the index of the documentation site, and fetch the
+Markdown version of a page by appending `index.md` to its URL, for example
+<https://yii2-framework.github.io/docs/extensions/bootstrap6/installation/index.md>. For the Yii conventions this
+package builds on, install the
+[`yii2-framework` agent skill](https://github.com/yii2-framework/docs/blob/main/skills/yii2-framework/SKILL.md) with
+`npx skills add yii2-framework/docs --skill yii2-framework`.
+
+- 🤖 [yii2-bootstrap6-widgets skill](docs/agents.md): installation for Claude Code, Codex, and OpenCode.
+
+If the hosted sources are unavailable, use the repository guides and locally available skills.
 
 ## Package information
 

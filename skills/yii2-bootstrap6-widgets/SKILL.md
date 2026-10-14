@@ -15,14 +15,9 @@ Confirm the installed package version before using a recipe from a different rel
 
 ## Find only the documentation needed
 
-1. If the workspace supplies `.eval-docs/INDEX.md` or another local documentation index, read it first and use the
-   listed local pages. Respect an evaluation's offline restriction.
-2. In a package checkout, use its `docs/` guides and `src/` PHPDoc. In an application, locate the package through
-   Composer before looking for those files; distribution archives may omit `docs/`.
-3. A distributed skill may contain generated guide snapshots in `references/`; use them when present. Otherwise
-   use the published Markdown pages below, or the repository guides at
-   `https://github.com/yii2-extensions/bootstrap6/tree/main/docs`. Do not assume a copied skill's parent directories
-   still contain the package.
+1. If the workspace supplies `.eval-docs/INDEX.md` or another local documentation index, read it first and use the listed local pages. Respect an evaluation's offline restriction.
+2. In a package checkout, use its `docs/` guides and `src/` PHPDoc. In an application, locate the package through Composer before looking for those files; distribution archives may omit `docs/`.
+3. A distributed skill may contain generated guide snapshots in `references/`; use them when present. Otherwise use the published Markdown pages below, or the repository guides at `https://github.com/yii2-extensions/bootstrap6/tree/main/docs`. Do not assume a copied skill's parent directories still contain the package.
 
 | Task                                                         | Guide page under `https://yii2-framework.github.io/docs/` |
 | ------------------------------------------------------------ | --------------------------------------------------------- |

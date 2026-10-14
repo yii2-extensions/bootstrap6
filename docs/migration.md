@@ -11,8 +11,7 @@ components, so expect markup changes in custom views as well as in widget calls.
 ## Migration sequence
 
 1. Check the browser requirements and migrate on a branch with representative views available for testing.
-2. Replace the package, namespace, and asset classes, then configure the `@npm` alias as described in
-   [installation](installation.md#point-the-npm-alias-to-the-install-directory).
+2. Replace the package, namespace, and asset classes, then configure the `@npm` alias as described in [installation](installation.md#point-the-npm-alias-to-the-install-directory).
 3. Replace renamed widget options and custom CSS selectors; migrate plugin scripts to the ES module helper.
 4. Render and exercise dialogs, drawers, menus, tabs, toasts, and form validation before removing legacy styles.
 
