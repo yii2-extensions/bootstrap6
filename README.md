@@ -31,8 +31,8 @@
 </p>
 
 > [!IMPORTANT]
-> Bootstrap 6 is an alpha. The extension pins `6.0.0-alpha.1`, the only Bootstrap 6 release so far, and its API may
-> change before beta. Bootstrap 6 supports Chrome and Edge 130, Firefox 132, and Safari 18 or later.
+> This package pins Bootstrap `6.0.0-alpha.1`. Its classes, markup, and plugin options may change before beta.
+> Supported browsers start at Chrome/Edge 130, Firefox 132, and Safari 18.
 
 ## Features
 
@@ -45,58 +45,54 @@
 
 ### Installation
 
-Requires PHP 8.3 or newer and Yii2 `2.0.54` or `22.x`.
+Requires PHP 8.3 or later and Yii2 `2.0.54` or the `22.x` development line.
 
 ```bash
 composer config allow-plugins.php-forge/foxy true
 composer require php-forge/foxy:^0.4 yii2-extensions/bootstrap6:^0.1
 ```
 
-Yii2 `2.0.x` applications must point the `@npm` alias to the Foxy install directory, or install into `vendor/npm`
-with the `native` manager; see the [installation guide](docs/installation.md).
+Foxy installs the frontend assets. In Yii2 `2.0.x`, set the application alias `@npm` to `@app/node_modules`, or use
+Foxy's native manager with `vendor/npm`. See [installation](docs/installation.md) for the complete configuration.
 
 ### Basic usage
 
-```php
-use yii2\extensions\bootstrap6\Alert;
-use yii2\extensions\bootstrap6\enum\Theme;
-
-echo Alert::widget(['body' => 'Profile saved.', 'theme' => Theme::SUCCESS]);
-```
+Place this in a Yii view. The button opens a native dialog with a title, content, and a working close action:
 
 ```php
-use yii2\extensions\bootstrap6\ActiveForm;
+use yii2\extensions\bootstrap6\{Dialog, Html};
+use yii2\extensions\bootstrap6\enum\DialogSize;
 
-$form = ActiveForm::begin(['layout' => ActiveForm::LAYOUT_FLOATING, 'nativeValidation' => true]);
+Dialog::begin([
+    'title' => 'Welcome to your next project',
+    'size' => DialogSize::LG,
+    'toggleButton' => ['label' => 'Preview welcome'],
+    'footer' => Html::button('Start exploring', [
+        'class' => 'btn-solid theme-primary',
+        'data' => ['bs-dismiss' => 'dialog'],
+    ]),
+]);
 
-echo $form->field($model, 'email')->textInput(['type' => 'email']);
-echo $form->field($model, 'notify')->checkbox(['switch' => true]);
-
-ActiveForm::end();
-```
-
-```php
-use yii2\extensions\bootstrap6\Dialog;
-
-Dialog::begin(['title' => 'Delete post', 'toggleButton' => ['label' => 'Delete']]);
-
-echo '<p>This action cannot be undone.</p>';
+echo '<p class="fs-5">Build clear interfaces with <strong>Yii2 and Bootstrap 6</strong>.</p>';
 
 Dialog::end();
 ```
 
-The widgets register the stylesheet and the `type="module"` bundle on demand. Plugins initialize through `data-bs-*`
-attributes, or through a dynamic `import()` of the bundle when `clientOptions` are given.
+Widgets load their CSS and JavaScript on demand. The JavaScript bundle uses `type="module"` and exposes no
+`window.bootstrap` by default; use the registered bundle's `importJs()` helper for custom plugin code. Titles and
+labels are encoded by default, while body and footer content require encoding when they contain user data.
 
 ## Documentation
 
-For detailed configuration options and advanced usage.
+Practical guides and complete examples, with API details generated from PHPDoc.
 
-- 📚 [Installation Guide](docs/installation.md)
-- ⚙️ [Configuration Reference](docs/configuration.md)
-- 💡 [Usage Examples](docs/examples.md)
-- 🔄 [Migration Guide](docs/migration.md)
+- 📚 [Installation Guide](docs/installation.md): packages, aliases, assets, and CDN delivery.
+- ⚙️ [Configuration Guide](docs/configuration.md): practical choices for plugins, items, forms, and icons.
+- 💡 [Usage Examples](docs/examples.md): widget gallery and complete view recipes.
+- 🔄 [Migration from Bootstrap 5](docs/migration.md)
 - 🧪 [Testing Guide](docs/testing.md)
+- 📖 [Generated API Reference](https://yii2-framework.github.io/docs/extensions/bootstrap6/reference/)
+- 🤖 [Agent Skill](docs/agents.md): installation for Claude Code, Codex, and OpenCode.
 
 ## Package information
 
