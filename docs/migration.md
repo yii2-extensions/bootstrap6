@@ -8,12 +8,19 @@ components, so expect markup changes in custom views as well as in widget calls.
 > Bootstrap 6 is an alpha (`6.0.0-alpha.1`) and drops browsers below Chrome/Edge 130, Firefox 132, and Safari 18.
 > Keep `yii2-bootstrap5` for applications that must support older browsers.
 
+## Migration sequence
+
+1. Check the browser requirements and migrate on a branch with representative views available for testing.
+2. Replace the package, namespace, and asset classes, then configure the `@npm` alias as described in [installation](installation.md#point-the-npm-alias-to-the-install-directory).
+3. Replace renamed widget options and custom CSS selectors; migrate plugin scripts to the ES module helper.
+4. Render and exercise dialogs, drawers, menus, tabs, toasts, and form validation before removing legacy styles.
+
 ## Package and namespace
 
 ```bash
 composer remove yiisoft/yii2-bootstrap5
 composer config allow-plugins.php-forge/foxy true
-composer require php-forge/foxy:^0.3 yii2-extensions/bootstrap6:^0.1
+composer require php-forge/foxy:^0.4 yii2-extensions/bootstrap6:^0.1
 ```
 
 Replace the namespace `yii\bootstrap5\` with `yii2\extensions\bootstrap6\` in every `use` statement and configuration
@@ -35,14 +42,18 @@ array. Enumerations are new and live in `yii2\extensions\bootstrap6\enum`; asset
 
 `Accordion`, `ActiveField`, `ActiveForm`, `Alert`, `Breadcrumbs`, `Button`, `ButtonGroup`, `ButtonToolbar`,
 `Carousel`, `Html`, `LinkPager`, `Nav`, `NavBar`, `Progress`, `Tabs`, `Toast`, and `ToggleButtonGroup` keep their names.
-The new widgets are `Avatar`, `Badge`, `Chips`, `Collapse`, `Combobox`, `Datepicker`, `NavOverflow`, `OtpInput`,
-`Placeholder`, `Range`, `Spinner`, `Stepper`, `Strength`, `Toggler`, and `Tooltip`.
+See the [gallery](examples.md) for components added in Bootstrap 6.
 
 ## JavaScript
 
+Do not replace `bootstrap.Modal` with `bootstrap.Dialog` in a classic inline script alone: the module still provides
+no global. Register the bundle and call its instance helper, as shown in the [Toast migration](#toast). A global
+exposure is a temporary compatibility option and does not restore removed Bootstrap 5 plugin names.
+
 - `BootstrapPluginAsset` registers `bootstrap.bundle.js` with `type="module"`. The bundle has no `window.bootstrap`, so
-  inline scripts such as `new bootstrap.Modal(...)` fail. Use `BootstrapPluginAsset::importJs()` or a dynamic
-  `import()` of `moduleUrl()`, or set `exposeGlobal` to `true` while migrating; see the
+  inline scripts such as `new bootstrap.Modal(...)` fail. Capture the instance returned by
+  `BootstrapPluginAsset::register($view)` and call `$bundle->importJs($view, $code)`, use a dynamic `import()` of
+  `$bundle->moduleUrl($view)`, or set `exposeGlobal` to `true` while migrating; see the
   [examples](examples.md#javascript).
 - Popper is gone; Floating UI is inlined in the bundle. Rename `popperConfig` plugin options to `floatingConfig`.
 - Plugin names and events follow the components: `Modal` becomes `Dialog` (`*.bs.dialog`), `Offcanvas` becomes
@@ -87,39 +98,37 @@ custom `i18n` configurations and in `Yii::t()` calls that reused the extension m
 
 ## Property changes
 
-Properties not listed keep their name and meaning. Properties typed with enumerations also accept the string value.
+Apply the replacements below to existing configurations. New options and their exact contracts are documented in
+the [generated API](https://yii2-framework.github.io/docs/extensions/bootstrap6/reference/). Enum-typed properties
+also accept a valid string value.
 
-Item arrays of `Accordion`, `Breadcrumbs`, `Carousel`, `Menu`, `Nav`, `Progress` (`bars`), `Stepper`, and `Tabs` keep
-working unchanged; the `AccordionItem`, `BreadcrumbLink`, `CarouselItem`, `MenuItem`, `NavItem`, `ProgressBar`,
-`StepItem`, and `TabItem` value objects (`yii2\extensions\bootstrap6\item`) are the canonical form, and both can be
-mixed in one list.
+Item arrays remain supported, but update renamed keys such as Accordion `expand` and `contentOptions`. Immutable
+item objects are an optional typed alternative and can be mixed with arrays; when chaining a `with*()` method, keep
+its returned copy. See [configuration](configuration.md#widgets).
 
 ### Accordion
 
-| yii2-bootstrap5       | bootstrap6                      | Notes                                  |
-| --------------------- | ------------------------------- | -------------------------------------- |
-| `itemToggleOptions`   | item `headerOptions`            | The toggle is the `<summary>` element. |
-| item `contentOptions` | item `bodyOptions`              | Attributes of `.accordion-body`.       |
-| item `expand`         | item `open`                     | Renders the `open` attribute.          |
-| —                     | `flush`, `gap`, `icon`, `small` | New.                                   |
+| yii2-bootstrap5       | bootstrap6           | Notes                                  |
+| --------------------- | -------------------- | -------------------------------------- |
+| `itemToggleOptions`   | item `headerOptions` | The toggle is the `<summary>` element. |
+| item `contentOptions` | item `bodyOptions`   | Attributes of `.accordion-body`.       |
+| item `expand`         | item `open`          | Renders the `open` attribute.          |
 
 `autoCloseItems` now shares a `name` attribute between `<details>` elements; no JavaScript is involved.
 
 ### Alert
 
-| yii2-bootstrap5 | bootstrap6                                              | Notes                                     |
-| --------------- | ------------------------------------------------------- | ----------------------------------------- |
-| `options` class | `theme`                                                 | `alert-success` becomes `Theme::SUCCESS`. |
-| —               | `heading`, `headingOptions`, `encodeHeading`, `instant` | New.                                      |
+| yii2-bootstrap5 | bootstrap6 | Notes                                     |
+| --------------- | ---------- | ----------------------------------------- |
+| `options` class | `theme`    | `alert-success` becomes `Theme::SUCCESS`. |
 
 `.alert-dismissible` is no longer rendered; the close button is a plain `.btn-close` inside the alert.
 
 ### Breadcrumbs
 
-| yii2-bootstrap5      | bootstrap6                  | Notes                                                 |
-| -------------------- | --------------------------- | ----------------------------------------------------- |
-| `activeItemTemplate` | `activeItemTemplate`        | `active` moved from the `<li>` to `.breadcrumb-link`. |
-| —                    | `divider`, `dividerOptions` | Explicit `.breadcrumb-divider` items.                 |
+| yii2-bootstrap5      | bootstrap6           | Notes                                                 |
+| -------------------- | -------------------- | ----------------------------------------------------- |
+| `activeItemTemplate` | `activeItemTemplate` | `active` moved from the `<li>` to `.breadcrumb-link`. |
 
 The widget extends `yii2\extensions\bootstrap6\Widget` instead of `yii\widgets\Breadcrumbs`; `links`, `homeLink`,
 `encodeLabels`, `itemTemplate`, `navOptions`, and `tag` keep their meaning.
@@ -130,51 +139,75 @@ The widget extends `yii2\extensions\bootstrap6\Widget` instead of `yii\widgets\B
 | -------------------------- | -------------------------- | -------------------------------------------- |
 | `label` (default `Button`) | `label` (default `null`)   | `null` renders the translated `Button`.      |
 | `options` class            | `variant`, `theme`, `size` | Default `variant` is `ButtonVariant::SOLID`. |
-| —                          | `toggle`                   | New.                                         |
 
 ### ButtonDropdown to ButtonMenu
 
-| ButtonDropdown             | ButtonMenu                                                               | Notes                                            |
-| -------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------ |
-| `dropdown`                 | `menu`                                                                   | `Menu` configuration.                            |
-| `dropdownClass`            | `menuClass`                                                              | Default `Menu::class`.                           |
-| `direction`                | `placement`                                                              | `DIRECTION_*` constants replaced by `Placement`. |
-| `renderContainer` (`true`) | `renderContainer` (`false`)                                              | Split buttons always render the container.       |
-| —                          | `autoClose`, `containerOptions`, `size`, `splitIcon`, `theme`, `variant` | New.                                             |
+| ButtonDropdown             | ButtonMenu                  | Notes                                            |
+| -------------------------- | --------------------------- | ------------------------------------------------ |
+| `dropdown`                 | `menu`                      | `Menu` configuration.                            |
+| `dropdownClass`            | `menuClass`                 | Default `Menu::class`.                           |
+| `direction`                | `placement`                 | `DIRECTION_*` constants replaced by `Placement`. |
+| `renderContainer` (`true`) | `renderContainer` (`false`) | Split buttons always render the container.       |
 
 `label`, `buttonOptions`, `split`, `tagName`, and `encodeLabel` are unchanged.
 
-### ButtonGroup
-
-New properties: `divider`, `size`, and `vertical`.
-
 ### Carousel
 
-| yii2-bootstrap5                  | bootstrap6                                                                                           | Notes                                                        |
-| -------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| `controls` (HTML), `null`        | `controls` (labels), `false`                                                                         | Visually hidden labels `[previous, next]`.                   |
-| `options` `data-bs-ride`         | `autoplay`                                                                                           | Renders `data-bs-autoplay="true"`.                           |
-| item `caption`, `captionOptions` | —                                                                                                    | Removed with `.carousel-caption`; put captions in `content`. |
-| —                                | `controlsOptions`, `ends`, `indicatorLabel`, `interval`, `keyboard`, `overlay`, `pause`, `playPause` | New.                                                         |
+| yii2-bootstrap5                  | bootstrap6                   | Notes                                                        |
+| -------------------------------- | ---------------------------- | ------------------------------------------------------------ |
+| `controls` (HTML), `null`        | `controls` (labels), `false` | Visually hidden labels `[previous, next]`.                   |
+| `options` `data-bs-ride`         | `autoplay`                   | Renders `data-bs-autoplay="true"`.                           |
+| item `caption`, `captionOptions` | —                            | Removed with `.carousel-caption`; put captions in `content`. |
 
 ### Dropdown to Menu
 
 `items`, `encodeLabels`, and `submenuOptions` are unchanged. Items gain `header`, `text`, and `divider` keys; items
 without `url` render `<button>` elements.
 
-### LinkPager
-
-All properties are unchanged. New: `size` and `theme`.
-
 ### Modal to Dialog
 
-| Modal                                  | Dialog                                                           | Notes                                         |
-| -------------------------------------- | ---------------------------------------------------------------- | --------------------------------------------- |
-| `size` (`SIZE_*`)                      | `size` (`DialogSize`)                                            | `Modal::SIZE_LARGE` becomes `DialogSize::LG`. |
-| `dialogOptions`                        | `options`                                                        | There is no inner `.modal-dialog` element.    |
-| `centerVertical`                       | —                                                                | Removed.                                      |
-| `clientOptions` `backdrop`, `keyboard` | `backdrop`, `keyboard`                                           | Rendered as `data-bs-*` attributes.           |
-| —                                      | `encodeTitle`, `fullscreenBelow`, `instant`, `nonModal`, `slide` | New.                                          |
+Before, a Bootstrap 5 view supplied the size constant and backdrop setting to Modal:
+
+```php
+use yii\bootstrap5\Modal;
+
+Modal::begin([
+    'title' => 'Terms of service',
+    'size' => Modal::SIZE_LARGE,
+    'clientOptions' => ['backdrop' => 'static'],
+    'scrollable' => true,
+    'toggleButton' => ['label' => 'Review terms'],
+]);
+echo '<p>Read the terms before continuing.</p>';
+Modal::end();
+```
+
+After, use `DialogSize` and the widget's `backdrop` option:
+
+```php
+use yii2\extensions\bootstrap6\Dialog;
+use yii2\extensions\bootstrap6\enum\DialogSize;
+
+Dialog::begin([
+    'title' => 'Terms of service',
+    'size' => DialogSize::LG,
+    'backdrop' => 'static',
+    'scrollable' => true,
+    'toggleButton' => ['label' => 'Review terms'],
+]);
+echo '<p>Read the terms before continuing.</p>';
+Dialog::end();
+```
+
+Verify that clicking the backdrop leaves it open and that Escape and the close button still close it. Update custom
+selectors: the native `<dialog>` replaces the nested v5 modal containers.
+
+| Modal                                  | Dialog                 | Notes                                         |
+| -------------------------------------- | ---------------------- | --------------------------------------------- |
+| `size` (`SIZE_*`)                      | `size` (`DialogSize`)  | `Modal::SIZE_LARGE` becomes `DialogSize::LG`. |
+| `dialogOptions`                        | `options`              | There is no inner `.modal-dialog` element.    |
+| `centerVertical`                       | —                      | Removed.                                      |
+| `clientOptions` `backdrop`, `keyboard` | `backdrop`, `keyboard` | Rendered as `data-bs-*` attributes.           |
 
 `title`, `titleOptions`, `headerOptions`, `bodyOptions`, `footer`, `footerOptions`, `closeButton`, `toggleButton`, and
 `scrollable` are unchanged. The title tag defaults to `h1` (v5 rendered `h5`) and accepts a `tag` key in
@@ -190,20 +223,18 @@ All properties are unchanged. New: `size` and `theme`.
 
 ### NavBar
 
-| yii2-bootstrap5                       | bootstrap6         | Notes                                                                  |
-| ------------------------------------- | ------------------ | ---------------------------------------------------------------------- |
-| `collapseOptions`, `offcanvasOptions` | `drawerOptions`    | The content always collapses into a drawer; `false` renders it inline. |
-| `options` `navbar-expand-*`           | `expand`           | `Breakpoint::LG` by default (`lg:navbar-expand`).                      |
-| `clientOptions`                       | —                  | The drawer uses the data API; the property has no effect.              |
-| —                                     | `encodeBrandLabel` | New.                                                                   |
+| yii2-bootstrap5                       | bootstrap6      | Notes                                                                  |
+| ------------------------------------- | --------------- | ---------------------------------------------------------------------- |
+| `collapseOptions`, `offcanvasOptions` | `drawerOptions` | The content always collapses into a drawer; `false` renders it inline. |
+| `options` `navbar-expand-*`           | `expand`        | `Breakpoint::LG` by default (`lg:navbar-expand`).                      |
+| `clientOptions`                       | —               | The drawer uses the data API; the property has no effect.              |
 
 ### Offcanvas to Drawer
 
-| Offcanvas                   | Drawer                                                                                    | Notes                                       |
-| --------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------- |
-| `placement` (`PLACEMENT_*`) | `placement` (`DrawerPlacement`)                                                           | `'start'` becomes `DrawerPlacement::START`. |
-| `scrolling`                 | `scroll`                                                                                  | Renders `data-bs-scroll="true"`.            |
-| —                           | `encodeTitle`, `footer`, `footerOptions`, `fullscreen`, `keyboard`, `responsive`, `sheet` | New.                                        |
+| Offcanvas                   | Drawer                          | Notes                                       |
+| --------------------------- | ------------------------------- | ------------------------------------------- |
+| `placement` (`PLACEMENT_*`) | `placement` (`DrawerPlacement`) | `'start'` becomes `DrawerPlacement::START`. |
+| `scrolling`                 | `scroll`                        | Renders `data-bs-scroll="true"`.            |
 
 `backdrop`, `title`, `titleOptions`, `headerOptions`, `bodyOptions`, `closeButton`, and `toggleButton` are unchanged.
 
@@ -218,12 +249,6 @@ between `begin()` and `end()` and lets Bootstrap build the popover.
 | `placement` (`PLACEMENT_*`, default `auto`)                    | `placement` (`Placement`, default `null`) | Also responsive values.                  |
 | `TRIGGER_*` constants                                          | `trigger`                                 | Space-separated string.                  |
 | `toggleButton`, `headerOptions`, `bodyOptions`, `arrowOptions` | —                                         | Removed.                                 |
-| —                                                              | `customClass`, `html`, `tagName`          | New.                                     |
-
-### Progress
-
-New properties: `animated`, `ariaLabel`, `encodeLabel`, `max`, `min`, `striped`, and `theme`; `bars` segments accept
-the same keys.
 
 ### Tabs
 
@@ -234,15 +259,38 @@ the same keys.
 
 ### Toast
 
-| yii2-bootstrap5      | bootstrap6               | Notes                  |
-| -------------------- | ------------------------ | ---------------------- |
-| `dateTime` (`false`) | `dateTime` (`null`)      | `null` omits the time. |
-| —                    | `encodeTitle`, `instant` | New.                   |
+For a legacy view receiving a user-supplied `$model->title`, replace the global plugin access and encode the body:
+
+```php
+use yii2\extensions\bootstrap6\{Html, Toast};
+use yii2\extensions\bootstrap6\asset\BootstrapPluginAsset;
+
+echo Toast::widget([
+    'options' => ['id' => 'saved-toast'],
+    'title' => 'Post saved',
+    'body' => Html::encode($model->title),
+    'dateTime' => null,
+]);
+
+$bundle = BootstrapPluginAsset::register($this);
+$this->registerJs($bundle->importJs(
+    $this,
+    'bootstrap.Toast.getOrCreateInstance(document.getElementById("saved-toast")).show();',
+));
+```
+
+Verify that the notification appears on load, can be dismissed, and renders a title containing `<script>` as text.
+A `show` class displays markup but does not exercise custom module access. The `importJs()` call above must use the
+registered bundle instance, not a static call on its class.
+
+| yii2-bootstrap5      | bootstrap6          | Notes                  |
+| -------------------- | ------------------- | ---------------------- |
+| `dateTime` (`false`) | `dateTime` (`null`) | `null` omits the time. |
 
 ### ToggleButtonGroup
 
-New properties: `inputOptions`, `size`, `theme`, and `variant` (default `ButtonVariant::OUTLINE`). The input is nested
-in its `.btn-check` label.
+Move any custom `.btn-check` selectors from the input to its enclosing label. The input is now nested inside that
+label; use `inputOptions` for attributes of the actual input.
 
 ### ActiveForm and ActiveField
 
@@ -258,9 +306,18 @@ The floating layout renders the label before the control and marks the `.form-fl
 horizontal grid classes use prefixes (`sm:col-2`, `sm:col-10`, `sm:offset-2`). Client-side floating feedback is
 displayed by a CSS `:has()` rule registered once per form, so it needs no jQuery.
 
+## Verify the migration
+
+- Search application views, assets, and configuration for `yii\bootstrap5`, `bootstrap.Modal`, `bootstrap.Offcanvas`,
+  `bootstrap.Dropdown`, and old event suffixes; review each remaining occurrence.
+- Check rendered markup and custom selectors against [markup changes](#markup-changes), including responsive classes,
+  spacing, floating labels, and menu triggers.
+- Submit invalid forms and verify feedback in the layouts used by the application. Keep server-side validation.
+- Open and dismiss each migrated interaction in a supported browser; check the console for module or asset errors.
+
 ## Next steps
 
-- 📚 [Installation Guide](installation.md)
-- ⚙️ [Configuration Reference](configuration.md)
-- 💡 [Usage Examples](examples.md)
-- 🧪 [Testing Guide](testing.md)
+- [Installation](installation.md).
+- [Configuration](configuration.md).
+- [Usage examples](examples.md).
+- [Testing](testing.md).
