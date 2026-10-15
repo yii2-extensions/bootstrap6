@@ -4,7 +4,7 @@
 
 - PHP 8.3 or later.
 - Composer 2.10.2 or later.
-- Yii2 `2.0.54` or later, or the Yii2 `22.x` development line.
+- Yii2 `2.0.55` or later, or the Yii2 `22.x` development line.
 - [`php-forge/foxy`](https://github.com/php-forge/foxy) `^0.4`, using its native manager with PHP `ext-zlib`
   to install frontend packages without Node.js. npm, pnpm, Yarn, Bun, and Deno remain optional alternatives.
 - Browsers supported by Bootstrap 6: Chrome and Edge 130, Firefox 132, Safari 18 (macOS, iOS, and iPadOS) or later.
@@ -13,6 +13,19 @@
 > The extension pins Bootstrap `6.0.0-alpha.1`, the only Bootstrap 6 release published so far. Bootstrap announced
 > more alphas before beta, so class names, plugin options, and markup may still change. Widgets follow the alpha.1
 > documentation at <https://getbootstrap.com/docs/6.0/>.
+
+Yii2 `2.0.x` also needs its Bower asset packages. If the application's root `composer.json` does not already
+configure an asset repository, add Asset Packagist:
+
+```json
+{
+  "repositories": [
+    { "type": "composer", "url": "https://asset-packagist.org" }
+  ]
+}
+```
+
+This setting belongs to the application root; Composer does not load repository settings from dependencies.
 
 ## Install the extension
 

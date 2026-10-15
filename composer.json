@@ -22,7 +22,7 @@
         "php": ">=8.3",
         "ui-awesome/html-helper": "^0.7",
         "ui-awesome/html-svg": "^0.6.1",
-        "yiisoft/yii2": "~2.0.54 || ^22.0@dev"
+        "yiisoft/yii2": "~2.0.55 || ^22.0@dev"
     },
     "require-dev": {
         "infection/infection": "^0.35",
