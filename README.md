@@ -52,8 +52,10 @@ composer config allow-plugins.php-forge/foxy true
 composer require php-forge/foxy:^0.4 yii2-extensions/bootstrap6:^0.1
 ```
 
-Foxy installs the frontend assets. In Yii2 `2.0.x`, set the application alias `@npm` to `@app/node_modules`, or use
-Foxy's native manager with `vendor/npm`. See [installation](docs/installation.md) for the complete configuration.
+Foxy installs the frontend assets. In Yii2 `2.0.x`, point `@npm` to Foxy's actual installation directory;
+use `@app/node_modules` only when the application base path is the Composer project root and Foxy uses its default
+directory. Alternatively, configure Foxy's native manager to install into `vendor/npm`. See
+[installation](docs/installation.md) for the complete configuration.
 
 ### Basic usage
 

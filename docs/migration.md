@@ -279,7 +279,7 @@ $this->registerJs($bundle->importJs(
 ));
 ```
 
-Verify that the notification appears on load, can be dismissed, and renders a title containing `<script>` as text.
+Verify that the notification appears on load, can be dismissed, and renders a body containing `<script>` as text.
 A `show` class displays markup but does not exercise custom module access. The `importJs()` call above must use the
 registered bundle instance, not a static call on its class.
 

@@ -150,7 +150,8 @@ choose the active state. Objects and array configurations can be mixed, includin
 ### Accordion
 
 Use it for expandable content without JavaScript: it renders native `<details>` elements. `autoCloseItems` groups
-them so one item stays open; disable it for independently open sections. Encode user text in item content.
+them so at most one item is open at a time; all items can be closed. Disable it for independently open sections.
+Encode user text in item content.
 [Example](examples.md#accordion).
 
 ### Alert
