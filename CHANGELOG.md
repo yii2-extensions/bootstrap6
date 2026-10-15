@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 0.1.1 Under development
 
+- chore: remove `README.md` requirements already shown in the package badges.
+
 ## 0.1.0 October 15, 2026
 
 - feat: initial development release.
