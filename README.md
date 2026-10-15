@@ -45,8 +45,6 @@
 
 ### Installation
 
-Requires PHP 8.3 or later and Yii2 `2.0.55` or the `22.x` development line.
-
 Select the native manager in the application's root `composer.json`:
 
 ```json
