@@ -10,7 +10,7 @@ license: BSD-3-Clause
 
 Use the package's widgets and HTML helper for Bootstrap 6 output. The namespace is
 `yii2\extensions\bootstrap6`; assets, enums, and immutable items live in its `asset`, `enum`, and `item`
-subnamespaces. This package targets Bootstrap `6.0.0-alpha.1`, with PHP 8.3 or later and Yii2 `2.0.54` or `22.x`.
+subnamespaces. This package targets Bootstrap `6.0.0-alpha.1`, with PHP 8.3 or later and Yii2 `2.0.55` or `22.x`.
 Confirm the installed package version before using a recipe from a different release.
 
 ## Find only the documentation needed
