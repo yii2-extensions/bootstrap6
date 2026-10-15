@@ -3,9 +3,10 @@
 ## Requirements
 
 - PHP 8.3 or later.
+- Composer 2.10.2 or later.
 - Yii2 `2.0.54` or later, or the Yii2 `22.x` development line.
-- A frontend package manager supported by [`php-forge/foxy`](https://github.com/php-forge/foxy) (npm, pnpm, Yarn,
-  Bun, or Deno) to install the `bootstrap` npm package.
+- [`php-forge/foxy`](https://github.com/php-forge/foxy) `^0.4`, using its native manager with PHP `ext-zlib`
+  to install frontend packages without Node.js. npm, pnpm, Yarn, Bun, and Deno remain optional alternatives.
 - Browsers supported by Bootstrap 6: Chrome and Edge 130, Firefox 132, Safari 18 (macOS, iOS, and iPadOS) or later.
 
 > [!IMPORTANT]
@@ -15,17 +16,8 @@
 
 ## Install the extension
 
-Authorize Foxy in the application, so Composer installs the frontend packages declared by the extension:
-
-```bash
-composer config allow-plugins.php-forge/foxy true
-composer require php-forge/foxy:^0.4 yii2-extensions/bootstrap6:^0.1
-```
-
-By default, Foxy merges `bootstrap@6.0.0-alpha.1` into the Composer project's `package.json` and runs the selected
-manager, so the files end up in that project's `node_modules` directory. Select the manager explicitly for
-reproducible installs. The `native` manager resolves the packages against the npm registry and extracts them with
-PHP alone, so the application needs no Node.js tooling:
+Select the native manager in the application's root `composer.json` before installing the extension. Dependency
+packages cannot select the application's manager:
 
 ```json
 {
@@ -37,10 +29,25 @@ PHP alone, so the application needs no Node.js tooling:
 }
 ```
 
-`npm`, `pnpm`, `yarn`, `bun`, and `deno` are accepted as well. The native manager installs a flat `node_modules` with
-one version per package and runs no lifecycle scripts, which is all Bootstrap 6 needs: its bundle inlines Floating UI
-and Vanilla Calendar Pro, so no other npm package is needed for menus, tooltips, popovers, comboboxes, or the
-datepicker.
+Authorize Foxy and install the extension:
+
+```bash
+composer config allow-plugins.php-forge/foxy true
+composer require php-forge/foxy:^0.4 yii2-extensions/bootstrap6:^0.1
+```
+
+Foxy merges the extension's frontend requirements into the Composer project's `package.json`, downloads the
+published npm packages, verifies their integrity, and extracts them with PHP alone. By default, it installs into
+`node_modules` beside that manifest. Commit the application's `composer.lock` and `foxy.lock`; `composer install`
+reuses a fresh frontend lock, while `composer update` resolves the frontend requirements again.
+
+The native manager installs one version per package in a flat directory and runs no lifecycle scripts and creates no executable
+links. Bootstrap 6 ships ready-to-use CSS and JavaScript, so it needs no build step. Its bundle inlines Floating UI
+and Vanilla Calendar Pro, while its declared peer dependencies (`@floating-ui/dom` and `vanilla-calendar-pro`) are
+still resolved and installed by Foxy.
+
+Applications that need frontend build tooling can select `npm`, `pnpm`, `yarn`, `bun`, or `deno` instead and keep
+that manager's lockfile. These application settings are independent of this library's development configuration.
 
 ## Point the `@npm` alias to the install directory
 
@@ -73,7 +80,12 @@ install into `vendor/npm`:
 }
 ```
 
-The asset bundles publish their files from that alias.
+`native-install-dir` is relative to Foxy's `root-package-json-dir` (the Composer project root by default).
+Use the actual directory when either setting or Composer's vendor directory is customized. The asset bundles
+publish their files from the `@npm` alias.
+
+The native manager owns its install directory and removes packages outside the resolved dependency set. Choose a
+directory dedicated to Foxy; do not share it with another frontend manager or with Composer Asset Packagist packages.
 
 ## Register the bootstrap
 
@@ -155,7 +167,7 @@ example in a `load` event listener.
 ## Load the assets from a CDN
 
 Set `cdn` on the bundles to link the files from jsDelivr instead of publishing them. The URL is pinned to the version
-installed in `node_modules`, so both delivery modes always serve the same release:
+installed under `@npm`, so both delivery modes always serve the same release:
 
 ```php
 // config/web.php
@@ -180,7 +192,7 @@ Outside debug mode this renders:
 
 `cdnUrl` changes the CDN base URL (files resolve as `{cdnUrl}/{package}@{version}/{directory}/{file}`), and `minified`
 forces or disables the `.min` files regardless of `YII_DEBUG`. The CDN mode still reads the version from
-`node_modules/<package>/package.json`, so the npm packages must be installed.
+`@npm/<package>/package.json`, so the npm packages must be installed.
 
 `registerWith()` selects the mode for a bundle and its npm-backed dependencies from a view, unless the asset manager
 already configures them:
@@ -194,7 +206,8 @@ BootstrapPluginAsset::registerWith($this, cdn: true);
 ## Optional Bootstrap Icons
 
 `BootstrapIconAsset` publishes the [Bootstrap Icons](https://icons.getbootstrap.com/) web font. The extension does not
-require the package, so add it to the application `package.json` and reinstall:
+require the package, so add it to the application `package.json` and run `composer update` to refresh
+`foxy.lock` and install the font:
 
 ```json
 {

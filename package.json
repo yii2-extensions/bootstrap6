@@ -1,7 +1,6 @@
 {
     "license": "BSD-3-Clause",
     "dependencies": {
-        "@composer-asset/yiisoft--yii2": "file:./vendor/php-forge/composer-asset/yiisoft/yii2",
         "bootstrap": "6.0.0-alpha.1"
     },
     "devDependencies": {
