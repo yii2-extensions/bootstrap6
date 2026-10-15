@@ -47,15 +47,30 @@
 
 Requires PHP 8.3 or later and Yii2 `2.0.54` or the `22.x` development line.
 
+Select the native manager in the application's root `composer.json`:
+
+```json
+{
+  "config": {
+    "foxy": {
+      "manager": "native"
+    }
+  }
+}
+```
+
+Then install the extension:
+
 ```bash
 composer config allow-plugins.php-forge/foxy true
 composer require php-forge/foxy:^0.4 yii2-extensions/bootstrap6:^0.1
 ```
 
-Foxy installs the frontend assets. In Yii2 `2.0.x`, point `@npm` to Foxy's actual installation directory;
-use `@app/node_modules` only when the application base path is the Composer project root and Foxy uses its default
-directory. Alternatively, configure Foxy's native manager to install into `vendor/npm`. See
-[installation](docs/installation.md) for the complete configuration.
+Foxy's native manager installs the frontend assets with PHP and `ext-zlib`; Node.js is unnecessary. Configure it
+in the application's root `composer.json` before requiring the extension. Its default install directory is
+`node_modules`. Point `@npm` to that actual directory; use `@app/node_modules` only when the application base path
+is the Composer project root. For Yii2 `2.0.x`, native installation into `vendor/npm` matches its default alias.
+See [installation](docs/installation.md) for the complete configuration and optional package managers.
 
 ### Basic usage
 
@@ -65,15 +80,20 @@ Place this in a Yii view. The button opens a native dialog with a title, content
 use yii2\extensions\bootstrap6\{Dialog, Html};
 use yii2\extensions\bootstrap6\enum\DialogSize;
 
-Dialog::begin([
-    'title' => 'Welcome to your next project',
-    'size' => DialogSize::LG,
-    'toggleButton' => ['label' => 'Preview welcome'],
-    'footer' => Html::button('Start exploring', [
-        'class' => 'btn-solid theme-primary',
-        'data' => ['bs-dismiss' => 'dialog'],
-    ]),
-]);
+Dialog::begin(
+    [
+        'title' => 'Welcome to your next project',
+        'size' => DialogSize::LG,
+        'toggleButton' => ['label' => 'Preview welcome'],
+        'footer' => Html::button(
+            'Start exploring',
+            [
+                'class' => 'btn-solid theme-primary',
+                'data' => ['bs-dismiss' => 'dialog'],
+            ]
+        ),
+    ],
+);
 
 echo '<p class="fs-5">Build clear interfaces with <strong>Yii2 and Bootstrap 6</strong>.</p>';
 

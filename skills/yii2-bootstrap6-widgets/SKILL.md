@@ -37,8 +37,11 @@ needs the `Toast` and asset sections, with migration guidance if the existing vi
   require an instance and mutate it. Item `with*()` methods return new immutable objects, so keep their results.
 - Prefer enum cases for widget choices. Valid string values also work; do not infer Bootstrap 6 values or class
   names from Bootstrap 5.
-- Widgets register their assets on demand. In Yii2 `2.0.x`, `@npm` must point to the frontend install directory;
-  extension bootstrap registration supplies `yii.bootstrap6` translations.
+- Prefer Foxy `^0.4` with the application's root `config.foxy.manager: native` for published assets without Node.js;
+  it needs PHP `ext-zlib`. The application selects its manager and maintains its own `foxy.lock`.
+- Point `@npm` to Foxy's actual install directory. Yii2 `2.0.x` defaults to `@vendor/npm`; Yii2 `22.x` defaults to
+  `@app/node_modules`. Follow the installation guide for root/base-path differences, dedicated native directories,
+  and optional build managers. Extension bootstrap registration supplies `yii.bootstrap6` translations.
 - `BootstrapPluginAsset` delivers an ES module, without `window.bootstrap` by default. Register the bundle, retain
   the returned instance, and call `$bundle->importJs($view, $code)` for custom plugin code. `importJs()` and
   `moduleUrl()` are instance methods; do not call them statically or add a classic script tag.

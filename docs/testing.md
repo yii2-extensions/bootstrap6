@@ -14,12 +14,19 @@ Tool references:
 ## Prerequisites
 
 The asset tests publish the real `bootstrap` and `bootstrap-icons` packages from the package `node_modules` directory.
-`composer install` runs [`php-forge/foxy`](https://github.com/php-forge/foxy), which installs them from the root
-`package.json`, so a clean checkout only needs:
+`composer install` runs [`php-forge/foxy`](https://github.com/php-forge/foxy) with the native manager, which installs
+them from the root `package.json` using PHP and `ext-zlib`; Node.js is unnecessary for this step:
 
 ```bash
 composer install
 ```
+
+Keep the development `foxy.lock` when updating frontend dependencies. It is excluded from Composer distribution
+archives because consuming applications resolve their own frontend requirements and maintain their own lockfiles.
+Foxy also adds generated `@composer-asset/*` dependencies with local `file:` paths to the checkout's root
+`package.json`. Keep those generated entries local: the distributed manifest must declare only registry packages,
+so it can be consumed without paths into this checkout's `vendor` directory. Inspect `git diff -- package.json`
+after Composer operations and remove generated entries before committing or packaging the library.
 
 ## Automated refactoring (Rector)
 
