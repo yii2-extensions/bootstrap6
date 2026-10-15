@@ -22,10 +22,10 @@ composer config allow-plugins.php-forge/foxy true
 composer require php-forge/foxy:^0.4 yii2-extensions/bootstrap6:^0.1
 ```
 
-Foxy merges `bootstrap@6.0.0-alpha.1` into the application `package.json` and runs the selected manager, so the files
-end up in the application `node_modules` directory. Select the manager explicitly for reproducible installs. The
-`native` manager resolves the packages against the npm registry and extracts them with PHP alone, so the application
-needs no Node.js tooling:
+By default, Foxy merges `bootstrap@6.0.0-alpha.1` into the Composer project's `package.json` and runs the selected
+manager, so the files end up in that project's `node_modules` directory. Select the manager explicitly for
+reproducible installs. The `native` manager resolves the packages against the npm registry and extracts them with
+PHP alone, so the application needs no Node.js tooling:
 
 ```json
 {
@@ -44,19 +44,23 @@ datepicker.
 
 ## Point the `@npm` alias to the install directory
 
-Yii2 `22.x` resolves `@npm` to the application `node_modules` directory by default, where every Foxy manager installs.
-Yii2 `2.0.x` still points it to `vendor/npm`, so either override the alias in the application configuration:
+Yii2 `22.x` defaults `@npm` to `@app/node_modules`; Yii2 `2.0.x` defaults it to `@vendor/npm`.
+Point the alias to the directory where Foxy actually installed the frontend packages. Use `@app/node_modules`
+only when the application base path is the Composer project root and Foxy uses its default directory.
+For an advanced template or a shared Composer root, configure each application with the shared directory's
+absolute path (replace the example path below):
 
 ```php
 // config/web.php
 return [
     'aliases' => [
-        '@npm' => '@app/node_modules',
+        '@npm' => '/absolute/path/to/composer-project/node_modules',
     ],
 ];
 ```
 
-or, with the `native` manager, install straight into the directory the default alias names:
+Alternatively, with Yii2 `2.0.x` and the default Composer vendor directory, configure the `native` manager to
+install into `vendor/npm`:
 
 ```json
 {
