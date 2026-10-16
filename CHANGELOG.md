@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - chore: remove `README.md` requirements already shown in the package badges.
 - fix: update `yii2-extensions/phpstan` requirement to stable version `^0.5`.
+- docs(skills): resolve documentation against the installed package reference and preserve local fallbacks.
 
 ## 0.1.0 October 15, 2026
 
