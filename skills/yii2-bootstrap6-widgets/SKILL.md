@@ -14,12 +14,15 @@ subnamespaces. This package targets Bootstrap `6.0.0-alpha.1`, with PHP 8.3 or l
 
 ## Find only the documentation needed
 
-Resolve the installed path, version and `source.reference` (or usable `dist.reference`) from Composer's installed
-metadata (`composer show <package> --format=json` or the vendor directory's `composer/installed.json`). Compare
-`composer.lock`; it records the locked resolution, which may differ from `vendor/`. Identify a lock-only state
-when no package files are installed. Resolve relevant dependencies separately. Use repository docs/code at that reference or a verified matching tag,
-not a branch alias. For a checkout with uncommitted changes, its local files are authoritative; no SHA includes
-those changes. Use hosted pages, catalogs or bundled snapshots only when their source revision matches.
+In a root package checkout, use `composer show --self --format=json` for metadata. For installed dependencies,
+resolve the real path and read the configured vendor directory's `composer/installed.php` (`versions[<package>]`):
+`install_path`, `pretty_version` and Composer's selected `reference`. Do not blindly prefer `source.reference`
+over `dist.reference`. For any live package checkout, including a symlinked path install, inspect its current
+`HEAD` and files even when clean; report metadata mismatches and let the actual files govern. Uncommitted changes
+have no matching SHA. Otherwise use the selected reference or a verified matching tag only after establishing
+its source provenance. Compare `composer.lock`; it may differ from the inspected installation. Identify a
+lock-only state when no package files are installed, and resolve dependencies separately. Use hosted pages,
+catalogs or snapshots only when their source revision matches.
 
 - If the workspace supplies `.eval-docs/INDEX.md` or another local documentation index, read it first. Respect offline restrictions and check its revision.
 - In a package checkout, use its `docs/` guides and `src/` PHPDoc. Distribution archives may omit `docs/`.
