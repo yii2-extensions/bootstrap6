@@ -11,13 +11,19 @@ license: BSD-3-Clause
 Use the package's widgets and HTML helper for Bootstrap 6 output. The namespace is
 `yii2\extensions\bootstrap6`; assets, enums, and immutable items live in its `asset`, `enum`, and `item`
 subnamespaces. This package targets Bootstrap `6.0.0-alpha.1`, with PHP 8.3 or later and Yii2 `2.0.55` or `22.x`.
-Confirm the installed package version before using a recipe from a different release.
 
 ## Find only the documentation needed
 
-1. If the workspace supplies `.eval-docs/INDEX.md` or another local documentation index, read it first and use the listed local pages. Respect an evaluation's offline restriction.
-2. In a package checkout, use its `docs/` guides and `src/` PHPDoc. In an application, locate the package through Composer before looking for those files; distribution archives may omit `docs/`.
-3. A distributed skill may contain generated guide snapshots in `references/`; use them when present. Otherwise use the published Markdown pages below, or the repository guides at `https://github.com/yii2-extensions/bootstrap6/tree/main/docs`. Do not assume a copied skill's parent directories still contain the package.
+Resolve the installed path, version and `source.reference` (or usable `dist.reference`) from Composer's installed
+metadata (`composer show <package> --format=json` or the vendor directory's `composer/installed.json`). Compare
+`composer.lock`; it records the locked resolution, which may differ from `vendor/`. Identify a lock-only state
+when no package files are installed. Resolve relevant dependencies separately. Use repository docs/code at that reference or a verified matching tag,
+not a branch alias. For a checkout with uncommitted changes, its local files are authoritative; no SHA includes
+those changes. Use hosted pages, catalogs or bundled snapshots only when their source revision matches.
+
+- If the workspace supplies `.eval-docs/INDEX.md` or another local documentation index, read it first. Respect offline restrictions and check its revision.
+- In a package checkout, use its `docs/` guides and `src/` PHPDoc. Distribution archives may omit `docs/`.
+- A distributed skill may contain guide snapshots in `references/`. Otherwise use matching published pages below or `docs/` at the resolved reference in <https://github.com/yii2-extensions/bootstrap6>. Do not assume a copied skill's parent contains the package. If matching guides are unavailable or offline, inspect the local source/PHPDoc and report the gap.
 
 | Task                                                         | Guide page under `https://yii2-framework.github.io/docs/` |
 | ------------------------------------------------------------ | --------------------------------------------------------- |
