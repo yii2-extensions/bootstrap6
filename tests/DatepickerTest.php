@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace yii2\extensions\bootstrap6\tests;
 
-use PHPUnit\Framework\Attributes\{DataProviderExternal, Group};
+use PHPUnit\Framework\Attributes\{DataProviderExternal, Group, TestWith};
 use yii\base\InvalidConfigException;
+use yii\web\JsExpression;
 use yii2\extensions\bootstrap6\asset\BootstrapPluginAsset;
 use yii2\extensions\bootstrap6\Datepicker;
 use yii2\extensions\bootstrap6\tests\provider\DatepickerProvider;
@@ -37,11 +38,18 @@ final class DatepickerTest extends TestCase
         );
     }
 
-    public function testLocalizedPopupValueRemainsLazy(): void
+    /**
+     * @param array<string, mixed>|false $clientOptions Plugin options, or `false` for data-API initialization.
+     */
+    #[TestWith([[]])]
+    #[TestWith([false])]
+    public function testLocalizedPopupValueRemainsLazy(array|false $clientOptions): void
     {
         $this->mockWebApplication();
 
-        $html = Datepicker::widget(['name' => 'date', 'value' => '01/02/2026', 'locale' => 'en-GB']);
+        $html = Datepicker::widget(
+            ['name' => 'date', 'value' => '01/02/2026', 'locale' => 'en-GB', 'clientOptions' => $clientOptions],
+        );
 
         self::assertStringContainsString(
             'value="01/02/2026"',
@@ -52,18 +60,110 @@ final class DatepickerTest extends TestCase
             self::registeredJs(self::webView(), 'w0-plugin'),
             'A popup without explicit preselection must not parse and rewrite its value on page load.',
         );
+        self::assertNull(
+            self::registeredJs(self::webView(), 'w0-selection'),
+            'A popup without explicit preselection must not register a selection override.',
+        );
+    }
+
+    public function testOtherPluginInitializationRemainsAvailable(): void
+    {
+        $this->mockWebApplication();
+
+        $datepicker = new class (['name' => 'date', 'selectedDates' => ['2026-03-01']]) extends Datepicker {
+            public function run(): string
+            {
+                $this->registerPlugin('Tooltip', true);
+
+                return '';
+            }
+        };
+
+        $datepicker->run();
+
+        self::assertSame(
+            self::IMPORT . 'bootstrap.Tooltip.getOrCreateInstance(document.getElementById("w0"), {}); });',
+            self::registeredJs(self::webView(), 'w0-plugin'),
+            'The preselection hook must preserve inherited registration of other plugins.',
+        );
+    }
+
+    public function testPopupPreselectionUsesClientOptions(): void
+    {
+        $this->mockWebApplication();
+
+        Datepicker::widget(
+            [
+                'name' => 'date',
+                'value' => '2026-01-01',
+                'selectedDates' => ['2026-03-01'],
+                'clientOptions' => ['selectedDates' => new JsExpression('["2026-04-01","2026-04-02"]')],
+            ],
+        );
+
+        $code = <<<JS
+        const options = {"selectedDates":["2026-04-01","2026-04-02"]};
+        const instance = bootstrap.Datepicker.getOrCreateInstance(document.getElementById("w0"), options);
+        instance.setSelectedDates(options.selectedDates ?? ["2026-03-01"]);
+        JS;
+
+        self::assertSame(
+            self::IMPORT . $code . ' });',
+            self::registeredJs(self::webView(), 'w0-plugin'),
+            'Client options must retain precedence over the widget preselection.',
+        );
+    }
+
+    public function testPopupPreselectionWithDataApiInitialization(): void
+    {
+        $this->mockWebApplication();
+
+        Datepicker::widget(
+            ['name' => 'date', 'selectedDates' => ['2026-03-01'], 'clientOptions' => false],
+        );
+
+        $code = <<<JS
+        const input = document.getElementById("w0");
+        const sync = () => {
+            const instance = bootstrap.Datepicker.getInstance(input);
+            if (instance) {
+                instance.setSelectedDates(["2026-03-01"]);
+                input.removeEventListener('show.bs.datepicker', sync);
+                document.removeEventListener('DOMContentLoaded', sync);
+            }
+        };
+        input.addEventListener('show.bs.datepicker', sync);
+        document.addEventListener('DOMContentLoaded', sync, {once: true});
+        sync();
+        JS;
+
+        self::assertNull(
+            self::registeredJs(self::webView(), 'w0-plugin'),
+            'Preselection must not force explicit initialization when client options are disabled.',
+        );
+        self::assertSame(
+            self::IMPORT . $code . ' });',
+            self::registeredJs(self::webView(), 'w0-selection'),
+            'Data-API initialization must apply the selection once and remove its listeners.',
+        );
     }
 
     public function testPreselectedPopupInitializesByDefault(): void
     {
         $this->mockWebApplication();
 
-        Datepicker::widget(['name' => 'date', 'selectedDates' => ['2026-10-19']]);
+        Datepicker::widget(['name' => 'date', 'value' => '2026-01-01', 'selectedDates' => ['2026-10-19']]);
+
+        $code = <<<JS
+        const options = {};
+        const instance = bootstrap.Datepicker.getOrCreateInstance(document.getElementById("w0"), options);
+        instance.setSelectedDates(options.selectedDates ?? ["2026-10-19"]);
+        JS;
 
         self::assertSame(
-            self::IMPORT . 'bootstrap.Datepicker.getOrCreateInstance(document.getElementById("w0"), {}); });',
+            self::IMPORT . $code . ' });',
             self::registeredJs(self::webView(), 'w0-plugin'),
-            'Explicit preselection must initialize even in a late fragment.',
+            'Explicit preselection must be applied after construction, including in a late fragment.',
         );
     }
 

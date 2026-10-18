@@ -81,6 +81,18 @@ trait BootstrapWidgetTrait
     }
 
     /**
+     * Returns the JavaScript that initializes a plugin with its normalized constructor options.
+     *
+     * @param string $name Plugin class exported by the bundle.
+     * @param string $element JavaScript expression selecting the plugin element.
+     * @param string $options JSON-encoded constructor options.
+     */
+    protected function pluginInitialization(string $name, string $element, string $options): string
+    {
+        return "bootstrap.{$name}.getOrCreateInstance({$element}, {$options});";
+    }
+
+    /**
      * Registers the JavaScript event handlers listed in {@see $clientEvents} at {@see View::POS_END}.
      */
     protected function registerClientEvents(): void
@@ -142,7 +154,7 @@ trait BootstrapWidgetTrait
             $view->registerJs(
                 $bundle->importJs(
                     $view,
-                    "bootstrap.{$name}.getOrCreateInstance({$this->elementJs()}, {$options});",
+                    $this->pluginInitialization($name, $this->elementJs(), $options),
                 ),
                 View::POS_END,
                 "{$this->widgetId()}-plugin",

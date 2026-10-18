@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace yii2\extensions\bootstrap6\tests;
 
-use PHPUnit\Framework\Attributes\{Group, TestWith};
+use PHPUnit\Framework\Attributes\{DataProviderExternal, Group};
 use yii\base\Widget;
-use yii2\extensions\bootstrap6\{Chips, Combobox, Datepicker, NavOverflow, OtpInput, Range, Strength};
+use yii2\extensions\bootstrap6\Datepicker;
+use yii2\extensions\bootstrap6\tests\provider\FragmentInitializationProvider;
 use yii2\extensions\bootstrap6\tests\support\TestCase;
 
 /**
  * Regression tests for explicitly initialized widgets rendered after the document-ready lifecycle.
+ *
+ * {@see FragmentInitializationProvider} for initialization opt-out cases.
  */
 #[Group('widget')]
 final class FragmentInitializationTest extends TestCase
@@ -19,14 +22,7 @@ final class FragmentInitializationTest extends TestCase
      * @param class-string<Widget> $class Widget class.
      * @param array<string, mixed> $config Widget configuration.
      */
-    #[TestWith([Chips::class, ['name' => 'tags'], 'w0-chips'])]
-    #[TestWith([Combobox::class, ['name' => 'choice', 'items' => ['a' => 'Alpha']], 'w0'])]
-    #[TestWith([Datepicker::class, ['name' => 'date'], 'w0'])]
-    #[TestWith([Datepicker::class, ['name' => 'date', 'inline' => true], 'w0-datepicker'])]
-    #[TestWith([NavOverflow::class, [], 'w0'])]
-    #[TestWith([OtpInput::class, ['name' => 'code'], 'w0-otp'])]
-    #[TestWith([Range::class, ['name' => 'amount'], 'w0-range'])]
-    #[TestWith([Strength::class, [], 'w0'])]
+    #[DataProviderExternal(FragmentInitializationProvider::class, 'explicitOptOutCases')]
     public function testExplicitOptOutSkipsInitialization(string $class, array $config, string $id): void
     {
         $this->mockWebApplication();
@@ -37,10 +33,13 @@ final class FragmentInitializationTest extends TestCase
             self::registeredJs(self::webView(), "{$id}-plugin"),
             'Opt-out must not register an initializer.',
         );
-        self::assertNull(
-            self::registeredJs(self::webView(), "{$id}-input"),
-            'Opt-out must not register input integration.',
-        );
+        foreach (['input', 'selection'] as $suffix) {
+            self::assertStringNotContainsString(
+                '.getOrCreateInstance(',
+                self::registeredJs(self::webView(), "{$id}-{$suffix}") ?? '',
+                'Opt-out integration must only synchronize instances created elsewhere.',
+            );
+        }
     }
 
     public function testInlineCalendarSelectorEscapesCustomContainerId(): void

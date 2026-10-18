@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace yii2\extensions\bootstrap6\tests;
 
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{Group, TestWith};
 use UIAwesome\Html\Svg\{Path, Svg};
 use Yii;
 use yii\base\InvalidConfigException;
@@ -33,28 +33,46 @@ final class ComboboxTest extends TestCase
     HTML;
     private const string IMPORT = 'import("/assets/js/bootstrap.bundle.js").then((bootstrap) => { ';
 
-    public function testRegisterInputAttributes(): void
+    /**
+     * @param array<string, mixed>|false $clientOptions Plugin options, or `false` for data-API initialization.
+     */
+    #[TestWith([[]])]
+    #[TestWith([false])]
+    #[TestWith([['name' => null]])]
+    public function testRegisterInputAttributes(array|false $clientOptions): void
     {
         $this->mockWebApplication();
 
-        Combobox::widget(['name' => 'option', 'items' => ['1' => 'One'], 'options' => ['id' => 'choice']]);
+        Combobox::widget(
+            [
+                'name' => 'option',
+                'items' => ['1' => 'One'],
+                'clientOptions' => $clientOptions,
+                'options' => ['id' => 'choice'],
+            ],
+        );
 
         $code = <<<JS
         const toggle = document.getElementById("choice");
-        const input = bootstrap.Combobox.getOrCreateInstance(toggle)._hiddenInput;
-        if (input) {
-            const sync = () => {
-                input.disabled = toggle.disabled;
-                const form = toggle.getAttribute('form');
-                if (form === null) {
-                    input.removeAttribute('form');
-                } else {
-                    input.setAttribute('form', form);
-                }
-            };
-            sync();
-            new MutationObserver(sync).observe(toggle, {attributes: true, attributeFilter: ['disabled', 'form']});
+        const sync = () => {
+            const input = bootstrap.Combobox.getInstance(toggle)?._hiddenInput;
+            if (!input) {
+                return;
+            }
+            input.disabled = toggle.disabled;
+            const form = toggle.getAttribute('form');
+            if (form === null) {
+                input.removeAttribute('form');
+            } else {
+                input.setAttribute('form', form);
+            }
+        };
+        const observer = new MutationObserver(sync);
+        observer.observe(toggle, {attributes: true, attributeFilter: ['disabled', 'form']});
+        if (toggle.parentElement) {
+            observer.observe(toggle.parentElement, {childList: true});
         }
+        sync();
         JS;
 
         self::assertSame(
@@ -62,6 +80,13 @@ final class ComboboxTest extends TestCase
             self::registeredJs(self::webView(), 'choice-input'),
             'Submitted control must follow the toggle form and disabled state after plugin initialization.',
         );
+
+        if ($clientOptions === false) {
+            self::assertNull(
+                self::registeredJs(self::webView(), 'choice-plugin'),
+                'Synchronizing the submitted control must not force explicit plugin initialization.',
+            );
+        }
     }
 
     public function testRegisterPluginAssetWithDefaultInitialization(): void

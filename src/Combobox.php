@@ -272,10 +272,6 @@ class Combobox extends InputWidget
      */
     private function registerInputAttributes(): void
     {
-        if ($this->clientOptions === false) {
-            return;
-        }
-
         $view = $this->getView();
 
         $bundle = BootstrapPluginAsset::register($view);
@@ -286,20 +282,25 @@ class Combobox extends InputWidget
 
         $code = <<<JS
         const toggle = document.getElementById({$id});
-        const input = bootstrap.Combobox.getOrCreateInstance(toggle)._hiddenInput;
-        if (input) {
-            const sync = () => {
-                input.disabled = toggle.disabled;
-                const form = toggle.getAttribute('form');
-                if (form === null) {
-                    input.removeAttribute('form');
-                } else {
-                    input.setAttribute('form', form);
-                }
-            };
-            sync();
-            new MutationObserver(sync).observe(toggle, {attributes: true, attributeFilter: ['disabled', 'form']});
+        const sync = () => {
+            const input = bootstrap.Combobox.getInstance(toggle)?._hiddenInput;
+            if (!input) {
+                return;
+            }
+            input.disabled = toggle.disabled;
+            const form = toggle.getAttribute('form');
+            if (form === null) {
+                input.removeAttribute('form');
+            } else {
+                input.setAttribute('form', form);
+            }
+        };
+        const observer = new MutationObserver(sync);
+        observer.observe(toggle, {attributes: true, attributeFilter: ['disabled', 'form']});
+        if (toggle.parentElement) {
+            observer.observe(toggle.parentElement, {childList: true});
         }
+        sync();
         JS;
 
         $view->registerJs($bundle->importJs($view, $code), View::POS_END, "{$options['id']}-input");
