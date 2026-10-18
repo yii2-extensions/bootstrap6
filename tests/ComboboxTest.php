@@ -67,18 +67,32 @@ final class ComboboxTest extends TestCase
                 input.setAttribute('form', form);
             }
         };
-        const observer = new MutationObserver(sync);
-        observer.observe(toggle, {attributes: true, attributeFilter: ['disabled', 'form']});
-        if (toggle.parentElement) {
-            observer.observe(toggle.parentElement, {childList: true});
-        }
+        let parent = toggle.parentElement;
+        const observe = () => {
+            observer.observe(toggle, {attributes: true, attributeFilter: ['disabled', 'form']});
+            if (parent) {
+                observer.observe(parent, {childList: true});
+            }
+        };
+        const observer = new MutationObserver(() => {
+            if (toggle.parentElement !== parent) {
+                observer.disconnect();
+                parent = toggle.parentElement;
+                if (!parent) {
+                    return;
+                }
+                observe();
+            }
+            sync();
+        });
+        observe();
         sync();
         JS;
 
         self::assertSame(
             self::IMPORT . $code . ' });',
             self::registeredJs(self::webView(), 'choice-input'),
-            'Submitted control must follow the toggle form and disabled state after plugin initialization.',
+            'Input synchronization must release removed toggles and follow the current instance and parent.',
         );
 
         if ($clientOptions === false) {

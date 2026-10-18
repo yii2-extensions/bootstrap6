@@ -295,11 +295,25 @@ class Combobox extends InputWidget
                 input.setAttribute('form', form);
             }
         };
-        const observer = new MutationObserver(sync);
-        observer.observe(toggle, {attributes: true, attributeFilter: ['disabled', 'form']});
-        if (toggle.parentElement) {
-            observer.observe(toggle.parentElement, {childList: true});
-        }
+        let parent = toggle.parentElement;
+        const observe = () => {
+            observer.observe(toggle, {attributes: true, attributeFilter: ['disabled', 'form']});
+            if (parent) {
+                observer.observe(parent, {childList: true});
+            }
+        };
+        const observer = new MutationObserver(() => {
+            if (toggle.parentElement !== parent) {
+                observer.disconnect();
+                parent = toggle.parentElement;
+                if (!parent) {
+                    return;
+                }
+                observe();
+            }
+            sync();
+        });
+        observe();
         sync();
         JS;
 
