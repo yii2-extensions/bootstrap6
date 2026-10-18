@@ -74,9 +74,9 @@ final class NavOverflowTest extends TestCase
             'Plugin bundle must be registered.',
         );
         self::assertSame(
-            [],
-            self::webView()->js,
-            'Data API must not need an inline init.',
+            'import("/assets/js/bootstrap.bundle.js").then((bootstrap) => { bootstrap.NavOverflow.getOrCreateInstance(document.getElementById("w0"), {}); });',
+            self::registeredJs(self::webView(), 'w0-plugin'),
+            'Default initialization must also support fragments inserted after page load.',
         );
     }
 

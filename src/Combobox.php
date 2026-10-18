@@ -7,6 +7,9 @@ namespace yii2\extensions\bootstrap6;
 use Stringable;
 use Yii;
 use yii\base\{InvalidConfigException, Model};
+use yii\helpers\Json;
+use yii\web\View;
+use yii2\extensions\bootstrap6\asset\BootstrapPluginAsset;
 use yii2\extensions\bootstrap6\enum\Placement;
 use yii2\extensions\bootstrap6\exception\Message;
 
@@ -110,7 +113,8 @@ class Combobox extends InputWidget
 
     public function run(): string
     {
-        $this->registerPlugin('Combobox');
+        $this->registerPlugin('Combobox', true);
+        $this->registerInputAttributes();
 
         $icons = Yii::createObject(IconSet::class);
 
@@ -261,6 +265,44 @@ class Combobox extends InputWidget
         }
 
         return (string) $this->name;
+    }
+
+    /**
+     * Keeps the plugin-generated input associated with the toggle's form and disabled state.
+     */
+    private function registerInputAttributes(): void
+    {
+        if ($this->clientOptions === false) {
+            return;
+        }
+
+        $view = $this->getView();
+
+        $bundle = BootstrapPluginAsset::register($view);
+
+        /** @var array{id: string} $options */
+        $options = $this->options;
+        $id = Json::htmlEncode($options['id']);
+
+        $code = <<<JS
+        const toggle = document.getElementById({$id});
+        const input = bootstrap.Combobox.getOrCreateInstance(toggle)._hiddenInput;
+        if (input) {
+            const sync = () => {
+                input.disabled = toggle.disabled;
+                const form = toggle.getAttribute('form');
+                if (form === null) {
+                    input.removeAttribute('form');
+                } else {
+                    input.setAttribute('form', form);
+                }
+            };
+            sync();
+            new MutationObserver(sync).observe(toggle, {attributes: true, attributeFilter: ['disabled', 'form']});
+        }
+        JS;
+
+        $view->registerJs($bundle->importJs($view, $code), View::POS_END, "{$options['id']}-input");
     }
 
     /**

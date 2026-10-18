@@ -77,7 +77,7 @@ final class StrengthTest extends TestCase
         );
     }
 
-    public function testRegisterPluginAssetWithoutInitialization(): void
+    public function testRegisterPluginAssetWithDefaultInitialization(): void
     {
         $this->mockWebApplication();
 
@@ -88,9 +88,10 @@ final class StrengthTest extends TestCase
             self::webView()->assetBundles,
             'Plugin bundle must be registered for the data API.',
         );
-        self::assertNull(
+        self::assertSame(
+            self::IMPORT . 'bootstrap.Strength.getOrCreateInstance(document.getElementById("w0"), {}); });',
             self::registeredJs(self::webView(), 'w0-plugin'),
-            'Data API must not need an inline init.',
+            'Default initialization must also support fragments inserted after page load.',
         );
     }
 

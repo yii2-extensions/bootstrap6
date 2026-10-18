@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace yii2\extensions\bootstrap6\tests;
 
-use PHPUnit\Framework\Attributes\{DataProviderExternal, Group};
+use PHPUnit\Framework\Attributes\{DataProviderExternal, Group, TestWith};
 use yii\base\{InvalidConfigException, Model};
 use yii\web\JsExpression;
 use yii2\extensions\bootstrap6\asset\BootstrapAsset;
@@ -69,6 +69,28 @@ final class ToggleButtonGroupTest extends TestCase
             '<input type="checkbox" name="Toggle[value][]" value="3" checked autocomplete="off">',
             $html,
             'Selected `int` value must be checked.',
+        );
+    }
+    #[TestWith([false])]
+    #[TestWith([true])]
+    public function testExternalFormOwnsUnselectInput(bool $disabled): void
+    {
+        $this->mockWebApplication();
+
+        $html = ToggleButtonGroup::widget(
+            [
+                'model' => self::model([]),
+                'attribute' => 'value',
+                'items' => ['a' => 'Alpha'],
+                'inputOptions' => ['form' => 'external', 'disabled' => $disabled],
+            ],
+        );
+        $disabledAttribute = $disabled ? ' disabled' : '';
+
+        self::assertStringContainsString(
+            '<input type="hidden" name="Toggle[value]" value="" form="external"' . $disabledAttribute . '>',
+            $html,
+            'Unselect input must preserve disabled state and external form ownership.',
         );
     }
 

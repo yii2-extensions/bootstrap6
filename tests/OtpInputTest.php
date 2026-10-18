@@ -23,7 +23,7 @@ final class OtpInputTest extends TestCase
 {
     private const string IMPORT = 'import("/assets/js/bootstrap.bundle.js").then((bootstrap) => { ';
 
-    public function testRegisterPluginAssetWithoutInitialization(): void
+    public function testRegisterPluginAssetWithDefaultInitialization(): void
     {
         $this->mockWebApplication();
 
@@ -34,9 +34,10 @@ final class OtpInputTest extends TestCase
             self::webView()->assetBundles,
             'Plugin bundle must be registered for the data API.',
         );
-        self::assertNull(
+        self::assertSame(
+            self::IMPORT . 'bootstrap.OtpInput.getOrCreateInstance(document.getElementById("w0-otp"), {}); });',
             self::registeredJs(self::webView(), 'w0-otp-plugin'),
-            'Data API must not need an inline init.',
+            'Default initialization must also support fragments inserted after page load.',
         );
     }
 

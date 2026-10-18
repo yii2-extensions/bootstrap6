@@ -18,7 +18,7 @@ final class RangeTest extends TestCase
 {
     private const string IMPORT = 'import("/assets/js/bootstrap.bundle.js").then((bootstrap) => { ';
 
-    public function testRegisterPluginAssetWithoutInitialization(): void
+    public function testRegisterPluginAssetWithDefaultInitialization(): void
     {
         $this->mockWebApplication();
 
@@ -29,9 +29,10 @@ final class RangeTest extends TestCase
             self::webView()->assetBundles,
             'Plugin bundle must be registered for the data API.',
         );
-        self::assertNull(
+        self::assertSame(
+            self::IMPORT . 'bootstrap.Range.getOrCreateInstance(document.getElementById("w0-range"), {}); });',
             self::registeredJs(self::webView(), 'w0-range-plugin'),
-            'Data API must not need an inline init.',
+            'Default initialization must also support fragments inserted after page load.',
         );
     }
 

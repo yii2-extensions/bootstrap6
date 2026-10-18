@@ -93,7 +93,7 @@ class OtpInput extends InputWidget
 
         $this->options['id'] = $containerId;
 
-        $this->registerPlugin('OtpInput');
+        $this->registerPlugin('OtpInput', true);
 
         $this->options = $original;
 

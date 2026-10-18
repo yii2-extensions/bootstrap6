@@ -37,6 +37,36 @@ final class DatepickerTest extends TestCase
         );
     }
 
+    public function testLocalizedPopupValueRemainsLazy(): void
+    {
+        $this->mockWebApplication();
+
+        $html = Datepicker::widget(['name' => 'date', 'value' => '01/02/2026', 'locale' => 'en-GB']);
+
+        self::assertStringContainsString(
+            'value="01/02/2026"',
+            $html,
+            'Localized value must remain unchanged.',
+        );
+        self::assertNull(
+            self::registeredJs(self::webView(), 'w0-plugin'),
+            'A popup without explicit preselection must not parse and rewrite its value on page load.',
+        );
+    }
+
+    public function testPreselectedPopupInitializesByDefault(): void
+    {
+        $this->mockWebApplication();
+
+        Datepicker::widget(['name' => 'date', 'selectedDates' => ['2026-10-19']]);
+
+        self::assertSame(
+            self::IMPORT . 'bootstrap.Datepicker.getOrCreateInstance(document.getElementById("w0"), {}); });',
+            self::registeredJs(self::webView(), 'w0-plugin'),
+            'Explicit preselection must initialize even in a late fragment.',
+        );
+    }
+
     public function testRegisterInlinePluginOnContainer(): void
     {
         $this->mockWebApplication();
@@ -77,7 +107,10 @@ final class DatepickerTest extends TestCase
             self::webView()->assetBundles,
             'Plugin bundle must be registered for the data API.',
         );
-        self::assertNull(self::registeredJs(self::webView(), 'w0-plugin'), 'Data API must not need an inline init.');
+        self::assertNull(
+            self::registeredJs(self::webView(), 'w0-plugin'),
+            'Popup inputs must keep lazy initialization.',
+        );
     }
 
     public function testRegisterPluginOnInput(): void
@@ -130,8 +163,9 @@ final class DatepickerTest extends TestCase
 
         self::assertSameHtml(
             <<<HTML
-            <div id="calendar" class="custom" data-bs-toggle="datepicker" data-bs-inline="true" data-bs-display-months-count="2">
+            <div id="calendar" class="custom" data-bs-toggle="datepicker" data-bs-inline="true" data-bs-display-months-count="2" data-bs-position-element="#calendar-calendar">
             <input type="hidden" id="w0" name="date">
+            <div id="calendar-calendar"></div>
             </div>
             HTML,
             Datepicker::widget(
@@ -152,8 +186,9 @@ final class DatepickerTest extends TestCase
 
         self::assertSameHtml(
             <<<HTML
-            <div id="w0-datepicker" data-bs-toggle="datepicker" data-bs-inline="true">
+            <div id="w0-datepicker" data-bs-toggle="datepicker" data-bs-inline="true" data-bs-position-element="#w0-datepicker-calendar">
             <input type="hidden" id="w0" name="date" value="">
+            <div id="w0-datepicker-calendar"></div>
             </div>
             HTML,
             Datepicker::widget(['name' => 'date', 'value' => '', 'inline' => true]),
@@ -171,8 +206,9 @@ final class DatepickerTest extends TestCase
 
         self::assertSameHtml(
             <<<HTML
-            <div id="user-username-datepicker" data-bs-toggle="datepicker" data-bs-inline="true" data-bs-selection-mode="multiple" data-bs-selected-dates='["2026-06-10","2026-06-18"]'>
+            <div id="user-username-datepicker" data-bs-toggle="datepicker" data-bs-inline="true" data-bs-selection-mode="multiple" data-bs-selected-dates='["2026-06-10","2026-06-18"]' data-bs-position-element="#user-username-datepicker-calendar">
             <input type="hidden" id="user-username" name="User[username]" value="2026-06-10,2026-06-18">
+            <div id="user-username-datepicker-calendar"></div>
             </div>
             HTML,
             Datepicker::widget(
@@ -188,8 +224,9 @@ final class DatepickerTest extends TestCase
 
         self::assertSameHtml(
             <<<HTML
-            <div id="w0-datepicker" data-bs-toggle="datepicker" data-bs-inline="true">
+            <div id="w0-datepicker" data-bs-toggle="datepicker" data-bs-inline="true" data-bs-position-element="#w0-datepicker-calendar">
             <input type="hidden" id="w0" name="date" value="20260101">
+            <div id="w0-datepicker-calendar"></div>
             </div>
             HTML,
             Datepicker::widget(['name' => 'date', 'value' => 20260101, 'inline' => true]),
@@ -203,8 +240,9 @@ final class DatepickerTest extends TestCase
 
         self::assertSameHtml(
             <<<HTML
-            <div id="w0-datepicker" data-bs-toggle="datepicker" data-bs-inline="true" data-bs-selected-dates='["2026-03-01"]'>
+            <div id="w0-datepicker" data-bs-toggle="datepicker" data-bs-inline="true" data-bs-selected-dates='["2026-03-01"]' data-bs-position-element="#w0-datepicker-calendar">
             <input type="hidden" id="w0" name="date" value="2026-01-01">
+            <div id="w0-datepicker-calendar"></div>
             </div>
             HTML,
             Datepicker::widget(
@@ -232,8 +270,9 @@ final class DatepickerTest extends TestCase
 
         self::assertSameHtml(
             <<<HTML
-            <inline><div id="w0-datepicker" data-bs-toggle="datepicker" data-bs-inline="true" data-custom="yes">
+            <inline><div id="w0-datepicker" data-bs-toggle="datepicker" data-bs-inline="true" data-custom="yes" data-bs-position-element="#w0-datepicker-calendar">
             <input type="hidden" id="w0" name="date">
+            <div id="w0-datepicker-calendar"></div>
             </div></inline>
             HTML,
             $datepicker->run(),

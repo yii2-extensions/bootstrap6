@@ -131,7 +131,11 @@ class ToggleButtonGroup extends InputWidget
             $items[] = $this->renderItem($label, $inputName, self::isSelected($value, $selection), $value);
         }
 
-        $hiddenOptions = ['disabled' => $this->inputOptions['disabled'] ?? null];
+        $hiddenOptions = [
+            'disabled' => $this->inputOptions['disabled'] ?? null,
+            'form' => $this->inputOptions['form'] ?? null,
+        ];
+
         $hidden = is_scalar($unselect) ? Html::hiddenInput($name, (string) $unselect, $hiddenOptions) : '';
 
         return $hidden

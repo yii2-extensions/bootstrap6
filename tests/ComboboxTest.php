@@ -33,7 +33,38 @@ final class ComboboxTest extends TestCase
     HTML;
     private const string IMPORT = 'import("/assets/js/bootstrap.bundle.js").then((bootstrap) => { ';
 
-    public function testRegisterPluginAssetWithoutInitialization(): void
+    public function testRegisterInputAttributes(): void
+    {
+        $this->mockWebApplication();
+
+        Combobox::widget(['name' => 'option', 'items' => ['1' => 'One'], 'options' => ['id' => 'choice']]);
+
+        $code = <<<JS
+        const toggle = document.getElementById("choice");
+        const input = bootstrap.Combobox.getOrCreateInstance(toggle)._hiddenInput;
+        if (input) {
+            const sync = () => {
+                input.disabled = toggle.disabled;
+                const form = toggle.getAttribute('form');
+                if (form === null) {
+                    input.removeAttribute('form');
+                } else {
+                    input.setAttribute('form', form);
+                }
+            };
+            sync();
+            new MutationObserver(sync).observe(toggle, {attributes: true, attributeFilter: ['disabled', 'form']});
+        }
+        JS;
+
+        self::assertSame(
+            self::IMPORT . $code . ' });',
+            self::registeredJs(self::webView(), 'choice-input'),
+            'Submitted control must follow the toggle form and disabled state after plugin initialization.',
+        );
+    }
+
+    public function testRegisterPluginAssetWithDefaultInitialization(): void
     {
         $this->mockWebApplication();
 
@@ -44,9 +75,10 @@ final class ComboboxTest extends TestCase
             self::webView()->assetBundles,
             'Plugin bundle must be registered for the data API.',
         );
-        self::assertNull(
+        self::assertSame(
+            self::IMPORT . 'bootstrap.Combobox.getOrCreateInstance(document.getElementById("w0"), {}); });',
             self::registeredJs(self::webView(), 'w0-plugin'),
-            'Data API must not need an inline init.',
+            'Default initialization must also support fragments inserted after page load.',
         );
     }
 

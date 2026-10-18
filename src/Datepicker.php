@@ -128,7 +128,7 @@ class Datepicker extends InputWidget
 
         $this->options = [...$options, ...$this->dataAttributes($this->selectedDates)];
 
-        $this->registerPlugin('Datepicker');
+        $this->registerPlugin('Datepicker', $this->selectedDates !== []);
 
         return $this->renderInputHtml('text');
     }
@@ -176,22 +176,25 @@ class Datepicker extends InputWidget
         $containerId = is_string($this->containerOptions['id'] ?? null)
             ? $this->containerOptions['id']
             : "{$id}-datepicker";
+        $calendarId = "{$containerId}-calendar";
         $containerOptions = [
             ...$this->containerOptions,
             'id' => $containerId,
             ...$this->dataAttributes($selectedDates),
+            'data-bs-position-element' => '#' . Html::escapeCssIdentifier($calendarId),
         ];
         $input = $this->renderInputHtml('hidden');
+        $calendar = Html::tag('div', '', ['id' => $calendarId]);
 
         $this->options['id'] = $containerId;
 
-        $this->registerPlugin('Datepicker');
+        $this->registerPlugin('Datepicker', true);
 
         $this->options = $options;
 
         return Html::tag(
             'div',
-            "\n{$input}\n",
+            "\n{$input}\n{$calendar}\n",
             $containerOptions,
         );
     }

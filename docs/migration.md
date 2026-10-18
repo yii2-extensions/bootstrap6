@@ -58,8 +58,9 @@ exposure is a temporary compatibility option and does not restore removed Bootst
 - Popper is gone; Floating UI is inlined in the bundle. Rename `popperConfig` plugin options to `floatingConfig`.
 - Plugin names and events follow the components: `Modal` becomes `Dialog` (`*.bs.dialog`), `Offcanvas` becomes
   `Drawer` (`*.bs.drawer`), and `Dropdown` becomes `Menu` (`*.bs.menu`).
-- `clientOptions` are passed to `getOrCreateInstance()` only when they are not empty; most widgets rely on the
-  `data-bs-*` API. `clientEvents` handlers are attached with `addEventListener` at `View::POS_END`.
+- A non-empty `clientOptions` array requests `getOrCreateInstance()` initialization; some widgets also initialize with
+  empty options. See [Plugin initialization](configuration.md#plugin-initialization).
+  `clientEvents` handlers are attached with `addEventListener` at `View::POS_END`.
 - The Menu plugin binds to the toggle, so options and events of a menu belong on `ButtonMenu` (or the toggle element),
   not on a standalone `Menu`.
 - `Toast` creates the plugin instance but does not show the toast; call `show()` on the instance.
