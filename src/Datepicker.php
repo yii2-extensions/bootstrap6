@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace yii2\extensions\bootstrap6;
 
 use yii\base\{InvalidConfigException, Model};
+use yii\helpers\Json;
+use yii\web\View;
+use yii2\extensions\bootstrap6\asset\BootstrapPluginAsset;
 use yii2\extensions\bootstrap6\exception\Message;
 
+use function array_key_exists;
 use function explode;
 use function implode;
 use function in_array;
@@ -74,7 +78,7 @@ class Datepicker extends InputWidget
      */
     public string|null $placement = null;
     /**
-     * @var list<string> Preselected dates in `YYYY-MM-DD` format.
+     * @var list<string> Preselected dates in `YYYY-MM-DD` format, taking precedence over the initial input value.
      */
     public array $selectedDates = [];
     /**
@@ -128,7 +132,8 @@ class Datepicker extends InputWidget
 
         $this->options = [...$options, ...$this->dataAttributes($this->selectedDates)];
 
-        $this->registerPlugin('Datepicker');
+        $this->registerPlugin('Datepicker', $this->selectedDates !== []);
+        $this->registerDataApiSelection();
 
         return $this->renderInputHtml('text');
     }
@@ -157,6 +162,25 @@ class Datepicker extends InputWidget
         ];
     }
 
+    protected function pluginInitialization(string $name, string $element, string $options): string
+    {
+        if (
+            $name !== 'Datepicker'
+            || $this->inline
+            || ($this->selectedDates === [] && !array_key_exists('selectedDates', (array) $this->clientOptions))
+        ) {
+            return parent::pluginInitialization($name, $element, $options);
+        }
+
+        $selectedDates = Json::htmlEncode($this->selectedDates);
+
+        return <<<JS
+        const options = {$options};
+        const instance = bootstrap.{$name}.getOrCreateInstance({$element}, options);
+        instance.setSelectedDates(options.selectedDates ?? {$selectedDates});
+        JS;
+    }
+
     /**
      * Renders the inline calendar container with the hidden input that receives the selected dates.
      */
@@ -176,22 +200,25 @@ class Datepicker extends InputWidget
         $containerId = is_string($this->containerOptions['id'] ?? null)
             ? $this->containerOptions['id']
             : "{$id}-datepicker";
+        $calendarId = "{$containerId}-calendar";
         $containerOptions = [
             ...$this->containerOptions,
             'id' => $containerId,
             ...$this->dataAttributes($selectedDates),
+            'data-bs-position-element' => '#' . Html::escapeCssIdentifier($calendarId),
         ];
         $input = $this->renderInputHtml('hidden');
+        $calendar = Html::tag('div', '', ['id' => $calendarId]);
 
         $this->options['id'] = $containerId;
 
-        $this->registerPlugin('Datepicker');
+        $this->registerPlugin('Datepicker', true);
 
         $this->options = $options;
 
         return Html::tag(
             'div',
-            "\n{$input}\n",
+            "\n{$input}\n{$calendar}\n",
             $containerOptions,
         );
     }
@@ -203,5 +230,37 @@ class Datepicker extends InputWidget
     {
         /** @var string */
         return $this->options['id'];
+    }
+
+    /**
+     * Applies explicit popup preselection once the data API creates an instance, without creating one.
+     */
+    private function registerDataApiSelection(): void
+    {
+        if ($this->clientOptions !== false || $this->selectedDates === []) {
+            return;
+        }
+
+        $view = $this->getView();
+        $bundle = BootstrapPluginAsset::register($view);
+        $id = Json::htmlEncode($this->inputId());
+        $selectedDates = Json::htmlEncode($this->selectedDates);
+
+        $code = <<<JS
+        const input = document.getElementById({$id});
+        const sync = () => {
+            const instance = bootstrap.Datepicker.getInstance(input);
+            if (instance) {
+                instance.setSelectedDates({$selectedDates});
+                input.removeEventListener('show.bs.datepicker', sync);
+                document.removeEventListener('DOMContentLoaded', sync);
+            }
+        };
+        input.addEventListener('show.bs.datepicker', sync);
+        document.addEventListener('DOMContentLoaded', sync, {once: true});
+        sync();
+        JS;
+
+        $view->registerJs($bundle->importJs($view, $code), View::POS_END, "{$this->inputId()}-selection");
     }
 }

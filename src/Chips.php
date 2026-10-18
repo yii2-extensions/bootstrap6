@@ -108,7 +108,7 @@ class Chips extends InputWidget
         $original = $this->options;
         $this->options['id'] = $containerId;
 
-        $this->registerPlugin('Chips');
+        $this->registerPlugin('Chips', true);
 
         $this->options = $original;
 

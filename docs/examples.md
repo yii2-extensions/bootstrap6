@@ -437,8 +437,9 @@ echo Datepicker::widget(
 ```
 
 ```html
-<div id="w0-datepicker" data-bs-toggle="datepicker" data-bs-inline="true" data-bs-selection-mode="multiple-ranged" data-bs-selected-dates='["2026-10-01","2026-10-05"]'>
+<div id="w0-datepicker" data-bs-toggle="datepicker" data-bs-inline="true" data-bs-selection-mode="multiple-ranged" data-bs-selected-dates='["2026-10-01","2026-10-05"]' data-bs-position-element="#w0-datepicker-calendar">
 <input type="hidden" id="w0" name="range" value="2026-10-01,2026-10-05">
+<div id="w0-datepicker-calendar"></div>
 </div>
 ```
 

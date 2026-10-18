@@ -82,7 +82,7 @@ class Strength extends Widget
             $this->clientOptions = ['messages' => $this->messages, ...$this->clientOptions];
         }
 
-        $this->registerPlugin('Strength');
+        $this->registerPlugin('Strength', true);
 
         $content = $this->segments
             ? "\n" . str_repeat(Html::tag('div', '', ['class' => 'strength-segment']) . "\n", 4)

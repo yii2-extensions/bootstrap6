@@ -7,6 +7,9 @@ namespace yii2\extensions\bootstrap6;
 use Stringable;
 use Yii;
 use yii\base\{InvalidConfigException, Model};
+use yii\helpers\Json;
+use yii\web\View;
+use yii2\extensions\bootstrap6\asset\BootstrapPluginAsset;
 use yii2\extensions\bootstrap6\enum\Placement;
 use yii2\extensions\bootstrap6\exception\Message;
 
@@ -110,7 +113,8 @@ class Combobox extends InputWidget
 
     public function run(): string
     {
-        $this->registerPlugin('Combobox');
+        $this->registerPlugin('Combobox', true);
+        $this->registerInputAttributes();
 
         $icons = Yii::createObject(IconSet::class);
 
@@ -261,6 +265,59 @@ class Combobox extends InputWidget
         }
 
         return (string) $this->name;
+    }
+
+    /**
+     * Keeps the plugin-generated input associated with the toggle's form and disabled state.
+     */
+    private function registerInputAttributes(): void
+    {
+        $view = $this->getView();
+
+        $bundle = BootstrapPluginAsset::register($view);
+
+        /** @var array{id: string} $options */
+        $options = $this->options;
+        $id = Json::htmlEncode($options['id']);
+
+        $code = <<<JS
+        const toggle = document.getElementById({$id});
+        const sync = () => {
+            const input = bootstrap.Combobox.getInstance(toggle)?._hiddenInput;
+            if (!input) {
+                return;
+            }
+            input.disabled = toggle.disabled;
+            const form = toggle.getAttribute('form');
+            if (form === null) {
+                input.removeAttribute('form');
+            } else {
+                input.setAttribute('form', form);
+            }
+        };
+        let parent = toggle.parentElement;
+        const observe = () => {
+            observer.observe(toggle, {attributes: true, attributeFilter: ['disabled', 'form']});
+            if (parent) {
+                observer.observe(parent, {childList: true});
+            }
+        };
+        const observer = new MutationObserver(() => {
+            if (toggle.parentElement !== parent) {
+                observer.disconnect();
+                parent = toggle.parentElement;
+                if (!parent) {
+                    return;
+                }
+                observe();
+            }
+            sync();
+        });
+        observe();
+        sync();
+        JS;
+
+        $view->registerJs($bundle->importJs($view, $code), View::POS_END, "{$options['id']}-input");
     }
 
     /**

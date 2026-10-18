@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace yii2\extensions\bootstrap6\tests;
 
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{Group, TestWith};
 use UIAwesome\Html\Svg\{Path, Svg};
 use Yii;
 use yii\base\InvalidConfigException;
@@ -33,7 +33,77 @@ final class ComboboxTest extends TestCase
     HTML;
     private const string IMPORT = 'import("/assets/js/bootstrap.bundle.js").then((bootstrap) => { ';
 
-    public function testRegisterPluginAssetWithoutInitialization(): void
+    /**
+     * @param array<string, mixed>|false $clientOptions Plugin options, or `false` for data-API initialization.
+     */
+    #[TestWith([[]])]
+    #[TestWith([false])]
+    #[TestWith([['name' => null]])]
+    public function testRegisterInputAttributes(array|false $clientOptions): void
+    {
+        $this->mockWebApplication();
+
+        Combobox::widget(
+            [
+                'name' => 'option',
+                'items' => ['1' => 'One'],
+                'clientOptions' => $clientOptions,
+                'options' => ['id' => 'choice'],
+            ],
+        );
+
+        $code = <<<JS
+        const toggle = document.getElementById("choice");
+        const sync = () => {
+            const input = bootstrap.Combobox.getInstance(toggle)?._hiddenInput;
+            if (!input) {
+                return;
+            }
+            input.disabled = toggle.disabled;
+            const form = toggle.getAttribute('form');
+            if (form === null) {
+                input.removeAttribute('form');
+            } else {
+                input.setAttribute('form', form);
+            }
+        };
+        let parent = toggle.parentElement;
+        const observe = () => {
+            observer.observe(toggle, {attributes: true, attributeFilter: ['disabled', 'form']});
+            if (parent) {
+                observer.observe(parent, {childList: true});
+            }
+        };
+        const observer = new MutationObserver(() => {
+            if (toggle.parentElement !== parent) {
+                observer.disconnect();
+                parent = toggle.parentElement;
+                if (!parent) {
+                    return;
+                }
+                observe();
+            }
+            sync();
+        });
+        observe();
+        sync();
+        JS;
+
+        self::assertSame(
+            self::IMPORT . $code . ' });',
+            self::registeredJs(self::webView(), 'choice-input'),
+            'Input synchronization must release removed toggles and follow the current instance and parent.',
+        );
+
+        if ($clientOptions === false) {
+            self::assertNull(
+                self::registeredJs(self::webView(), 'choice-plugin'),
+                'Synchronizing the submitted control must not force explicit plugin initialization.',
+            );
+        }
+    }
+
+    public function testRegisterPluginAssetWithDefaultInitialization(): void
     {
         $this->mockWebApplication();
 
@@ -44,9 +114,10 @@ final class ComboboxTest extends TestCase
             self::webView()->assetBundles,
             'Plugin bundle must be registered for the data API.',
         );
-        self::assertNull(
+        self::assertSame(
+            self::IMPORT . 'bootstrap.Combobox.getOrCreateInstance(document.getElementById("w0"), {}); });',
             self::registeredJs(self::webView(), 'w0-plugin'),
-            'Data API must not need an inline init.',
+            'Default initialization must also support fragments inserted after page load.',
         );
     }
 

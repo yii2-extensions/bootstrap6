@@ -12,9 +12,9 @@ use function is_int;
 /**
  * Renders a {@see Nav} inside a `.nav-overflow` wrapper that moves the items that do not fit into a "More" menu.
  *
- * The NavOverflow plugin initializes through `data-bs-toggle="nav-overflow"`. When {@see $clientOptions} is a
- * non-empty array, the attribute is omitted and the plugin is initialized with those options instead, so the data API
- * cannot create the instance first.
+ * The plugin initializes explicitly so navigation inserted after page load also works. When {@see $clientOptions}
+ * is a non-empty array, the data toggle is omitted so the data API cannot create the instance before those options
+ * are applied.
  *
  * @see https://getbootstrap.com/docs/6.0/components/nav-overflow/
  */
@@ -99,7 +99,7 @@ class NavOverflow extends Widget
 
         $html = Html::tag('div', $this->navClass::widget($nav), $options);
 
-        $this->registerPlugin('NavOverflow');
+        $this->registerPlugin('NavOverflow', true);
 
         return $html;
     }

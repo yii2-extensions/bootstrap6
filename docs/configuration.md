@@ -77,9 +77,10 @@ property still identifies the model field; their `attribute()` method sets an HT
 
 ### Plugin initialization
 
-Most widgets emit `data-bs-*` attributes and let Bootstrap initialize on interaction. A non-empty `clientOptions`
-array requests explicit initialization through the ES module. `Carousel` and `Toast` initialize even with an empty
-array; `Button` initializes when `clientOptions` is an array. Set `clientOptions` to `false` to skip that explicit
+Widgets emit `data-bs-*` attributes, and a non-empty `clientOptions` array requests explicit initialization through
+the ES module. `Chips`, `Combobox`, `NavOverflow`, `OtpInput`, `Range`, `Strength`, and inline or preselected
+`Datepicker` widgets also initialize with empty options so they work in fragments inserted after page load. `Carousel` and `Toast` initialize with empty
+options too; `Button` initializes when `clientOptions` is an array. Set `clientOptions` to `false` to skip explicit
 initialization; rendered data attributes can still activate the Bootstrap data API.
 
 `clientEvents` handlers use `addEventListener` independently of `clientOptions`. Menu options and events belong on

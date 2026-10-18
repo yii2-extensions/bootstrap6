@@ -76,7 +76,7 @@ class Range extends InputWidget
 
         $this->options['id'] = $containerId;
 
-        $this->registerPlugin('Range');
+        $this->registerPlugin('Range', true);
 
         $this->options = $original;
 
