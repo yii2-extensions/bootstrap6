@@ -9,8 +9,9 @@ pages and skill distribution. Edit the package sources, not generated copies.
 
 ### Automatic Composer installation
 
-Complete the [one-time application setup](https://yii2-framework.github.io/docs/project/ai-agents/#composer-installation), enabling `llm/skills`
-and automatic synchronization. Approve `yii2-extensions/bootstrap6` explicitly in `dependencies.composer.trusted`.
+Complete the [one-time application setup](https://yii2-framework.github.io/docs/project/ai-agents/#composer-installation) to enable `llm/skills`
+and set `auto-sync` to `true` in `skills.json`. Approve `yii2-extensions/bootstrap6` explicitly in
+`dependencies.composer.trusted`.
 The installed package must include its skill bundle; its `extra.skills.source` declares the directory.
 
 ```bash
@@ -18,7 +19,8 @@ composer install
 composer skills:show
 ```
 
-Later dependency installs and updates synchronize the skill automatically; no per-skill installer is required.
+With `auto-sync` enabled, later dependency installs and updates synchronize the skill automatically; no per-skill
+installer is required. If `auto-sync` is `false`, run `composer skills:update` after dependency installation or updates.
 
 ### Optional npx installation
 
