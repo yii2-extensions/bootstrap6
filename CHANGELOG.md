@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 0.1.3 Under development
 
+- docs: enhance `README.md` badges for security and social media links.
+
 ## 0.1.2 October 19, 2026
 
 - docs: declare the bundled skill source and synchronize trusted skills automatically through Composer.
