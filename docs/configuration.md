@@ -393,10 +393,4 @@ Use `yii2\extensions\bootstrap6\Html` when helper output must match Bootstrap 6 
 or theme classes. It extends Yii's HTML helper, including `encode()`. Its generated API documents signatures;
 [helper recipes](examples.md#html-helpers) show combinations.
 
-## Next steps
-
-- [Installation](installation.md).
-- [Usage examples](examples.md).
-- [Migration from Bootstrap 5](migration.md).
-- [Agent skill](agents.md).
-- [Testing](testing.md).
+[Back to documentation](../README.md#documentation)

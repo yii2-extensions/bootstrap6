@@ -1553,9 +1553,4 @@ window.addEventListener("load", () => {
 });
 ```
 
-## Next steps
-
-- 📚 [Installation Guide](installation.md)
-- ⚙️ [Configuration Reference](configuration.md)
-- 🔄 [Migration Guide](migration.md)
-- 🧪 [Testing Guide](testing.md)
+[Back to documentation](../README.md#documentation)

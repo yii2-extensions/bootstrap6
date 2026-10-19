@@ -119,8 +119,8 @@ AI agents: read <https://yii2-framework.github.io/docs/llms.txt>, the index of t
 Markdown version of a page by appending `index.md` to its URL, for example
 <https://yii2-framework.github.io/docs/extensions/bootstrap6/installation/index.md>. For the Yii conventions this
 package builds on, install the
-[`yii2-framework` agent skill](https://github.com/yii2-framework/docs/blob/main/skills/yii2-framework/SKILL.md) with
-`npx skills add yii2-framework/docs --skill yii2-framework`.
+[`yii2-framework` skill](https://github.com/yii2-extensions/skill/tree/main/skills/yii2-framework)
+through the [shared Composer setup](https://yii2-framework.github.io/docs/project/ai-agents/#composer-installation).
 
 - 🤖 [yii2-bootstrap6-widgets skill](docs/agents.md): installation for Claude Code, Codex, and OpenCode.
 

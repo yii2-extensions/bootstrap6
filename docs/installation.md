@@ -236,9 +236,4 @@ use yii2\extensions\bootstrap6\asset\BootstrapIconAsset;
 BootstrapIconAsset::register($this);
 ```
 
-## Next steps
-
-- ⚙️ [Configuration Reference](configuration.md)
-- 💡 [Usage Examples](examples.md)
-- 🔄 [Migration Guide](migration.md)
-- 🧪 [Testing Guide](testing.md)
+[Back to documentation](../README.md#documentation)
