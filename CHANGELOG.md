@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 0.1.2 Under development
 
+- docs: declare the bundled skill source and synchronize trusted skills automatically through Composer.
+
 ## 0.1.1 October 18, 2026
 
 - chore: remove `README.md` requirements already shown in the package badges.

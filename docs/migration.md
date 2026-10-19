@@ -316,9 +316,4 @@ displayed by a CSS `:has()` rule registered once per form, so it needs no jQuery
 - Submit invalid forms and verify feedback in the layouts used by the application. Keep server-side validation.
 - Open and dismiss each migrated interaction in a supported browser; check the console for module or asset errors.
 
-## Next steps
-
-- [Installation](installation.md).
-- [Configuration](configuration.md).
-- [Usage examples](examples.md).
-- [Testing](testing.md).
+[Back to documentation](../README.md#documentation)

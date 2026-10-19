@@ -7,6 +7,21 @@ pages and skill distribution. Edit the package sources, not generated copies.
 
 ## Install in an application
 
+### Automatic Composer installation
+
+Complete the [one-time application setup](https://yii2-framework.github.io/docs/project/ai-agents/#composer-installation), enabling `llm/skills`
+and automatic synchronization. Approve `yii2-extensions/bootstrap6` explicitly in `dependencies.composer.trusted`.
+The installed package must include its skill bundle; its `extra.skills.source` declares the directory.
+
+```bash
+composer install
+composer skills:show
+```
+
+Later dependency installs and updates synchronize the skill automatically; no per-skill installer is required.
+
+### Optional npx installation
+
 Run the pinned installer from the application root and select the clients you use:
 
 ```bash
@@ -47,3 +62,5 @@ local guides, generated references, or published Markdown. A copied skill does n
 To check setup, start a fresh client session at the application root, inspect the available skills, then invoke the
 skill for one small widget task. Record discovery and activation separately from PHP lint, rendered output, and
 browser behavior. For automatic selection, repeat with a natural task prompt that does not name the skill.
+
+[Back to documentation](../README.md#documentation)
