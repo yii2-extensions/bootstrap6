@@ -30,17 +30,21 @@ nbproject
 
 # node_modules (if present)
 node_modules
-
-# phpstorm project (if present)
-.idea
+package-lock.json
 
 # phpactor (if present)
 .phpactor.*
+
+# phpstorm project (if present)
+.idea
 
 # phpunit (if present)
 .phpunit.cache
 .phpunit.result.cache
 phpunit.xml
+
+# private maintainer files (if present)
+/internal/
 
 # vagrant (if present)
 .vagrant
@@ -58,6 +62,3 @@ Thumbs.db
 .buildpath
 .project
 .settings
-
-# Private maintainer files
-/internal/
