@@ -110,6 +110,8 @@ abstract class BaseHtml extends YiiHtml
      * @param string|Theme|null $theme Theme color, or `null` for the default color.
      * @param array<mixed> $options Tag attributes.
      *
+     * @throws InvalidConfigException if `$theme` is a `string` that is not a {@see Theme} value.
+     *
      * @return string Generated HTML, for example `<span class="badge theme-primary">New</span>`.
      *
      * @see https://getbootstrap.com/docs/6.0/components/badge/
@@ -144,6 +146,8 @@ abstract class BaseHtml extends YiiHtml
      * @param array<mixed> $options Container attributes and the special options above.
      *
      * @see https://getbootstrap.com/docs/6.0/forms/field/#grouped
+     *
+     * @return string Generated HTML.
      */
     public static function checkboxList($name, $selection = null, $items = [], $options = []): string
     {
@@ -215,9 +219,13 @@ abstract class BaseHtml extends YiiHtml
     }
 
     /**
+     * Generates the validation error element with the default Bootstrap feedback class.
+     *
      * @param Model $model Model holding the attribute.
      * @param string $attribute Attribute name or expression.
      * @param array<mixed> $options Tag options; the `class` attribute defaults to `invalid-feedback`.
+     *
+     * @return string Generated HTML.
      */
     public static function error($model, $attribute, $options = []): string
     {
@@ -280,6 +288,8 @@ abstract class BaseHtml extends YiiHtml
      * @param array<mixed> $options Container attributes and the special options of {@see checkboxList()}.
      *
      * @see https://getbootstrap.com/docs/6.0/forms/field/#grouped
+     *
+     * @return string Generated HTML.
      */
     public static function radioList($name, $selection = null, $items = [], $options = []): string
     {
@@ -340,6 +350,8 @@ abstract class BaseHtml extends YiiHtml
      * @param string $name Input name.
      * @param bool $checked Whether the input is checked; the `checked` option takes precedence.
      * @param array<mixed> $options Tag attributes and the special options above.
+     *
+     * @return string Generated HTML.
      */
     protected static function booleanInput($type, $name, $checked = false, $options = []): string
     {
@@ -376,6 +388,8 @@ abstract class BaseHtml extends YiiHtml
 
     /**
      * Returns the next auto-generated `id` for checkbox and radio labels.
+     *
+     * @return string Next identifier using the configured prefix and incremented counter.
      */
     protected static function getId(): string
     {
@@ -385,7 +399,9 @@ abstract class BaseHtml extends YiiHtml
     /**
      * Returns the value when it is an array, or an empty array otherwise.
      *
-     * @return array<mixed>
+     * @param mixed $value Value to inspect.
+     *
+     * @return array<mixed> The array value, or an empty array for other types.
      */
     private static function arrayValue(mixed $value): array
     {
@@ -395,8 +411,14 @@ abstract class BaseHtml extends YiiHtml
     /**
      * Renders the checkbox or radio input, wrapped in the `.switch` element for switches.
      *
+     * @param string $type Input type, either `checkbox` or `radio`.
+     * @param string $name Input name.
+     * @param string|null $value Input value, or `null` to omit the value attribute.
      * @param array<mixed> $options Input attributes.
+     * @param bool $switch Whether to wrap the checkbox as a switch.
      * @param array<mixed> $switchOptions Attributes of the `.switch` wrapper.
+     *
+     * @return string Input markup, including the switch wrapper when requested.
      */
     private static function control(
         string $type,
@@ -424,6 +446,10 @@ abstract class BaseHtml extends YiiHtml
      * Returns whether the `string` is a value of the enum, or a list of breakpoint-prefixed values when `$responsive`.
      *
      * @param class-string<BackedEnum> $enum String-backed enum the value belongs to.
+     * @param string $value Value or space-separated list of responsive values to validate.
+     * @param bool $responsive Whether to accept breakpoint-prefixed values.
+     *
+     * @return bool Whether every value belongs to the enum and uses an allowed breakpoint prefix.
      */
     private static function isEnumString(string $enum, string $value, bool $responsive): bool
     {
@@ -515,6 +541,10 @@ abstract class BaseHtml extends YiiHtml
 
     /**
      * Returns the value as a `string` when it is scalar or {@see Stringable}, or `null` otherwise.
+     *
+     * @param mixed $value Value to convert when it is scalar or implements `Stringable`.
+     *
+     * @return string|null Converted scalar or `Stringable` value, or `null` for unsupported values.
      */
     private static function stringValue(mixed $value): string|null
     {

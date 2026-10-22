@@ -21,6 +21,14 @@ class Popover extends Tooltip
      */
     public string|Stringable|null $content = null;
 
+    /**
+     * Returns the inherited `data-bs-*` attributes, adding `bs-content` when {@see $content} is set.
+     *
+     * @throws \yii\base\InvalidConfigException if {@see $placement} is not a valid placement, optionally
+     * breakpoint-prefixed.
+     *
+     * @return array<string, string|Stringable> Inherited plugin attributes with the optional popover content.
+     */
     protected function dataAttributes(): array
     {
         $data = parent::dataAttributes();
@@ -32,6 +40,11 @@ class Popover extends Tooltip
         return $data;
     }
 
+    /**
+     * Returns the `Popover` plugin class exported by the bundle.
+     *
+     * @return string Popover plugin class name.
+     */
     protected function pluginName(): string
     {
         return 'Popover';

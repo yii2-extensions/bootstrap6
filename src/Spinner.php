@@ -82,6 +82,13 @@ class Spinner extends Widget
         }
     }
 
+    /**
+     * Returns the spinner markup with the visually hidden status label.
+     *
+     * @throws InvalidConfigException if {@see $theme} is not a {@see Theme} value.
+     *
+     * @return string Rendered Spinner markup.
+     */
     public function run(): string
     {
         BootstrapAsset::register($this->getView());
@@ -112,6 +119,8 @@ class Spinner extends Widget
 
     /**
      * Renders the visually hidden status label, or an empty `string` when {@see $label} is empty.
+     *
+     * @return string Visually hidden label markup, or an empty `string` for an empty label.
      */
     protected function renderLabel(): string
     {

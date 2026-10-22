@@ -1,18 +1,19 @@
-# Agent skill
+# AI assistance
 
-The editable source is `skills/yii2-bootstrap6-widgets/SKILL.md` in this package. Its workflow covers Bootstrap 6
-widget selection, configuration, migration, assets, and output encoding. Guides stay in `docs/`; API contracts stay
-in PHPDoc and the generated API reference. The documentation site consumes these sources to generate its published
-pages and skill distribution. Edit the package sources, not generated copies.
+The editable source is `skills/yii2-bootstrap6-widgets/SKILL.md` in this package. Its workflow covers Bootstrap 6 widget
+selection, configuration, migration, assets, and output encoding. Guides stay in `docs/`; API contracts stay in PHPDoc
+and the generated API reference. The documentation site consumes these sources to generate its published pages and skill
+distribution. Edit the package sources, not generated copies.
 
 ## Install in an application
 
 ### Automatic Composer installation
 
-Complete the [one-time application setup](https://yii2-framework.github.io/docs/project/ai-agents/#composer-installation) to enable `llm/skills`
-and set `auto-sync` to `true` in `skills.json`. Approve `yii2-extensions/bootstrap6` explicitly in
-`dependencies.composer.trusted`.
-The installed package must include its skill bundle; its `extra.skills.source` declares the directory.
+Complete the
+[one-time application setup](https://yii2-framework.github.io/docs/project/ai-agents/#composer-installation) to enable
+`llm/skills` and set `auto-sync` to `true` in `skills.json`. Approve `yii2-extensions/bootstrap6` explicitly in
+`dependencies.composer.trusted`. The installed package must include its skill bundle; its `extra.skills.source` declares
+the directory.
 
 ```bash
 composer install
@@ -36,9 +37,9 @@ For a local checkout, pass its directory instead:
 npx skills@1.7.2 add /path/to/bootstrap6 --skill yii2-bootstrap6-widgets
 ```
 
-To inspect the source without installing, add `--list`. Omit `--global` for an application-specific installation.
-Review the selected destination paths before proceeding; installing a Composer dependency in `vendor/` does not
-make its skills automatically discoverable from the application root.
+To inspect the source without installing, add `--list`. Omit `--global` for an application-specific installation. Review
+the selected destination paths before proceeding; installing a Composer dependency in `vendor/` does not make its skills
+automatically discoverable from the application root.
 
 ## Native discovery and activation
 
@@ -57,12 +58,12 @@ client behavior, see [Codex skills](https://learn.chatgpt.com/docs/build-skills)
 [Claude Code skills](https://code.claude.com/docs/en/skills), and [OpenCode skills](https://opencode.ai/docs/skills/).
 
 Installation places files or links. Discovery exposes the skill's name and description. Activation loads its
-instructions, either explicitly or when the client's selection matches the task. These are separate stages:
-installation alone does not prove activation. After activation, the skill directs selective reading of the relevant
-local guides, generated references, or published Markdown. A copied skill does not depend on `../../docs` existing.
+instructions, either explicitly or when the client's selection matches the task. These are separate stages: installation
+alone does not prove activation. After activation, the skill directs selective reading of the relevant local guides,
+generated references, or published Markdown. A copied skill does not depend on `../../docs` existing.
 
 To check setup, start a fresh client session at the application root, inspect the available skills, then invoke the
-skill for one small widget task. Record discovery and activation separately from PHP lint, rendered output, and
-browser behavior. For automatic selection, repeat with a natural task prompt that does not name the skill.
+skill for one small widget task. Record discovery and activation separately from PHP lint, rendered output, and browser
+behavior. For automatic selection, repeat with a natural task prompt that does not name the skill.
 
 [Back to documentation](../README.md#documentation)

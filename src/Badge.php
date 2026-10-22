@@ -61,6 +61,13 @@ class Badge extends Widget
         Html::enumValue(Theme::class, $this->theme, 'theme');
     }
 
+    /**
+     * Returns the badge element with its variant and theme classes.
+     *
+     * @throws InvalidConfigException if {@see $theme} is not a {@see Theme} value.
+     *
+     * @return string Rendered Badge markup.
+     */
     public function run(): string
     {
         BootstrapAsset::register($this->getView());

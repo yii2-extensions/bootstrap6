@@ -80,6 +80,8 @@ class ToggleButtonGroup extends InputWidget
     public ButtonVariant|string $variant = ButtonVariant::OUTLINE;
 
     /**
+     * Initializes the input widget and validates its button style, size, theme, and input type.
+     *
      * @throws InvalidConfigException if the widget has neither a model attribute nor a name, or {@see $size},
      * {@see $theme}, {@see $type}, or {@see $variant} is not supported.
      */
@@ -98,6 +100,14 @@ class ToggleButtonGroup extends InputWidget
         }
     }
 
+    /**
+     * Returns the `.btn-group` of toggle buttons, preceded by the hidden input of the `unselect` option when it
+     * is set (`''` by default for a model attribute).
+     *
+     * @throws InvalidConfigException if {@see $size}, {@see $theme}, or {@see $variant} is not a value of its enum.
+     *
+     * @return string Rendered ToggleButtonGroup markup.
+     */
     public function run(): string
     {
         BootstrapAsset::register($this->getView());
@@ -154,6 +164,8 @@ class ToggleButtonGroup extends InputWidget
      * @param bool $checked Whether the input is checked.
      * @param string $value Input value.
      *
+     * @throws InvalidConfigException if {@see $theme} or {@see $variant} is not a value of its enum.
+     *
      * @return string Generated HTML.
      */
     protected function renderItem(string $label, string $name, bool $checked, string $value): string
@@ -184,6 +196,8 @@ class ToggleButtonGroup extends InputWidget
      *
      * @param string $value Item value.
      * @param mixed $selection Selected value, or iterable of selected values.
+     *
+     * @return bool Whether any selected value matches the item value as a `string`.
      */
     private static function isSelected(string $value, mixed $selection): bool
     {

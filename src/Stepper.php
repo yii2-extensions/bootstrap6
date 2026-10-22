@@ -81,6 +81,14 @@ class Stepper extends Widget
         }
     }
 
+    /**
+     * Returns the stepper markup, wrapped in a `.contains-inline` container when {@see $horizontal} is a
+     * breakpoint.
+     *
+     * @throws InvalidConfigException if {@see $horizontal} is a `string` that is not a {@see Breakpoint} value.
+     *
+     * @return string Rendered Stepper markup.
+     */
     public function run(): string
     {
         BootstrapAsset::register($this->getView());
@@ -119,7 +127,10 @@ class Stepper extends Widget
     /**
      * Renders a step.
      *
+     * @param StepItem $item Step content, state, and attributes to render.
      * @param bool $links Whether the stepper renders links, so steps without `url` use a `<div>` instead of `<li>`.
+     *
+     * @return string Rendered item markup.
      */
     protected function renderItem(StepItem $item, bool $links): string
     {
@@ -167,7 +178,7 @@ class Stepper extends Widget
      *
      * @throws InvalidConfigException if an item has no `label` or an invalid `theme`.
      *
-     * @return list<StepItem>
+     * @return list<StepItem> Normalized steps in their configured order.
      */
     private function normalizeItems(): array
     {

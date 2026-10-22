@@ -21,6 +21,8 @@ trait AttributesTrait
      *
      * @param array<string, mixed> $attributes Attribute values indexed by attribute names, for example
      * `['id' => 'my-id']`.
+     *
+     * @return $this The current instance for method chaining.
      */
     public function addAttributes(array $attributes): static
     {
@@ -36,6 +38,8 @@ trait AttributesTrait
      * ignored.
      *
      * @see https://html.spec.whatwg.org/#classes
+     *
+     * @return $this The current instance for method chaining.
      */
     public function addClass(BackedEnum|string|null ...$class): static
     {
@@ -57,6 +61,8 @@ trait AttributesTrait
      * value is kept.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/style
+     *
+     * @return $this The current instance for method chaining.
      */
     public function addCssStyle(array|string $style, bool $overwrite = true): static
     {
@@ -70,6 +76,8 @@ trait AttributesTrait
      *
      * @param string $name Attribute name.
      * @param mixed $value Attribute value, or `null` to omit the attribute when rendering.
+     *
+     * @return $this The current instance for method chaining.
      */
     public function attribute(string $name, mixed $value): static
     {
@@ -88,6 +96,8 @@ trait AttributesTrait
      * ignored. When no class remains, the `class` attribute is removed.
      *
      * @see https://html.spec.whatwg.org/#classes
+     *
+     * @return $this The current instance for method chaining.
      */
     public function class(BackedEnum|string|null ...$class): static
     {

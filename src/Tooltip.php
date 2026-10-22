@@ -64,6 +64,15 @@ class Tooltip extends Widget
         ob_start();
     }
 
+    /**
+     * Returns the wrapping element with the captured trigger content and its `data-bs-*` attributes, and
+     * registers the plugin named by {@see pluginName()}.
+     *
+     * @throws InvalidConfigException if {@see $placement} is not a {@see Placement} value, optionally
+     * breakpoint-prefixed.
+     *
+     * @return string Rendered Tooltip markup.
+     */
     public function run(): string
     {
         $content = ob_get_clean();
@@ -81,7 +90,10 @@ class Tooltip extends Widget
     /**
      * Returns the `data-bs-*` attributes of the wrapping element, without the `data-` prefix.
      *
-     * @return array<string, string|Stringable>
+     * @throws InvalidConfigException if {@see $placement} is not a {@see Placement} value, optionally
+     * breakpoint-prefixed.
+     *
+     * @return array<string, string|Stringable> Plugin attributes without the `data-` prefix.
      */
     protected function dataAttributes(): array
     {
@@ -114,6 +126,8 @@ class Tooltip extends Widget
 
     /**
      * Returns the plugin class exported by the bundle.
+     *
+     * @return string Tooltip plugin class name.
      */
     protected function pluginName(): string
     {

@@ -143,6 +143,14 @@ class Dialog extends Widget
         ob_start();
     }
 
+    /**
+     * Returns the optional toggle button followed by the `<dialog>` element with its header, the captured
+     * content inside `.dialog-body`, and its footer, and registers the `Dialog` plugin.
+     *
+     * @throws InvalidConfigException if {@see $fullscreenBelow} or {@see $size} is not a value of its enum.
+     *
+     * @return string Rendered Dialog markup.
+     */
     public function run(): string
     {
         $content = ob_get_clean();
@@ -166,7 +174,7 @@ class Dialog extends Widget
     /**
      * Returns {@see $toggleButton} by reference, replacing `false` with an empty array to enable the toggle button.
      *
-     * @return array<string, mixed>
+     * @return array<string, mixed> Toggle button attributes returned by reference for in-place updates.
      */
     protected function &togglerOptions(): array
     {
@@ -180,7 +188,9 @@ class Dialog extends Widget
     /**
      * Returns the HTML attributes of the `<dialog>` element.
      *
-     * @return array<mixed>
+     * @throws InvalidConfigException if {@see $fullscreenBelow} or {@see $size} is not a value of its enum.
+     *
+     * @return array<mixed> Dialog attributes with accessibility and plugin configuration.
      */
     protected function dialogOptions(): array
     {
@@ -243,6 +253,8 @@ class Dialog extends Widget
 
     /**
      * Renders the `.dialog-footer` element prefixed with a line break, or an empty string without {@see $footer}.
+     *
+     * @return string Footer markup with a leading line break, or an empty `string` when no footer is set.
      */
     protected function renderFooter(): string
     {
@@ -264,6 +276,8 @@ class Dialog extends Widget
 
     /**
      * Renders the `.dialog-header` element, or an empty string when there is neither a title nor a close button.
+     *
+     * @return string Header markup, or an empty `string` when no header content is configured.
      */
     protected function renderHeader(): string
     {
@@ -311,6 +325,8 @@ class Dialog extends Widget
 
     /**
      * Renders the toggle button, or an empty string when {@see $toggleButton} is `false`.
+     *
+     * @return string Toggle button markup, or an empty `string` when disabled.
      */
     protected function renderToggleButton(): string
     {
@@ -352,6 +368,8 @@ class Dialog extends Widget
 
     /**
      * Returns the `id` of the dialog element.
+     *
+     * @return string Widget element identifier.
      */
     private function elementId(): string
     {
@@ -361,6 +379,8 @@ class Dialog extends Widget
 
     /**
      * Returns the `id` of the title element.
+     *
+     * @return string Title element identifier.
      */
     private function titleId(): string
     {

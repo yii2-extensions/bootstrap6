@@ -110,7 +110,12 @@ class ButtonMenu extends Widget
     }
 
     /**
-     * @throws InvalidConfigException if a menu item has no `label`.
+     * Renders the menu toggle and panel, optionally inside a button group, and registers the plugin.
+     *
+     * @throws InvalidConfigException if a menu item lacks a required label, or a placement, size, theme, or variant
+     * is invalid.
+     *
+     * @return string Rendered ButtonMenu markup.
      */
     public function run(): string
     {
@@ -187,6 +192,10 @@ class ButtonMenu extends Widget
      * @param string $tagName Tag name, either `button` or `a`.
      * @param string $content Button content, already encoded.
      * @param array<array-key, mixed> $options HTML attributes of the button.
+     *
+     * @throws InvalidConfigException if {@see $size}, {@see $theme}, or {@see $variant} is not a value of its enum.
+     *
+     * @return string Button markup.
      */
     protected function renderButton(string $tagName, string $content, array $options): string
     {

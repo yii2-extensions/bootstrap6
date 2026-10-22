@@ -25,6 +25,8 @@ final readonly class ProgressBar
     use ItemTrait;
 
     /**
+     * Initializes the immutable ProgressBar configuration.
+     *
      * @param float|int $percent Current value, between the widget `min` and `max`.
      * @param string|Stringable $label Content of the `.progress-bar` element.
      * @param Theme|string|null $theme Theme color rendered as the `theme-{value}` class, or `null` for the default.
@@ -50,13 +52,15 @@ final readonly class ProgressBar
     /**
      * Creates a bar from the array configuration documented in `Progress::$bars`.
      *
-     * Only `true` enables `striped` and `animated`; a `label`, `theme`, `ariaLabel`, or `options` of another type is
-     * ignored.
+     * Numeric strings are converted to `float`. Only `true` enables `striped` and `animated`; a `label`, `theme`,
+     * `ariaLabel`, or `options` of another type is ignored.
      *
      * @param array<array-key, mixed> $config Bar configuration.
      *
-     * @throws InvalidConfigException if the bar has no `float|int` `percent`, or its `theme` is a `string` that is not
+     * @throws InvalidConfigException if the bar has no numeric `percent`, or its `theme` is a `string` that is not
      * a {@see Theme} value.
+     *
+     * @return self A new instance.
      */
     public static function fromArray(array $config): self
     {
@@ -100,6 +104,8 @@ final readonly class ProgressBar
      *
      * @param float|int $percent Current value, between the widget `min` and `max`.
      * @param string|Stringable $label Content of the `.progress-bar` element.
+     *
+     * @return self A new instance.
      */
     public static function to(float|int $percent, string|Stringable $label = ''): self
     {
@@ -108,6 +114,10 @@ final readonly class ProgressBar
 
     /**
      * Returns a copy with the given stripe animation flag.
+     *
+     * @param bool $animated Whether to animate the stripes (`progress-bar-animated`).
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withAnimated(bool $animated): self
     {
@@ -116,6 +126,10 @@ final readonly class ProgressBar
 
     /**
      * Returns a copy with the given accessible name.
+     *
+     * @param string|null $ariaLabel Accessible name rendered as `aria-label`, or `null` to omit it.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withAriaLabel(string|null $ariaLabel): self
     {
@@ -124,6 +138,10 @@ final readonly class ProgressBar
 
     /**
      * Returns a copy with the given label.
+     *
+     * @param string|Stringable $label Content of the `.progress-bar` element.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withLabel(string|Stringable $label): self
     {
@@ -134,6 +152,8 @@ final readonly class ProgressBar
      * Returns a copy with the given `.progress-bar` attributes.
      *
      * @param array<array-key, mixed> $options HTML attributes of the `.progress-bar` element.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withOptions(array $options): self
     {
@@ -142,6 +162,10 @@ final readonly class ProgressBar
 
     /**
      * Returns a copy with the given value.
+     *
+     * @param float|int $percent Current value, between the widget `min` and `max`.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withPercent(float|int $percent): self
     {
@@ -150,6 +174,10 @@ final readonly class ProgressBar
 
     /**
      * Returns a copy with the given stripes flag.
+     *
+     * @param bool $striped Whether to render stripes (`progress-bar-striped`).
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withStriped(bool $striped): self
     {
@@ -159,7 +187,11 @@ final readonly class ProgressBar
     /**
      * Returns a copy with the given theme color.
      *
+     * @param Theme|string|null $theme Theme color rendered as the `theme-{value}` class, or `null` for the default.
+     *
      * @throws InvalidConfigException if `$theme` is a `string` that is not a {@see Theme} value.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withTheme(Theme|string|null $theme): self
     {

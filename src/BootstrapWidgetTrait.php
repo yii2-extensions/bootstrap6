@@ -72,6 +72,8 @@ trait BootstrapWidgetTrait
 
     /**
      * Initializes the widget and assigns an `id` to {@see $options} when it is not set.
+     *
+     * @throws \yii\base\InvalidConfigException if an input widget has neither a model attribute nor a name.
      */
     public function init(): void
     {
@@ -86,6 +88,8 @@ trait BootstrapWidgetTrait
      * @param string $name Plugin class exported by the bundle.
      * @param string $element JavaScript expression selecting the plugin element.
      * @param string $options JSON-encoded constructor options.
+     *
+     * @return string JavaScript that obtains or creates the plugin instance.
      */
     protected function pluginInitialization(string $name, string $element, string $options): string
     {
@@ -166,6 +170,8 @@ trait BootstrapWidgetTrait
 
     /**
      * Returns the JavaScript expression selecting the widget element by its JSON-encoded `id`.
+     *
+     * @return string JavaScript expression selecting the widget element.
      */
     private function elementJs(): string
     {
@@ -174,6 +180,8 @@ trait BootstrapWidgetTrait
 
     /**
      * Returns the widget element `id`.
+     *
+     * @return string Widget element identifier.
      */
     private function widgetId(): string
     {

@@ -70,6 +70,13 @@ class Button extends Widget
         Html::enumValue(ButtonVariant::class, $this->variant, 'variant');
     }
 
+    /**
+     * Returns the button markup, registering the `Button` plugin only when it is needed.
+     *
+     * @throws InvalidConfigException if {@see $size}, {@see $theme}, or {@see $variant} is not a value of its enum.
+     *
+     * @return string Rendered Button markup.
+     */
     public function run(): string
     {
         $options = $this->options;

@@ -145,7 +145,11 @@ class LinkPager extends Widget
     }
 
     /**
-     * @throws InvalidConfigException if {@see $pagination} is not set.
+     * Renders the pagination container and optionally registers relational link tags.
+     *
+     * @throws InvalidConfigException if {@see $pagination} is not set, or {@see $size} or {@see $theme} is invalid.
+     *
+     * @return string Rendered LinkPager markup.
      */
     public function run(): string
     {
@@ -171,7 +175,9 @@ class LinkPager extends Widget
     /**
      * Returns the first and last internal page indexes to render.
      *
-     * @return array{int, int}
+     * @param Pagination $pagination Pagination supplying the current page and page count.
+     *
+     * @return array{int, int} Zero-based indexes of the first and last page buttons.
      */
     protected function getPageRange(Pagination $pagination): array
     {
@@ -190,6 +196,8 @@ class LinkPager extends Widget
 
     /**
      * Registers the relational link tags returned by {@see Pagination::getLinks()}.
+     *
+     * @param Pagination $pagination Pagination supplying the relational links.
      */
     protected function registerLinkTags(Pagination $pagination): void
     {
@@ -209,6 +217,8 @@ class LinkPager extends Widget
      * @param bool $disabled Whether the item is disabled.
      * @param bool $active Whether the item is the current page.
      * @param array<string, mixed> $linkOptions Extra HTML attributes of the link.
+     *
+     * @throws InvalidConfigException if {@see $pagination} is not set.
      *
      * @return string Generated HTML.
      */
@@ -248,6 +258,12 @@ class LinkPager extends Widget
 
     /**
      * Renders the list of page items, or an empty `string` when a single page is hidden.
+     *
+     * @param Pagination $pagination Pagination supplying the page count and current page.
+     *
+     * @throws InvalidConfigException if {@see $pagination} is not set, or {@see $size} or {@see $theme} is invalid.
+     *
+     * @return string Page list markup, or an empty `string` when a single page is hidden.
      */
     protected function renderPageButtons(Pagination $pagination): string
     {
@@ -340,6 +356,8 @@ class LinkPager extends Widget
      * Returns the configured pagination.
      *
      * @throws InvalidConfigException if {@see $pagination} is not set.
+     *
+     * @return Pagination Configured pagination instance.
      */
     private function getPagination(): Pagination
     {

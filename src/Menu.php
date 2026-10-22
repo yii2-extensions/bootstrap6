@@ -60,7 +60,11 @@ class Menu extends Widget
     public array $submenuOptions = [];
 
     /**
+     * Renders the menu panel with its visible items and registers the `Menu` plugin.
+     *
      * @throws InvalidConfigException if an item has no `label`.
+     *
+     * @return string Rendered Menu markup.
      */
     public function run(): string
     {
@@ -80,6 +84,8 @@ class Menu extends Widget
      *
      * @param array<array-key, MenuItem|string> $items Items to render, see {@see $items}.
      * @param array<array-key, mixed> $options HTML attributes of the panel.
+     *
+     * @return string Menu panel markup with its visible items.
      */
     protected function renderItems(array $items, array $options): string
     {
@@ -102,6 +108,10 @@ class Menu extends Widget
 
     /**
      * Returns the item label HTML-encoded according to the item `encode` flag and {@see $encodeLabels}.
+     *
+     * @param MenuItem $item Item whose label and encoding flag are used.
+     *
+     * @return string Item label, encoded when requested by the item or widget.
      */
     private function encode(MenuItem $item): string
     {
@@ -113,7 +123,7 @@ class Menu extends Widget
      *
      * @throws InvalidConfigException if an item has no `label`.
      *
-     * @return array<array-key, MenuItem|string>
+     * @return array<array-key, MenuItem|string> Normalized menu items with their original keys.
      */
     private function normalizeItems(): array
     {
@@ -129,7 +139,11 @@ class Menu extends Widget
     /**
      * Renders a `<button>` menu item.
      *
+     * @param string $label Button content, already encoded when needed.
      * @param array<array-key, mixed> $options HTML attributes of the button.
+     * @param bool $disabled Whether to disable the button.
+     *
+     * @return string Button markup.
      */
     private function renderButton(string $label, array $options, bool $disabled): string
     {
@@ -148,6 +162,10 @@ class Menu extends Widget
 
     /**
      * Renders a single menu item, header, text, divider, or submenu.
+     *
+     * @param MenuItem $item Menu item to render.
+     *
+     * @return string Rendered item markup.
      */
     private function renderItem(MenuItem $item): string
     {

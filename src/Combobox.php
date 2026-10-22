@@ -97,8 +97,8 @@ class Combobox extends InputWidget
     /**
      * Initializes the widget and validates {@see $items} and {@see $placement}.
      *
-     * @throws InvalidConfigException if {@see $items} is empty, or {@see $placement} is not a {@see Placement} value,
-     * optionally breakpoint-prefixed.
+     * @throws InvalidConfigException if neither a model attribute nor a name is set, {@see $items} is empty, or
+     * {@see $placement} is invalid.
      */
     public function init(): void
     {
@@ -111,6 +111,15 @@ class Combobox extends InputWidget
         Html::enumValue(Placement::class, $this->placement, 'placement', true);
     }
 
+    /**
+     * Returns the toggle button followed by the menu, and registers the `Combobox` plugin with the script that
+     * keeps its generated hidden input in sync with the `disabled` and `form` attributes of the toggle.
+     *
+     * @throws InvalidConfigException if {@see $placement} is not a {@see Placement} value, optionally
+     * breakpoint-prefixed.
+     *
+     * @return string Rendered Combobox markup.
+     */
     public function run(): string
     {
         $this->registerPlugin('Combobox', true);
@@ -132,7 +141,11 @@ class Combobox extends InputWidget
     /**
      * Renders a menu item.
      *
+     * @param int|string $value Value submitted when the item is selected.
+     * @param string $label Item label, encoded according to {@see $encodeLabels}.
      * @param list<string> $selected Selected values.
+     *
+     * @return string Rendered item markup.
      */
     protected function renderItem(int|string $value, string $label, array $selected): string
     {
@@ -165,6 +178,8 @@ class Combobox extends InputWidget
      * Renders the `.menu` container with the search field and the items.
      *
      * @param list<string> $selected Selected values.
+     *
+     * @return string Menu panel markup.
      */
     protected function renderMenu(array $selected): string
     {
@@ -211,6 +226,11 @@ class Combobox extends InputWidget
      * Renders the toggle button.
      *
      * @param list<string> $selected Selected values.
+     *
+     * @throws InvalidConfigException if {@see $placement} is not a {@see Placement} value, optionally
+     * breakpoint-prefixed.
+     *
+     * @return string Combobox toggle button markup.
      */
     protected function renderToggle(array $selected): string
     {
@@ -257,6 +277,8 @@ class Combobox extends InputWidget
 
     /**
      * Returns the name of the hidden input the plugin creates.
+     *
+     * @return string Model-derived input name, or the configured name.
      */
     private function inputName(): string
     {
@@ -323,7 +345,7 @@ class Combobox extends InputWidget
     /**
      * Returns the selected values from the model attribute or {@see $value}.
      *
-     * @return list<string>
+     * @return list<string> Selected scalar values converted to strings.
      */
     private function selectedValues(): array
     {

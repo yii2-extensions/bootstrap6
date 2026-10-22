@@ -119,7 +119,12 @@ class Nav extends Widget
     }
 
     /**
-     * @throws InvalidConfigException if an item has no `label`.
+     * Renders the navigation with active item detection and registers its required assets.
+     *
+     * @throws InvalidConfigException if an item lacks a required label, or {@see $layout} or {@see $style} is
+     * invalid.
+     *
+     * @return string Rendered Nav markup.
      */
     public function run(): string
     {
@@ -156,9 +161,11 @@ class Nav extends Widget
     /**
      * Returns the classes of a nav style; {@see NavStyle::PILLS_VERTICAL} also needs {@see NavStyle::PILLS}.
      *
+     * @param NavStyle|string|null $style Nav style, or `null` for no additional classes.
+     *
      * @throws InvalidConfigException if `$style` is a `string` that is not a {@see NavStyle} value.
      *
-     * @return list<string>
+     * @return list<string> CSS classes required by the selected nav style.
      */
     public static function styleClasses(NavStyle|string|null $style): array
     {
@@ -222,6 +229,8 @@ class Nav extends Widget
      * `id=42`, and arrays element by element with the same keys. A `null` parameter matches any value.
      *
      * @param MenuItem|NavItem $item Nav item, or item of a menu toggled by the nav.
+     *
+     * @return bool Whether item activation is enabled and the explicit state or route matches.
      */
     protected function isItemActive(MenuItem|NavItem $item): bool
     {
@@ -265,6 +274,8 @@ class Nav extends Widget
      * Renders a nav item.
      *
      * @param NavItem|string $item Nav item, or a string rendered as is.
+     *
+     * @return string Rendered item markup.
      */
     protected function renderItem(NavItem|string $item): string
     {
@@ -323,6 +334,8 @@ class Nav extends Widget
      *
      * @param array<array-key, MenuItem|string> $items Menu items, see {@see Menu::$items}.
      * @param array<array-key, mixed> $options HTML attributes of the `.menu` panel.
+     *
+     * @return string Menu panel markup.
      */
     protected function renderMenu(array $items, array $options): string
     {
@@ -341,7 +354,7 @@ class Nav extends Widget
      *
      * @throws InvalidConfigException if an item has no `label`.
      *
-     * @return array<array-key, NavItem|string>
+     * @return array<array-key, NavItem|string> Normalized navigation items with their original keys.
      */
     private function normalizeItems(): array
     {
@@ -362,6 +375,8 @@ class Nav extends Widget
      *
      * @param mixed $expected Parameter of the item `url`.
      * @param mixed $actual Request parameter, or `null` when it is missing.
+     *
+     * @return bool Whether the scalar values or nested arrays match.
      */
     private static function paramMatches(mixed $expected, mixed $actual): bool
     {

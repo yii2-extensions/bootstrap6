@@ -107,7 +107,12 @@ class Carousel extends Widget
     }
 
     /**
-     * @throws InvalidConfigException if {@see $items} is empty or an item lacks its `content` option.
+     * Renders the carousel slides and enabled controls, and registers the plugin.
+     *
+     * @throws InvalidConfigException if {@see $items} is empty, an item lacks its content, or {@see $ends} is
+     * invalid.
+     *
+     * @return string Rendered Carousel markup.
      */
     public function run(): string
     {
@@ -132,7 +137,9 @@ class Carousel extends Widget
     /**
      * Returns the HTML attributes of the `.carousel` element.
      *
-     * @return array<mixed>
+     * @throws InvalidConfigException if {@see $ends} is not a {@see CarouselEnds} value.
+     *
+     * @return array<mixed> Carousel attributes with its classes and plugin data options.
      */
     protected function carouselOptions(): array
     {
@@ -174,6 +181,8 @@ class Carousel extends Widget
 
     /**
      * Renders the previous/next and play/pause controls with the indicators, or an empty string when all are disabled.
+     *
+     * @return string Enabled control markup, or an empty `string` when all controls are disabled.
      */
     protected function renderControls(): string
     {
@@ -223,6 +232,8 @@ class Carousel extends Widget
 
     /**
      * Renders the `.carousel-indicators` element.
+     *
+     * @return string Indicator container markup with one button per slide.
      */
     protected function renderIndicators(): string
     {
@@ -257,7 +268,10 @@ class Carousel extends Widget
     /**
      * Renders a single `.carousel-item` element.
      *
+     * @param CarouselItem $item Slide content and attributes to render.
      * @param int $index Zero-based position of the item.
+     *
+     * @return string Rendered item markup.
      */
     protected function renderItem(CarouselItem $item, int $index): string
     {
@@ -280,6 +294,8 @@ class Carousel extends Widget
      * Renders the `.carousel-inner` element with every slide.
      *
      * @throws InvalidConfigException if an item lacks its `content` option.
+     *
+     * @return string Carousel inner container markup with every slide.
      */
     protected function renderItems(): string
     {
@@ -299,7 +315,7 @@ class Carousel extends Widget
     /**
      * Returns the classes of the control buttons.
      *
-     * @return list<string>
+     * @return list<string> CSS classes applied to carousel controls.
      */
     private function buttonClass(): array
     {
@@ -310,6 +326,8 @@ class Carousel extends Widget
 
     /**
      * Returns the `id` of the carousel element.
+     *
+     * @return string Widget element identifier.
      */
     private function elementId(): string
     {
@@ -323,7 +341,7 @@ class Carousel extends Widget
      *
      * @throws InvalidConfigException if an item lacks its `content` option.
      *
-     * @return list<CarouselItem>
+     * @return list<CarouselItem> Normalized slides in rendering order.
      */
     private function normalizeItems(): array
     {
@@ -345,6 +363,8 @@ class Carousel extends Widget
      *
      * @param string $direction Either `prev` or `next`.
      * @param string $label Visually hidden label (HTML-encoded).
+     *
+     * @return string Previous or next control markup.
      */
     private function renderControl(string $direction, string $label): string
     {
@@ -363,6 +383,8 @@ class Carousel extends Widget
 
     /**
      * Renders the play/pause control with translated accessible labels.
+     *
+     * @return string Play/pause button markup with accessible labels.
      */
     private function renderPlayPause(): string
     {

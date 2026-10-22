@@ -16,6 +16,8 @@ final readonly class CarouselItem
     use ItemTrait;
 
     /**
+     * Initializes the immutable CarouselItem configuration.
+     *
      * @param string|Stringable $content Content of the slide (not encoded).
      * @param array<array-key, mixed> $options HTML attributes of the `.carousel-item` element.
      */
@@ -29,6 +31,8 @@ final readonly class CarouselItem
      * @param array<array-key, mixed> $config Slide configuration.
      *
      * @throws InvalidConfigException if the slide has no `string|Stringable` `content`.
+     *
+     * @return self A new instance.
      */
     public static function fromArray(array $config): self
     {
@@ -44,6 +48,8 @@ final readonly class CarouselItem
      * Creates a slide.
      *
      * @param string|Stringable $content Content of the slide (not encoded).
+     *
+     * @return self A new instance.
      */
     public static function to(string|Stringable $content): self
     {
@@ -52,6 +58,10 @@ final readonly class CarouselItem
 
     /**
      * Returns a copy with the given content.
+     *
+     * @param string|Stringable $content Content of the slide (not encoded).
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withContent(string|Stringable $content): self
     {
@@ -62,6 +72,8 @@ final readonly class CarouselItem
      * Returns a copy with the given `.carousel-item` attributes.
      *
      * @param array<array-key, mixed> $options HTML attributes of the `.carousel-item` element.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withOptions(array $options): self
     {

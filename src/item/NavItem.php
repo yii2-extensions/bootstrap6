@@ -20,6 +20,8 @@ final readonly class NavItem
     use ItemTrait;
 
     /**
+     * Initializes the immutable NavItem configuration.
+     *
      * @param string|Stringable $label Label of the `.nav-link` element.
      * @param array<array-key, mixed>|string|null $url URL processed by {@see \yii\helpers\Url::to()}, or `null` for no
      * `href`; a route array also drives the active state detection.
@@ -55,6 +57,8 @@ final readonly class NavItem
      * @param array<array-key, mixed> $config Item configuration.
      *
      * @throws InvalidConfigException if the item, or one of its menu items, has no `string|Stringable` `label`.
+     *
+     * @return self A new instance.
      */
     public static function fromArray(array $config): self
     {
@@ -92,6 +96,10 @@ final readonly class NavItem
      * @param string|Stringable $label Toggle label.
      * @param array<array-key, array<string, mixed>|MenuItem|string>|string $items Menu items, or the menu HTML; arrays
      * are converted through {@see MenuItem::fromArray()}.
+     *
+     * @throws InvalidConfigException if a nested array item lacks a required text label.
+     *
+     * @return self A new instance.
      */
     public static function menu(string|Stringable $label, array|string $items): self
     {
@@ -104,6 +112,8 @@ final readonly class NavItem
      * @param string|Stringable $label Link label.
      * @param array<array-key, mixed>|string|null $url URL processed by {@see \yii\helpers\Url::to()}; `null` renders
      * no `href`.
+     *
+     * @return self A new instance.
      */
     public static function to(string|Stringable $label, array|string|null $url = '#'): self
     {
@@ -112,6 +122,10 @@ final readonly class NavItem
 
     /**
      * Returns a copy with the given active state.
+     *
+     * @param bool|null $active Whether the item is active, or `null` to detect it from the {@see $url} route.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withActive(bool|null $active): self
     {
@@ -120,6 +134,10 @@ final readonly class NavItem
 
     /**
      * Returns a copy with the given disabled state.
+     *
+     * @param bool $disabled Whether the item is disabled; it takes precedence over {@see $active}.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withDisabled(bool $disabled): self
     {
@@ -128,6 +146,10 @@ final readonly class NavItem
 
     /**
      * Returns a copy with the given encoding flag.
+     *
+     * @param bool|null $encode Whether to HTML-encode {@see $label}, or `null` to use `Nav::$encodeLabels`.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withEncode(bool|null $encode): self
     {
@@ -139,6 +161,10 @@ final readonly class NavItem
      *
      * @param array<array-key, array<string, mixed>|MenuItem|string>|string $items Menu items, or the menu HTML; arrays
      * are converted through {@see MenuItem::fromArray()}.
+     *
+     * @throws InvalidConfigException if a nested array item lacks a required text label.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withItems(array|string $items): self
     {
@@ -147,6 +173,10 @@ final readonly class NavItem
 
     /**
      * Returns a copy with the given label.
+     *
+     * @param string|Stringable $label Label of the `.nav-link` element.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withLabel(string|Stringable $label): self
     {
@@ -157,6 +187,8 @@ final readonly class NavItem
      * Returns a copy with the given `.nav-link` attributes.
      *
      * @param array<array-key, mixed> $linkOptions HTML attributes of the `.nav-link` element.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withLinkOptions(array $linkOptions): self
     {
@@ -167,6 +199,8 @@ final readonly class NavItem
      * Returns a copy with the given `.menu` panel attributes.
      *
      * @param array<array-key, mixed> $menuOptions HTML attributes of the `.menu` panel.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withMenuOptions(array $menuOptions): self
     {
@@ -177,6 +211,8 @@ final readonly class NavItem
      * Returns a copy with the given `.nav-item` attributes.
      *
      * @param array<array-key, mixed> $options HTML attributes of the `.nav-item` element.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withOptions(array $options): self
     {
@@ -187,6 +223,8 @@ final readonly class NavItem
      * Returns a copy with the given URL.
      *
      * @param array<array-key, mixed>|string|null $url URL processed by {@see \yii\helpers\Url::to()}.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withUrl(array|string|null $url): self
     {
@@ -195,6 +233,10 @@ final readonly class NavItem
 
     /**
      * Returns a copy with the given visibility.
+     *
+     * @param bool $visible Whether to render the item.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withVisible(bool $visible): self
     {
@@ -209,7 +251,8 @@ final readonly class NavItem
      *
      * @throws InvalidConfigException if an array item has no `label`.
      *
-     * @return array<array-key, MenuItem|string>|string
+     * @return array<array-key, MenuItem|string>|string Normalized menu items with their original keys, or unchanged
+     * menu HTML.
      */
     private static function normalize(array|string $items): array|string
     {

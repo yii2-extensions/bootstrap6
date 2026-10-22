@@ -83,6 +83,13 @@ class Avatar extends Widget
         }
     }
 
+    /**
+     * Returns the avatar markup with the image or the initials and the optional status indicator.
+     *
+     * @throws InvalidConfigException if {@see $size} or {@see $theme} is not a value of its enum.
+     *
+     * @return string Rendered Avatar markup.
+     */
     public function run(): string
     {
         BootstrapAsset::register($this->getView());

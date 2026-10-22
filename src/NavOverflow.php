@@ -64,7 +64,12 @@ class NavOverflow extends Widget
     }
 
     /**
-     * @throws InvalidConfigException if a nav item has no `label`.
+     * Renders the navigation wrapper and registers the `NavOverflow` plugin.
+     *
+     * @throws InvalidConfigException if a nav item lacks a required label, or the overflow or nested nav
+     * configuration is invalid.
+     *
+     * @return string Rendered NavOverflow markup.
      */
     public function run(): string
     {

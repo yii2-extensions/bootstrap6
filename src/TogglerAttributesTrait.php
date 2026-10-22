@@ -18,7 +18,7 @@ trait TogglerAttributesTrait
     /**
      * Returns the HTML attributes of the toggler by reference, enabling the toggler when it is disabled.
      *
-     * @return array<mixed>
+     * @return array<mixed> Toggler attributes returned by reference for in-place updates.
      */
     abstract protected function &togglerOptions(): array;
 
@@ -27,6 +27,8 @@ trait TogglerAttributesTrait
      *
      * @param string $name Attribute name.
      * @param mixed $value Attribute value, or `null` to omit the attribute when rendering.
+     *
+     * @return $this The current instance for method chaining.
      */
     public function addTogglerAttribute(string $name, mixed $value): static
     {
@@ -44,6 +46,8 @@ trait TogglerAttributesTrait
      * ignored.
      *
      * @see https://html.spec.whatwg.org/#classes
+     *
+     * @return $this The current instance for method chaining.
      */
     public function addTogglerClass(BackedEnum|string|null ...$class): static
     {
@@ -65,6 +69,8 @@ trait TogglerAttributesTrait
      * value is kept.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/style
+     *
+     * @return $this The current instance for method chaining.
      */
     public function addTogglerCssStyle(array|string $style, bool $overwrite = true): static
     {

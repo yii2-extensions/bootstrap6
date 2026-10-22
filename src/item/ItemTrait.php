@@ -27,7 +27,7 @@ trait ItemTrait
      * @param array<array-key, mixed> $config Item configuration.
      * @param string $key Configuration key.
      *
-     * @return array<array-key, mixed>
+     * @return array<array-key, mixed> Configured array, or an empty array when the entry is absent or not an array.
      */
     private static function arrayValue(array $config, string $key): array
     {
@@ -44,6 +44,8 @@ trait ItemTrait
      * @param Message $message Message of the exception thrown when the entry is missing or not text.
      *
      * @throws InvalidConfigException if the entry is not a `string|Stringable`.
+     *
+     * @return string|Stringable Configured text value.
      */
     private static function textValue(array $config, string $key, Message $message): string|Stringable
     {
@@ -61,6 +63,10 @@ trait ItemTrait
      *
      * @param string $property Name of a promoted constructor parameter.
      * @param mixed $value Value of the property in the copy.
+     *
+     * @throws InvalidConfigException if the constructor rejects the replacement value.
+     *
+     * @return static A new instance with the updated configuration.
      */
     private function with(string $property, mixed $value): static
     {

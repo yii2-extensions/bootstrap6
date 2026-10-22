@@ -73,9 +73,8 @@ Thresholds, thread count and memory options live in `infection.json5`. CI enforc
 
 ## Repository quality checks
 
-Make the CLI tools used by the shared quality workflow available on `PATH`:
-actionlint with its ShellCheck helper, codespell, EditorConfig Checker, markdownlint-cli2, Prettier and
-yamllint. Run all checks:
+Make the CLI tools used by the shared quality workflow available on `PATH`: actionlint with its ShellCheck helper,
+codespell, EditorConfig Checker, markdownlint-cli2, Prettier and yamllint. Run all checks:
 
 ```bash
 composer quality
@@ -115,8 +114,8 @@ The test classes are grouped with `#[Group]` attributes: `asset`, `form`, `html`
 
 ## Workflow security checks
 
-Make zizmor and Gitleaks available on `PATH`. Audit the current workflow files
-with the same pedantic persona used by the shared security workflow:
+Make zizmor and Gitleaks available on `PATH`. Audit the current workflow files with the same pedantic persona used by
+the shared security workflow:
 
 ```bash
 composer zizmor
@@ -128,22 +127,21 @@ Scan Git history for secrets with the repository's Gitleaks configuration:
 composer gitleaks
 ```
 
-Run both checks. Findings make the command fail; inspect them rather than
-disabling the checks.
+Run both checks. Findings make the command fail; inspect them rather than disabling the checks.
 
 ```bash
 composer security
 ```
 
-Zizmor needs GitHub API access for its online audits. If the tool runs offline,
-report that limit separately. To request an offline audit explicitly:
+Zizmor needs GitHub API access for its online audits. If the tool runs offline, report that limit separately. To request
+an offline audit explicitly:
 
 ```bash
 composer zizmor -- --offline
 ```
 
-Report hosted CI execution and its PHP/OS matrix separately from these local
-commands. Keep generated reports in ignored `internal/`.
+Report hosted CI execution and its PHP/OS matrix separately from these local commands. Keep generated reports in ignored
+`internal/`.
 
 ## Passing extra arguments
 
@@ -177,11 +175,11 @@ them from the root `package.json` using PHP and `ext-zlib`; Node.js is unnecessa
 composer install
 ```
 
-Keep the development `foxy.lock` when updating frontend dependencies. It is excluded from Composer distribution
-archives because consuming applications resolve their own frontend requirements and maintain their own lockfiles.
-Foxy also adds generated `@composer-asset/*` dependencies with local `file:` paths to the checkout's root
-`package.json`. Keep those generated entries local: the distributed manifest must declare only registry packages,
-so it can be consumed without paths into this checkout's `vendor` directory. Inspect `git diff -- package.json`
-after Composer operations and remove generated entries before committing or packaging the library.
+Keep the development `foxy.lock` when updating frontend dependencies. It is excluded from Composer distribution archives
+because consuming applications resolve their own frontend requirements and maintain their own lockfiles. Foxy also adds
+generated `@composer-asset/*` dependencies with local `file:` paths to the checkout's root `package.json`. Keep those
+generated entries local: the distributed manifest must declare only registry packages, so it can be consumed without
+paths into this checkout's `vendor` directory. Inspect `git diff -- package.json` after Composer operations and remove
+generated entries before committing or packaging the library.
 
 [Back to documentation](../README.md#documentation)

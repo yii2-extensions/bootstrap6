@@ -107,7 +107,9 @@ abstract class AbstractNpmAsset extends AssetBundle
      * @param View $view View that renders the asset files.
      * @param bool $cdn Whether to link the files from the CDN.
      *
-     * @return static Registered bundle instance.
+     * @throws InvalidConfigException if an npm package version cannot be resolved for CDN delivery.
+     *
+     * @return static The registered asset bundle instance.
      */
     public static function registerWith(View $view, bool $cdn = false): static
     {
@@ -183,6 +185,8 @@ abstract class AbstractNpmAsset extends AssetBundle
      * Reads the installed package version from its `package.json`.
      *
      * @throws InvalidConfigException if the package manifest is missing or has no version.
+     *
+     * @return string Non-empty version read from the installed npm package manifest.
      */
     private function packageVersion(): string
     {
@@ -204,7 +208,9 @@ abstract class AbstractNpmAsset extends AssetBundle
     /**
      * Stores the delivery mode of a bundle and its npm-backed dependencies before they are instantiated.
      *
+     * @param AssetManager $assetManager Asset manager receiving the bundle configuration.
      * @param class-string<self> $class Bundle class to seed.
+     * @param bool $cdn Whether to link the bundle and its npm-backed dependencies from the CDN.
      */
     private static function seed(AssetManager $assetManager, string $class, bool $cdn): void
     {

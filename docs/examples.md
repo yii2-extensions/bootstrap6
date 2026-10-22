@@ -403,10 +403,11 @@ echo Combobox::widget(
 </div>
 ```
 
-`multiple`, `search`, and `check` add `data-bs-multiple="true"`, `data-bs-search="true"`, the `.combobox-search`
-field, the `.combobox-no-results` element, and a `.menu-item-check` icon in every item.
+`multiple`, `search`, and `check` add `data-bs-multiple="true"`, `data-bs-search="true"`, the `.combobox-search` field,
+the `.combobox-no-results` element, and a `.menu-item-check` icon in every item.
 
 > [!NOTE]
+>
 > Bootstrap `6.0.0-alpha.1` logs a harmless `Bootstrap doesn't allow more than one instance per element` console error
 > when a combobox opens. The message comes from the upstream bundle, not from the widget.
 
@@ -560,8 +561,8 @@ Filter form
 </dialog>
 ```
 
-`'responsive' => Breakpoint::LG` renders `class="lg:drawer drawer-start"`: the content is a drawer below `lg` and
-inline from `lg` up.
+`'responsive' => Breakpoint::LG` renders `class="lg:drawer drawer-start"`: the content is a drawer below `lg` and inline
+from `lg` up.
 
 ### LinkPager
 
@@ -1280,8 +1281,8 @@ ActiveForm::end();
 ### Floating layout
 
 The label comes before the control inside `.form-floating`; the hint and the error follow the wrapper. The wrapper
-receives `is-invalid` on the server so the sibling feedback is displayed. On the client, a `:has()` rule registered
-once per form displays the feedback when the control carries `is-invalid`, so client validation needs no jQuery:
+receives `is-invalid` on the server so the sibling feedback is displayed. On the client, a `:has()` rule registered once
+per form displays the feedback when the control carries `is-invalid`, so client validation needs no jQuery:
 
 ```php
 $form = ActiveForm::begin(['action' => '/signup', 'layout' => ActiveForm::LAYOUT_FLOATING]);
@@ -1543,9 +1544,9 @@ Dialog.getOrCreateInstance(document.getElementById("confirm")).show();
 
 ### Accessing plugin instances through `window.bootstrap`
 
-Enable `exposeGlobal` (see the [installation guide](installation.md#the-javascript-bundle-is-an-es-module)) for
-scripts written against the Bootstrap 5 global. The assignment happens when the module import resolves, so wait for
-the `load` event:
+Enable `exposeGlobal` (see the [installation guide](installation.md#the-javascript-bundle-is-an-es-module)) for scripts
+written against the Bootstrap 5 global. The assignment happens when the module import resolves, so wait for the `load`
+event:
 
 ```js
 window.addEventListener("load", () => {

@@ -16,6 +16,8 @@ final readonly class AccordionItem
     use ItemTrait;
 
     /**
+     * Initializes the immutable AccordionItem configuration.
+     *
      * @param string|Stringable $label Content of the `<summary>` element.
      * @param string|Stringable $content Content of the `.accordion-body` element (not encoded).
      * @param bool $open Whether the item is initially expanded.
@@ -45,6 +47,8 @@ final readonly class AccordionItem
      * @param array<array-key, mixed> $config Item configuration.
      *
      * @throws InvalidConfigException if the item has no `string|Stringable` `label` or `content`.
+     *
+     * @return self A new instance.
      */
     public static function fromArray(array $config): self
     {
@@ -68,6 +72,8 @@ final readonly class AccordionItem
      *
      * @param string|Stringable $label Content of the `<summary>` element.
      * @param string|Stringable $content Content of the `.accordion-body` element (not encoded).
+     *
+     * @return self A new instance.
      */
     public static function to(string|Stringable $label, string|Stringable $content): self
     {
@@ -78,6 +84,8 @@ final readonly class AccordionItem
      * Returns a copy with the given `.accordion-body` attributes.
      *
      * @param array<array-key, mixed> $bodyOptions HTML attributes of the `.accordion-body` element.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withBodyOptions(array $bodyOptions): self
     {
@@ -86,6 +94,10 @@ final readonly class AccordionItem
 
     /**
      * Returns a copy with the given content.
+     *
+     * @param string|Stringable $content Content of the `.accordion-body` element (not encoded).
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withContent(string|Stringable $content): self
     {
@@ -94,6 +106,10 @@ final readonly class AccordionItem
 
     /**
      * Returns a copy with the given encoding flag.
+     *
+     * @param bool|null $encode Whether to HTML-encode {@see $label}, or `null` to use `Accordion::$encodeLabels`.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withEncode(bool|null $encode): self
     {
@@ -104,6 +120,8 @@ final readonly class AccordionItem
      * Returns a copy with the given `<summary>` attributes.
      *
      * @param array<array-key, mixed> $headerOptions HTML attributes of the `<summary>` element.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withHeaderOptions(array $headerOptions): self
     {
@@ -112,6 +130,10 @@ final readonly class AccordionItem
 
     /**
      * Returns a copy with the given label.
+     *
+     * @param string|Stringable $label Content of the `<summary>` element.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withLabel(string|Stringable $label): self
     {
@@ -120,6 +142,10 @@ final readonly class AccordionItem
 
     /**
      * Returns a copy with the given expanded state.
+     *
+     * @param bool $open Whether the item is initially expanded.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withOpen(bool $open): self
     {
@@ -130,6 +156,8 @@ final readonly class AccordionItem
      * Returns a copy with the given `<details>` attributes.
      *
      * @param array<array-key, mixed> $options HTML attributes of the `<details>` element.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withOptions(array $options): self
     {
@@ -138,6 +166,10 @@ final readonly class AccordionItem
 
     /**
      * Returns a copy with the given visibility.
+     *
+     * @param bool $visible Whether to render the item.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withVisible(bool $visible): self
     {

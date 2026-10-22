@@ -77,6 +77,9 @@ class Toast extends Widget
      */
     public array $titleOptions = [];
 
+    /**
+     * Initializes the widget and starts capturing the content.
+     */
     public function init(): void
     {
         parent::init();
@@ -84,6 +87,14 @@ class Toast extends Widget
         ob_start();
     }
 
+    /**
+     * Returns the toast markup with the optional header and the captured content followed by {@see $body}, and
+     * registers the `Toast` plugin.
+     *
+     * @throws \yii\base\InvalidArgumentException if {@see $dateTime} cannot be evaluated as a date value.
+     *
+     * @return string Rendered Toast markup.
+     */
     public function run(): string
     {
         $content = ob_get_clean();
@@ -104,6 +115,10 @@ class Toast extends Widget
 
     /**
      * Renders the `.toast-header` element, or an empty string when there is no title, time, or close button.
+     *
+     * @throws \yii\base\InvalidArgumentException if {@see $dateTime} cannot be evaluated as a date value.
+     *
+     * @return string Header markup, or an empty `string` when no header content is configured.
      */
     protected function renderHeader(): string
     {
@@ -167,7 +182,7 @@ class Toast extends Widget
      * The `role`, `aria-live`, and `aria-atomic` attributes default to `alert`, `assertive`, and `true`; values given
      * in {@see $options}, either flat (`aria-live`) or nested (`aria => ['live' => ...]`), are kept.
      *
-     * @return array<mixed>
+     * @return array<mixed> Toast attributes with default live-region accessibility settings.
      */
     protected function toastOptions(): array
     {

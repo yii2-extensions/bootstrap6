@@ -31,8 +31,9 @@
 </p>
 
 > [!IMPORTANT]
-> This package pins Bootstrap `6.0.0-alpha.1`. Its classes, markup, and plugin options may change before beta.
-> Supported browsers start at Chrome/Edge 130, Firefox 132, and Safari 18.
+>
+> This package pins Bootstrap `6.0.0-alpha.1`. Its classes, markup, and plugin options may change before beta. Supported
+> browsers start at Chrome/Edge 130, Firefox 132, and Safari 18.
 
 ## Features
 
@@ -64,11 +65,11 @@ composer config allow-plugins.php-forge/foxy true
 composer require php-forge/foxy:^0.4 yii2-extensions/bootstrap6:^0.1
 ```
 
-Foxy's native manager installs the frontend assets with PHP and `ext-zlib`; Node.js is unnecessary. Configure it
-in the application's root `composer.json` before requiring the extension. Its default install directory is
-`node_modules`. Point `@npm` to that actual directory; use `@app/node_modules` only when the application base path
-is the Composer project root. For Yii2 `2.0.x`, native installation into `vendor/npm` matches its default alias.
-See [installation](docs/installation.md) for the complete configuration and optional package managers.
+Foxy's native manager installs the frontend assets with PHP and `ext-zlib`; Node.js is unnecessary. Configure it in the
+application's root `composer.json` before requiring the extension. Its default install directory is `node_modules`.
+Point `@npm` to that actual directory; use `@app/node_modules` only when the application base path is the Composer
+project root. For Yii2 `2.0.x`, native installation into `vendor/npm` matches its default alias. See
+[installation](docs/installation.md) for the complete configuration and optional package managers.
 
 ### Basic usage
 
@@ -99,8 +100,8 @@ Dialog::end();
 ```
 
 Widgets load their CSS and JavaScript on demand. The JavaScript bundle uses `type="module"` and exposes no
-`window.bootstrap` by default; use the registered bundle's `importJs()` helper for custom plugin code. Titles and
-labels are encoded by default, while body and footer content require encoding when they contain user data.
+`window.bootstrap` by default; use the registered bundle's `importJs()` helper for custom plugin code. Titles and labels
+are encoded by default, while body and footer content require encoding when they contain user data.
 
 ## Documentation
 
@@ -113,18 +114,23 @@ Practical guides and complete examples, with API details generated from PHPDoc.
 - 🧪 [Testing Guide](docs/testing.md)
 - 📖 [Generated API Reference](https://yii2-framework.github.io/docs/extensions/bootstrap6/reference/)
 
+The guides and the [API reference](https://yii2-framework.github.io/docs/extensions/bootstrap6/reference/) generated
+from the PHPDoc in `src/` are published at <https://yii2-framework.github.io/docs/extensions/bootstrap6/>.
+
 ## AI assistance
 
-AI agents: read <https://yii2-framework.github.io/docs/llms.txt>, the index of the documentation site, and fetch the
-Markdown version of a page by appending `index.md` to its URL, for example
-<https://yii2-framework.github.io/docs/extensions/bootstrap6/installation/index.md>. For the Yii conventions this
-package builds on, install the
-[`yii2-framework` skill](https://github.com/yii2-extensions/skill/tree/main/skills/yii2-framework)
-through the [shared Composer setup](https://yii2-framework.github.io/docs/project/ai-agents/#composer-installation).
+AI agents: read the [documentation index](https://yii2-framework.github.io/docs/llms.txt) and fetch the Markdown version
+of a page by appending `index.md` to its URL. The
+[AI agents guide](https://yii2-framework.github.io/docs/project/ai-agents/) covers skill installation, client setup and
+verification.
 
-- 🤖 [yii2-bootstrap6-widgets skill](docs/agents.md): installation for Claude Code, Codex, and OpenCode.
+- 🤖 [`yii2-bootstrap6-widgets` skill](docs/agents.md): Bootstrap 6 widgets.
+- 🧭 [`yii2-framework` skill](https://yii2-framework.github.io/docs/guide/skills/yii2-framework/): Yii 22.0 application
+  conventions.
 
-If the hosted sources are unavailable, use the repository guides and locally available skills.
+The hosted documentation covers Yii 22.0. If it does not match the installed revision or is unavailable, use the
+[repository guides](#documentation), the [skill source](skills/yii2-bootstrap6-widgets/SKILL.md), the source PHPDoc and
+the [changelog](CHANGELOG.md).
 
 ## Package information
 
