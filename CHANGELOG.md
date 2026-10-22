@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 0.1.4 Under development
 
+- fix: reorder support section in `composer.json` for clarity.
+
 ## 0.1.3 October 22, 2026
 
 - docs: enhance `README.md` badges for security and social media links.
