@@ -423,14 +423,15 @@ class Tabs extends Widget
     }
 
     /**
-     * Adds the tab pane of an item to {@see $panes} and returns the tab button attributes that control it.
+     * Returns the tab button attributes, appending the pane to {@see $panes} only when {@see $renderTabContent}
+     * is `true`.
      *
      * @param TabItem $item Tab supplying the pane content and attributes.
      * @param array<array-key, mixed> $linkOptions Tab button attributes.
      * @param string $tabSuffix Suffix of the default tab button `id`.
      * @param string $paneSuffix Suffix of the default pane `id`.
      *
-     * @return array<array-key, mixed> Tab button attributes linked to the appended pane.
+     * @return array<array-key, mixed> Tab button attributes targeting the pane, regardless of {@see $renderTabContent}.
      */
     private function renderPane(TabItem $item, array $linkOptions, string $tabSuffix, string $paneSuffix): array
     {
