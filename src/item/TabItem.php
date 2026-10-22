@@ -19,6 +19,8 @@ final readonly class TabItem
     use ItemTrait;
 
     /**
+     * Initializes the immutable TabItem configuration.
+     *
      * @param string|Stringable $label Label of the tab button, link, or menu toggle.
      * @param string|Stringable|null $content HTML content of the pane, or `null` for an empty pane.
      * @param array<array-key, mixed>|string|null $url URL of a plain link tab, processed by
@@ -60,6 +62,8 @@ final readonly class TabItem
      * @param array<array-key, mixed> $config Item configuration.
      *
      * @throws InvalidConfigException if the item, or one of its nested items, has no `string|Stringable` `label`.
+     *
+     * @return self A new instance.
      */
     public static function fromArray(array $config): self
     {
@@ -99,6 +103,8 @@ final readonly class TabItem
      *
      * @param string|Stringable $label Link label.
      * @param array<array-key, mixed>|string $url URL processed by {@see \yii\helpers\Url::to()}.
+     *
+     * @return self A new instance.
      */
     public static function link(string|Stringable $label, array|string $url): self
     {
@@ -112,6 +118,10 @@ final readonly class TabItem
      * @param array<array-key, array<string, mixed>|MenuItem|string|TabItem> $items Tabs rendered as menu buttons (menu
      * links when they have a URL, nested `.submenu` panels when they have items), menu items, or strings; arrays are
      * converted as in {@see fromArray()}.
+     *
+     * @throws InvalidConfigException if a nested array item lacks a required text label.
+     *
+     * @return self A new instance.
      */
     public static function menu(string|Stringable $label, array $items): self
     {
@@ -123,6 +133,8 @@ final readonly class TabItem
      *
      * @param string|Stringable $label Tab label.
      * @param string|Stringable|null $content HTML content of the pane.
+     *
+     * @return self A new instance.
      */
     public static function to(string|Stringable $label, string|Stringable|null $content = null): self
     {
@@ -131,6 +143,11 @@ final readonly class TabItem
 
     /**
      * Returns a copy with the given active state.
+     *
+     * @param bool|null $active Whether the tab and its pane, the link, or the menu toggle are active, or `null` to
+     * let `Tabs` activate the first eligible tab when none is active; an active menu toggle needs no active item.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withActive(bool|null $active): self
     {
@@ -139,6 +156,10 @@ final readonly class TabItem
 
     /**
      * Returns a copy with the given pane content.
+     *
+     * @param string|Stringable|null $content HTML content of the pane, or `null` for an empty pane.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withContent(string|Stringable|null $content): self
     {
@@ -147,6 +168,11 @@ final readonly class TabItem
 
     /**
      * Returns a copy with the given disabled state.
+     *
+     * @param bool $disabled Whether the tab button, the link, or the menu toggle is disabled; a disabled link loses
+     * its `href` and takes precedence over {@see $active}, and a disabled toggle is never marked active.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withDisabled(bool $disabled): self
     {
@@ -155,6 +181,10 @@ final readonly class TabItem
 
     /**
      * Returns a copy with the given encoding flag.
+     *
+     * @param bool|null $encode Whether to HTML-encode {@see $label}, or `null` to use `Tabs::$encodeLabels`.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withEncode(bool|null $encode): self
     {
@@ -165,6 +195,8 @@ final readonly class TabItem
      * Returns a copy with the given `.nav-item` attributes.
      *
      * @param array<array-key, mixed> $headerOptions HTML attributes of the `.nav-item` element.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withHeaderOptions(array $headerOptions): self
     {
@@ -177,6 +209,10 @@ final readonly class TabItem
      * @param array<array-key, array<string, mixed>|MenuItem|string|TabItem> $items Tabs rendered as menu buttons (menu
      * links when they have a URL, nested `.submenu` panels when they have items), menu items, or strings; arrays are
      * converted as in {@see fromArray()}.
+     *
+     * @throws InvalidConfigException if a nested array item lacks a required text label.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withItems(array $items): self
     {
@@ -185,6 +221,10 @@ final readonly class TabItem
 
     /**
      * Returns a copy with the given label.
+     *
+     * @param string|Stringable $label Label of the tab button, link, or menu toggle.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withLabel(string|Stringable $label): self
     {
@@ -195,6 +235,8 @@ final readonly class TabItem
      * Returns a copy with the given tab button attributes.
      *
      * @param array<array-key, mixed> $linkOptions HTML attributes of the tab button.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withLinkOptions(array $linkOptions): self
     {
@@ -205,6 +247,8 @@ final readonly class TabItem
      * Returns a copy with the given pane attributes.
      *
      * @param array<array-key, mixed> $options HTML attributes of the pane.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withOptions(array $options): self
     {
@@ -216,6 +260,8 @@ final readonly class TabItem
      *
      * @param array<array-key, mixed>|string|null $url URL processed by {@see \yii\helpers\Url::to()}, or `null` for a
      * tab with a pane.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withUrl(array|string|null $url): self
     {
@@ -224,6 +270,10 @@ final readonly class TabItem
 
     /**
      * Returns a copy with the given visibility.
+     *
+     * @param bool $visible Whether to render the tab and its pane.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withVisible(bool $visible): self
     {
@@ -239,7 +289,7 @@ final readonly class TabItem
      *
      * @throws InvalidConfigException if an array item has no `label`.
      *
-     * @return array<array-key, MenuItem|string|TabItem>
+     * @return array<array-key, MenuItem|string|TabItem> Normalized menu or tab items with their original keys.
      */
     private static function normalize(array $items): array
     {

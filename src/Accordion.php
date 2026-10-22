@@ -72,7 +72,11 @@ class Accordion extends Widget
     private string $iconMarkup = '';
 
     /**
+     * Renders the accordion with its visible items and registers its stylesheet.
+     *
      * @throws InvalidConfigException if an item lacks its `label` or `content` option.
+     *
+     * @return string the rendered accordion markup.
      */
     public function run(): string
     {
@@ -106,6 +110,10 @@ class Accordion extends Widget
 
     /**
      * Renders a single `<details>` item.
+     *
+     * @param AccordionItem $item Accordion item to render.
+     *
+     * @return string the rendered `<details>` item.
      */
     protected function renderItem(AccordionItem $item): string
     {
@@ -144,6 +152,8 @@ class Accordion extends Widget
      * Renders the visible items separated by line breaks.
      *
      * @throws InvalidConfigException if an item lacks its `label` or `content` option.
+     *
+     * @return string the rendered accordion items.
      */
     protected function renderItems(): string
     {
@@ -160,6 +170,8 @@ class Accordion extends Widget
 
     /**
      * Returns the `id` of the accordion element.
+     *
+     * @return string the `id` of the accordion element.
      */
     private function elementId(): string
     {
@@ -173,7 +185,7 @@ class Accordion extends Widget
      *
      * @throws InvalidConfigException if an item lacks its `label` or `content` option.
      *
-     * @return list<AccordionItem>
+     * @return list<AccordionItem> the normalized accordion items.
      */
     private function normalizeItems(): array
     {

@@ -100,8 +100,12 @@ class Progress extends Widget
     }
 
     /**
+     * Renders a single progress bar or a stack of progress segments.
+     *
      * @throws InvalidArgumentException if a value is outside the [{@see $min}, {@see $max}] range.
-     * @throws InvalidConfigException if a stacked segment has no numeric `percent` or an invalid `theme`.
+     * @throws InvalidConfigException if a stacked segment has no numeric `percent`, or a bar theme is invalid.
+     *
+     * @return string Rendered Progress markup.
      */
     public function run(): string
     {
@@ -145,6 +149,8 @@ class Progress extends Widget
      * @param bool $stacked Whether the bar is a stacked segment, sized on the `.progress` element.
      *
      * @throws InvalidArgumentException if the value is outside the [{@see $min}, {@see $max}] range.
+     *
+     * @return string Progress element markup with its bar.
      */
     protected function renderProgress(ProgressBar $bar, array $options, bool $stacked): string
     {
@@ -203,7 +209,7 @@ class Progress extends Widget
      *
      * @throws InvalidConfigException if a segment has no numeric `percent` or an invalid `theme`.
      *
-     * @return list<ProgressBar>
+     * @return list<ProgressBar> Normalized progress segments in their configured order.
      */
     private function normalizeBars(): array
     {

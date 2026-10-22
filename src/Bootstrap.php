@@ -23,6 +23,8 @@ final class Bootstrap implements BootstrapInterface
     public const string TRANSLATION_CATEGORY = 'yii.bootstrap6';
 
     /**
+     * Registers the widget message source unless the application already configures it.
+     *
      * @param Application $app Application being bootstrapped.
      */
     public function bootstrap($app): void

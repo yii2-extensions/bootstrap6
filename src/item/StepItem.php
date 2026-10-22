@@ -22,6 +22,8 @@ final readonly class StepItem
     use ItemTrait;
 
     /**
+     * Initializes the immutable StepItem configuration.
+     *
      * @param string|Stringable $label Label of the step.
      * @param string|Stringable|null $description Secondary text rendered under the label, or `null` for none.
      * @param bool $active Whether the step is completed or current (`.active`).
@@ -56,6 +58,8 @@ final readonly class StepItem
      *
      * @throws InvalidConfigException if the step has no `string|Stringable` `label`, or its `theme` is a `string`
      * that is not a {@see Theme} value.
+     *
+     * @return self A new instance.
      */
     public static function fromArray(array $config): self
     {
@@ -82,6 +86,8 @@ final readonly class StepItem
      *
      * @param string|Stringable $label Label of the step.
      * @param string|Stringable|null $description Secondary text rendered under the label, or `null` for none.
+     *
+     * @return self A new instance.
      */
     public static function to(string|Stringable $label, string|Stringable|null $description = null): self
     {
@@ -90,6 +96,10 @@ final readonly class StepItem
 
     /**
      * Returns a copy with the given active state.
+     *
+     * @param bool $active Whether the step is completed or current (`.active`).
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withActive(bool $active): self
     {
@@ -98,6 +108,10 @@ final readonly class StepItem
 
     /**
      * Returns a copy with the given description.
+     *
+     * @param string|Stringable|null $description Secondary text rendered under the label, or `null` for none.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withDescription(string|Stringable|null $description): self
     {
@@ -106,6 +120,11 @@ final readonly class StepItem
 
     /**
      * Returns a copy with the given encoding flag.
+     *
+     * @param bool|null $encode Whether to HTML-encode {@see $label} and {@see $description}, or `null` to use
+     * `Stepper::$encodeLabels`.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withEncode(bool|null $encode): self
     {
@@ -114,6 +133,10 @@ final readonly class StepItem
 
     /**
      * Returns a copy with the given label.
+     *
+     * @param string|Stringable $label Label of the step.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withLabel(string|Stringable $label): self
     {
@@ -124,6 +147,8 @@ final readonly class StepItem
      * Returns a copy with the given `.stepper-item` attributes.
      *
      * @param array<array-key, mixed> $options HTML attributes of the `.stepper-item` element.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withOptions(array $options): self
     {
@@ -133,7 +158,11 @@ final readonly class StepItem
     /**
      * Returns a copy with the given theme color.
      *
+     * @param Theme|string|null $theme Theme color rendered as the `theme-{value}` class, or `null` for the default.
+     *
      * @throws InvalidConfigException if `$theme` is a `string` that is not a {@see Theme} value.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withTheme(Theme|string|null $theme): self
     {
@@ -144,6 +173,8 @@ final readonly class StepItem
      * Returns a copy with the given URL.
      *
      * @param array<array-key, mixed>|string|null $url URL processed by {@see \yii\helpers\Url::to()}.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withUrl(array|string|null $url): self
     {

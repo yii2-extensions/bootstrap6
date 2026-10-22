@@ -25,6 +25,14 @@ class ButtonToolbar extends Widget
      */
     public array $buttonGroups = [];
 
+    /**
+     * Returns the button toolbar with its button groups.
+     *
+     * @throws \yii\base\InvalidConfigException if a configured group, or one of its buttons, has a `size`, `theme`,
+     * or `variant` that is not a value of its enum.
+     *
+     * @return string Rendered ButtonToolbar markup.
+     */
     public function run(): string
     {
         BootstrapAsset::register($this->getView());
@@ -44,6 +52,11 @@ class ButtonToolbar extends Widget
 
     /**
      * Renders the button groups separated by line breaks.
+     *
+     * @throws \yii\base\InvalidConfigException if a configured group or one of its buttons has an invalid size,
+     * theme, or variant.
+     *
+     * @return string Button group markup separated by line breaks.
      */
     protected function renderButtonGroups(): string
     {

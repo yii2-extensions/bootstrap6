@@ -73,6 +73,14 @@ class Alert extends Widget
         ob_start();
     }
 
+    /**
+     * Returns the alert markup with the captured content followed by {@see $body}, and registers the `Alert`
+     * plugin.
+     *
+     * @throws InvalidConfigException if {@see $theme} is not a {@see Theme} value.
+     *
+     * @return string Rendered Alert markup.
+     */
     public function run(): string
     {
         $content = ob_get_clean() . $this->body;
@@ -98,6 +106,10 @@ class Alert extends Widget
 
     /**
      * Renders the alert content, wrapped with the heading in a `.vstack` element when {@see $heading} is set.
+     *
+     * @param string $content Captured content followed by the configured body, rendered without encoding.
+     *
+     * @return string Alert content with the optional heading wrapper.
      */
     protected function renderBody(string $content): string
     {
@@ -122,6 +134,8 @@ class Alert extends Widget
 
     /**
      * Renders the dismiss button followed by a line break, or an empty `string` when {@see $closeButton} is `false`.
+     *
+     * @return string Dismiss button markup followed by a line break, or an empty `string` when disabled.
      */
     protected function renderCloseButton(): string
     {

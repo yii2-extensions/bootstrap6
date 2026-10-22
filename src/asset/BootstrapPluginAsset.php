@@ -27,6 +27,11 @@ final class BootstrapPluginAsset extends AbstractNpmAsset
      */
     public bool $exposeGlobal = false;
 
+    /**
+     * Returns the {@see BootstrapAsset} dependency, so the stylesheet is registered with the bundle.
+     *
+     * @return list<class-string<\yii\web\AssetBundle>> Asset bundle classes required by the JavaScript bundle.
+     */
     public static function dependencies(): array
     {
         return [BootstrapAsset::class];
@@ -41,6 +46,8 @@ final class BootstrapPluginAsset extends AbstractNpmAsset
      * @param View $view View the bundle is registered with.
      * @param string $code JavaScript statements that use the `bootstrap` namespace.
      *
+     * @throws InvalidConfigException if the bundle does not list a script.
+     *
      * @return string JavaScript in the form `import("url").then((bootstrap) => { code });`.
      */
     public function importJs(View $view, string $code): string
@@ -52,6 +59,8 @@ final class BootstrapPluginAsset extends AbstractNpmAsset
 
     /**
      * Initializes the bundle and forces `type="module"` on its script tag, keeping the other configured options.
+     *
+     * @throws InvalidConfigException if the installed package version cannot be resolved in CDN mode.
      */
     public function init(): void
     {
@@ -81,7 +90,11 @@ final class BootstrapPluginAsset extends AbstractNpmAsset
     }
 
     /**
+     * Registers the asset files and optionally exposes the module as `window.bootstrap`.
+     *
      * @param View $view View that renders the asset files.
+     *
+     * @throws InvalidConfigException if global exposure is enabled and the bundle does not list a script.
      */
     public function registerAssetFiles($view): void
     {
@@ -96,16 +109,31 @@ final class BootstrapPluginAsset extends AbstractNpmAsset
         }
     }
 
+    /**
+     * Returns the `dist/js` directory of the package.
+     *
+     * @return string Script directory relative to the npm package root.
+     */
     protected function directory(): string
     {
         return 'dist/js';
     }
 
+    /**
+     * Returns the `bootstrap` npm package.
+     *
+     * @return string Bootstrap npm package name.
+     */
     protected function package(): string
     {
         return 'bootstrap';
     }
 
+    /**
+     * Returns the Bootstrap JavaScript bundle.
+     *
+     * @return list<string> Script paths relative to {@see directory()}.
+     */
     protected function scripts(): array
     {
         return ['bootstrap.bundle.js'];

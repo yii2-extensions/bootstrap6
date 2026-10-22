@@ -66,6 +66,12 @@ class Chips extends InputWidget
      */
     public string|null $separator = null;
 
+    /**
+     * Returns the `.chip-input` container with the initial chips, the ghost input, and the hidden input, and
+     * registers the `Chips` plugin with the listener that updates the hidden input.
+     *
+     * @return string Rendered Chips markup.
+     */
     public function run(): string
     {
         $options = $this->options;
@@ -141,6 +147,8 @@ class Chips extends InputWidget
      *
      * @param string $id `id` of the hidden input.
      * @param string $value Chip values joined by the separator.
+     *
+     * @return string Hidden input markup that submits the chip values.
      */
     protected function renderHiddenInput(string $id, string $value): string
     {
@@ -159,6 +167,10 @@ class Chips extends InputWidget
 
     /**
      * Returns the `data-bs-*` value of a boolean option, or `null` when the option is not set.
+     *
+     * @param bool|null $value Boolean option, or `null` when it is unset.
+     *
+     * @return string|null `true` or `false` as a `string`, or `null` for an unset option.
      */
     private static function booleanAttribute(bool|null $value): string|null
     {
@@ -170,7 +182,7 @@ class Chips extends InputWidget
      *
      * @param non-empty-string $delimiter Separator of a string value.
      *
-     * @return list<string>
+     * @return list<string> Non-empty, trimmed chip values in their original order.
      */
     private function chipValues(string $delimiter): array
     {
@@ -183,6 +195,8 @@ class Chips extends InputWidget
 
     /**
      * Returns the input `id` assigned by {@see init()}.
+     *
+     * @return string Input element identifier.
      */
     private function inputId(): string
     {
@@ -193,9 +207,10 @@ class Chips extends InputWidget
     /**
      * Splits a chip value given as an array or as a string joined by `$delimiter`.
      *
+     * @param mixed $value Chip values as an array or a delimiter-separated scalar; unsupported values are ignored.
      * @param non-empty-string $delimiter Separator of the joined string.
      *
-     * @return list<string>
+     * @return list<string> Non-empty, trimmed chip values with list indexes.
      */
     private static function splitValue(mixed $value, string $delimiter): array
     {

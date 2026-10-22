@@ -43,6 +43,11 @@ class Toggler extends Widget
      */
     public string|null $value = null;
 
+    /**
+     * Returns the toggler element and registers the `Toggler` plugin.
+     *
+     * @return string Rendered Toggler markup.
+     */
     public function run(): string
     {
         $options = $this->options;

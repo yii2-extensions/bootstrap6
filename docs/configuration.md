@@ -26,21 +26,21 @@ $this->registerJs($bundle->importJs(
 ));
 ```
 
-`importJs()` and `moduleUrl()` are instance methods. For a temporary global during migration, set `exposeGlobal` on
-this bundle and account for its asynchronous assignment; prefer `importJs()` for new scripts.
+`importJs()` and `moduleUrl()` are instance methods. For a temporary global during migration, set `exposeGlobal` on this
+bundle and account for its asynchronous assignment; prefer `importJs()` for new scripts.
 
 ## Translations
 
-The package bootstrap registers `yii.bootstrap6` translations automatically when Yii loads Composer extensions.
-If an application disables extension loading, [register the bootstrap](installation.md#register-the-bootstrap).
-Override the category in `components.i18n.translations` to replace widget labels; the bootstrap preserves an existing
-configuration. Changing `language` selects the appropriate translation; source messages use `en-US`.
+The package bootstrap registers `yii.bootstrap6` translations automatically when Yii loads Composer extensions. If an
+application disables extension loading, [register the bootstrap](installation.md#register-the-bootstrap). Override the
+category in `components.i18n.translations` to replace widget labels; the bootstrap preserves an existing configuration.
+Changing `language` selects the appropriate translation; source messages use `en-US`.
 
 ## Common widget properties
 
-Put HTML attributes in `options`, plugin constructor settings in `clientOptions`, and event handlers in
-`clientEvents`. Input widgets also support Yii's `model`/`attribute` or `name`/`value` modes. A widget's HTML
-`options` may address an input, container, or trigger; the notes below identify the distinctions that matter.
+Put HTML attributes in `options`, plugin constructor settings in `clientOptions`, and event handlers in `clientEvents`.
+Input widgets also support Yii's `model`/`attribute` or `name`/`value` modes. A widget's HTML `options` may address an
+input, container, or trigger; the notes below identify the distinctions that matter.
 
 Labels and titles are encoded by default. Body, footer, tab/accordion/slide content, and content echoed between
 `begin()` and `end()` are HTML. Encode user-controlled text with the package's `Html::encode()` before putting it in
@@ -77,25 +77,24 @@ property still identifies the model field; their `attribute()` method sets an HT
 
 ### Plugin initialization
 
-Widgets emit `data-bs-*` attributes, and a non-empty `clientOptions` array requests explicit initialization through
-the ES module. `Chips`, `Combobox`, `NavOverflow`, `OtpInput`, `Range`, `Strength`, and inline or preselected
-`Datepicker` widgets also initialize with empty options so they work in fragments inserted after page load. `Carousel` and `Toast` initialize with empty
-options too; `Button` initializes when `clientOptions` is an array. Set `clientOptions` to `false` to skip explicit
-initialization; rendered data attributes can still activate the Bootstrap data API.
+Widgets emit `data-bs-*` attributes, and a non-empty `clientOptions` array requests explicit initialization through the
+ES module. `Chips`, `Combobox`, `NavOverflow`, `OtpInput`, `Range`, `Strength`, and inline or preselected `Datepicker`
+widgets also initialize with empty options so they work in fragments inserted after page load. `Carousel` and `Toast`
+initialize with empty options too; `Button` initializes when `clientOptions` is an array. Set `clientOptions` to `false`
+to skip explicit initialization; rendered data attributes can still activate the Bootstrap data API.
 
 `clientEvents` handlers use `addEventListener` independently of `clientOptions`. Menu options and events belong on
 `ButtonMenu` or the trigger carrying `data-bs-toggle="menu"`, not on a standalone menu panel. Menu and tab events
 bubble, allowing `Nav` and `Tabs` to listen on their lists. `NavBar` uses the drawer data API and ignores these plugin
-properties; CSS-only widgets ignore them too. See [JavaScript recipes](examples.md#javascript) for handlers and
-custom plugin access.
+properties; CSS-only widgets ignore them too. See [JavaScript recipes](examples.md#javascript) for handlers and custom
+plugin access.
 
 ### Begin and end widgets
 
-Call matching `begin()` and `end()` as statements in a view or layout: both return widget instances, and `end()`
-renders and echoes the captured HTML.
-`Alert`, `Collapse`, `Dialog`, `Drawer`, `NavBar`, `Toast`, `Popover`, and `Tooltip` support this pattern. For
-`Popover` and `Tooltip`, the captured content is the **trigger**, not the popup body. Keep rendering inside a view's
-output buffer, including under worker runtimes.
+Call matching `begin()` and `end()` as statements in a view or layout: both return widget instances, and `end()` renders
+and echoes the captured HTML. `Alert`, `Collapse`, `Dialog`, `Drawer`, `NavBar`, `Toast`, `Popover`, and `Tooltip`
+support this pattern. For `Popover` and `Tooltip`, the captured content is the **trigger**, not the popup body. Keep
+rendering inside a view's output buffer, including under worker runtimes.
 
 ## Icons
 
@@ -115,21 +114,21 @@ return [
 ```
 
 Widget-level `icon`, `caretIcon`, or `checkIcon` options override the shared icon. `Svg` instances receive structural
-classes from the widgets; plain markup must supply `accordion-icon`, `combobox-caret`, or `menu-item-check` itself
-so Bootstrap can size, rotate, and hide it. Optional font icons need `BootstrapIconAsset`.
+classes from the widgets; plain markup must supply `accordion-icon`, `combobox-caret`, or `menu-item-check` itself so
+Bootstrap can size, rotate, and hide it. Optional font icons need `BootstrapIconAsset`.
 
 ## Enumerations
 
-Prefer enum cases to strings when configuring themes, sizes, placement, and navigation style. Enum-typed properties
-also accept a valid case value; unknown strings raise `InvalidConfigException`. The
-[enum reference](https://yii2-framework.github.io/docs/extensions/bootstrap6/reference/) lists the available cases.
-Use `Breakpoint::prefix()` for responsive classes rather than Bootstrap 5 suffixes such as `col-md-6`.
+Prefer enum cases to strings when configuring themes, sizes, placement, and navigation style. Enum-typed properties also
+accept a valid case value; unknown strings raise `InvalidConfigException`. The
+[enum reference](https://yii2-framework.github.io/docs/extensions/bootstrap6/reference/) lists the available cases. Use
+`Breakpoint::prefix()` for responsive classes rather than Bootstrap 5 suffixes such as `col-md-6`.
 
 ## Widgets
 
-Choose a widget from the [gallery](examples.md#widgets), then consult its generated API only for the options needed.
-For lists, prefer the immutable item objects, while retaining arrays where they are convenient. Each `with*()` on an
-item returns a copy: assign or chain its result. This differs from the mutable widget attribute methods.
+Choose a widget from the [gallery](examples.md#widgets), then consult its generated API only for the options needed. For
+lists, prefer the immutable item objects, while retaining arrays where they are convenient. Each `with*()` on an item
+returns a copy: assign or chain its result. This differs from the mutable widget attribute methods.
 
 ```php
 use yii2\extensions\bootstrap6\Nav;
@@ -145,15 +144,14 @@ echo Nav::widget([
 ]);
 ```
 
-Keep an item's `encode` unset to inherit the widget's label policy, and its `active` unset when the widget should
-choose the active state. Objects and array configurations can be mixed, including nested menus.
+Keep an item's `encode` unset to inherit the widget's label policy, and its `active` unset when the widget should choose
+the active state. Objects and array configurations can be mixed, including nested menus.
 
 ### Accordion
 
-Use it for expandable content without JavaScript: it renders native `<details>` elements. `autoCloseItems` groups
-them so at most one item is open at a time; all items can be closed. Disable it for independently open sections.
-Encode user text in item content.
-[Example](examples.md#accordion).
+Use it for expandable content without JavaScript: it renders native `<details>` elements. `autoCloseItems` groups them
+so at most one item is open at a time; all items can be closed. Disable it for independently open sections. Encode user
+text in item content. [Example](examples.md#accordion).
 
 ### Alert
 
@@ -162,8 +160,8 @@ encode user text in both. [Example](examples.md#alert).
 
 ### Avatar
 
-Supply an image with meaningful alternative text, or use initials when no image is available. A status indicator
-can carry its own accessible label. [Example](examples.md#avatar).
+Supply an image with meaningful alternative text, or use initials when no image is available. A status indicator can
+carry its own accessible label. [Example](examples.md#avatar).
 
 ### Badge
 
@@ -172,8 +170,8 @@ classes. [Example](examples.md#badge).
 
 ### Breadcrumbs
 
-Build route links followed by a current-page label; an empty `links` list renders nothing. Customize the divider
-without rewriting the navigation wrapper. [Example](examples.md#breadcrumbs).
+Build route links followed by a current-page label; an empty `links` list renders nothing. Customize the divider without
+rewriting the navigation wrapper. [Example](examples.md#breadcrumbs).
 
 ### Button
 
@@ -196,8 +194,8 @@ Combine button groups rather than rebuilding each group's markup. [Example](exam
 
 ### Carousel
 
-Provide at least one slide. Use `autoplay` deliberately, and consider `playPause` for an automatically cycling
-carousel. Put captions in slide content; v5 caption options are gone. [Example](examples.md#carousel).
+Provide at least one slide. Use `autoplay` deliberately, and consider `playPause` for an automatically cycling carousel.
+Put captions in slide content; v5 caption options are gone. [Example](examples.md#carousel).
 
 ### Chips
 
@@ -212,13 +210,13 @@ collapsible region. [Example](examples.md#collapse).
 
 ### Combobox
 
-Supply a non-empty list and enable search for a large set. Multiple selections submit a comma-separated value;
-match the server-side parsing and validation to that format. [Example](examples.md#combobox).
+Supply a non-empty list and enable search for a large set. Multiple selections submit a comma-separated value; match the
+server-side parsing and validation to that format. [Example](examples.md#combobox).
 
 ### Datepicker
 
-Choose input mode when the submitted value should be the displayed locale-formatted text. Inline mode synchronizes
-a hidden `YYYY-MM-DD` value, comma-separated for multiple dates. Validate the chosen format on the server.
+Choose input mode when the submitted value should be the displayed locale-formatted text. Inline mode synchronizes a
+hidden `YYYY-MM-DD` value, comma-separated for multiple dates. Validate the chosen format on the server.
 [Example](examples.md#datepicker).
 
 ### Dialog
@@ -246,8 +244,8 @@ Dialog::end();
 
 ### Drawer
 
-Choose placement through `DrawerPlacement`. A responsive drawer becomes inline content above the selected
-breakpoint; page scrolling and fullscreen display are separate choices. [Example](examples.md#drawer).
+Choose placement through `DrawerPlacement`. A responsive drawer becomes inline content above the selected breakpoint;
+page scrolling and fullscreen display are separate choices. [Example](examples.md#drawer).
 
 ### LinkPager
 
@@ -286,18 +284,18 @@ Use skeletons while content loads. `pulse` and `glow` animations require a conta
 
 ### Popover and Tooltip
 
-Capture the trigger between `begin()` and `end()`. Set a popover's `content` separately; keep `html` disabled for
-plain text. [Popover example](examples.md#popover), [tooltip example](examples.md#tooltip).
+Capture the trigger between `begin()` and `end()`. Set a popover's `content` separately; keep `html` disabled for plain
+text. [Popover example](examples.md#popover), [tooltip example](examples.md#tooltip).
 
 ### Progress
 
-Use a descriptive accessible label, and keep values inside the configured bounds. Use `ProgressBar` items for
-stacked segments. [Example](examples.md#progress).
+Use a descriptive accessible label, and keep values inside the configured bounds. Use `ProgressBar` items for stacked
+segments. [Example](examples.md#progress).
 
 ### Range
 
-`options` targets the input, while `containerOptions` targets the plugin wrapper. Supply meaningful tick labels when
-the scale needs explanation. [Example](examples.md#range).
+`options` targets the input, while `containerOptions` targets the plugin wrapper. Supply meaningful tick labels when the
+scale needs explanation. [Example](examples.md#range).
 
 ### Spinner
 
@@ -311,13 +309,13 @@ Provide at least one step. Mark the current step explicitly and add URLs when us
 
 ### Strength
 
-Render it beside the password input, or set `input` to a selector. Its client-side feedback does not replace
-server-side password validation. [Example](examples.md#strength).
+Render it beside the password input, or set `input` to a selector. Its client-side feedback does not replace server-side
+password validation. [Example](examples.md#strength).
 
 ### Tabs
 
-When no item is active, the first visible, enabled pane is activated. Keep label and content encoding separate;
-content is HTML. [Example](examples.md#tabs).
+When no item is active, the first visible, enabled pane is activated. Keep label and content encoding separate; content
+is HTML. [Example](examples.md#tabs).
 
 ### Toast
 
@@ -341,13 +339,13 @@ $this->registerJs($bundle->importJs(
 ));
 ```
 
-For a user-supplied body, pass `Html::encode($text)`. Use `dateTime: null` to omit the time; the v5 `false` value is
-not accepted. [More examples](examples.md#toast).
+For a user-supplied body, pass `Html::encode($text)`. Use `dateTime: null` to omit the time; the v5 `false` value is not
+accepted. [More examples](examples.md#toast).
 
 ### ToggleButtonGroup
 
-Choose checkbox or radio behavior to match the model attribute. With a model, the hidden input submits an empty
-value when nothing is selected; `options['unselect']` changes that value. [Example](examples.md#togglebuttongroup).
+Choose checkbox or radio behavior to match the model attribute. With a model, the hidden input submits an empty value
+when nothing is selected; `options['unselect']` changes that value. [Example](examples.md#togglebuttongroup).
 
 ### Toggler
 
@@ -383,8 +381,8 @@ individual error elements. See the [form recipes](examples.md#forms) before choo
 ### ActiveField
 
 Use `checkbox(['switch' => true])` for a switch. Set `inputTemplate` for an input group, and override the horizontal
-label/wrapper grid through `horizontalCssClasses`. List values replace the corresponding default classes.
-A caller-supplied class on a select retains `form-control`; select controls do not inherit an input placeholder.
+label/wrapper grid through `horizontalCssClasses`. List values replace the corresponding default classes. A
+caller-supplied class on a select retains `form-control`; select controls do not inherit an input placeholder.
 [Field recipes](examples.md#select-range-static-control-and-input-group).
 
 ## HTML helpers

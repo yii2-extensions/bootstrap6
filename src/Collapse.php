@@ -49,6 +49,9 @@ class Collapse extends Widget
      */
     public array|false $toggleButton = false;
 
+    /**
+     * Initializes the widget and starts capturing the content.
+     */
     public function init(): void
     {
         parent::init();
@@ -56,6 +59,12 @@ class Collapse extends Widget
         ob_start();
     }
 
+    /**
+     * Returns the optional toggle button followed by the collapsible element with the captured content, and
+     * registers the `Collapse` plugin.
+     *
+     * @return string Rendered Collapse markup.
+     */
     public function run(): string
     {
         $content = ob_get_clean();
@@ -73,7 +82,7 @@ class Collapse extends Widget
     /**
      * Returns {@see $toggleButton} by reference, replacing `false` with an empty array to enable the toggle button.
      *
-     * @return array<string, mixed>
+     * @return array<string, mixed> Toggle button attributes returned by reference for in-place updates.
      */
     protected function &togglerOptions(): array
     {
@@ -87,7 +96,7 @@ class Collapse extends Widget
     /**
      * Returns the HTML attributes of the collapsible element.
      *
-     * @return array<mixed>
+     * @return array<mixed> Collapsible element attributes with its classes and parent selector.
      */
     protected function collapseOptions(): array
     {
@@ -115,6 +124,8 @@ class Collapse extends Widget
 
     /**
      * Renders the toggle button, or an empty string when {@see $toggleButton} is `false`.
+     *
+     * @return string Toggle button markup, or an empty `string` when disabled.
      */
     protected function renderToggleButton(): string
     {
@@ -165,6 +176,8 @@ class Collapse extends Widget
 
     /**
      * Returns the `id` of the collapsible element.
+     *
+     * @return string Widget element identifier.
      */
     private function elementId(): string
     {

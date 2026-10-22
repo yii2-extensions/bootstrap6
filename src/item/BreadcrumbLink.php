@@ -20,6 +20,8 @@ final readonly class BreadcrumbLink
     use ItemTrait;
 
     /**
+     * Initializes the immutable BreadcrumbLink configuration.
+     *
      * @param string|Stringable $label Label of the `.breadcrumb-link` element.
      * @param array<array-key, mixed>|string|null $url URL processed by {@see \yii\helpers\Url::to()}, or `null` for no
      * `href`.
@@ -47,6 +49,8 @@ final readonly class BreadcrumbLink
      * @param array<array-key, mixed> $config Item configuration.
      *
      * @throws InvalidConfigException if the item has no `string|Stringable` `label`.
+     *
+     * @return self A new instance.
      */
     public static function fromArray(array $config): self
     {
@@ -75,6 +79,8 @@ final readonly class BreadcrumbLink
      * @param string|Stringable $label Link label.
      * @param array<array-key, mixed>|string|null $url URL processed by {@see \yii\helpers\Url::to()}, or `null` for
      * the active item.
+     *
+     * @return self A new instance.
      */
     public static function to(string|Stringable $label, array|string|null $url = null): self
     {
@@ -83,6 +89,10 @@ final readonly class BreadcrumbLink
 
     /**
      * Returns a copy with the given active state.
+     *
+     * @param bool|null $active Whether the item is active, or `null` to make it active when {@see $url} is `null`.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withActive(bool|null $active): self
     {
@@ -91,6 +101,10 @@ final readonly class BreadcrumbLink
 
     /**
      * Returns a copy with the given encoding flag.
+     *
+     * @param bool|null $encode Whether to HTML-encode {@see $label}, or `null` to use `Breadcrumbs::$encodeLabels`.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withEncode(bool|null $encode): self
     {
@@ -99,6 +113,10 @@ final readonly class BreadcrumbLink
 
     /**
      * Returns a copy with the given label.
+     *
+     * @param string|Stringable $label Label of the `.breadcrumb-link` element.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withLabel(string|Stringable $label): self
     {
@@ -109,6 +127,8 @@ final readonly class BreadcrumbLink
      * Returns a copy with the given link attributes.
      *
      * @param array<array-key, mixed> $options HTML attributes of the link.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withOptions(array $options): self
     {
@@ -117,6 +137,11 @@ final readonly class BreadcrumbLink
 
     /**
      * Returns a copy with the given template.
+     *
+     * @param string|null $template Template of the item, where `{link}` is replaced by the rendered link, or `null`
+     * to use the widget item templates.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withTemplate(string|null $template): self
     {
@@ -127,6 +152,8 @@ final readonly class BreadcrumbLink
      * Returns a copy with the given URL.
      *
      * @param array<array-key, mixed>|string|null $url URL processed by {@see \yii\helpers\Url::to()}.
+     *
+     * @return self A new instance with the updated configuration.
      */
     public function withUrl(array|string|null $url): self
     {

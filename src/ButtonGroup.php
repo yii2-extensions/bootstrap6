@@ -57,6 +57,13 @@ class ButtonGroup extends Widget
         Html::enumValue(Size::class, $this->size, 'size');
     }
 
+    /**
+     * Returns the button group with the visible buttons.
+     *
+     * @throws InvalidConfigException if {@see $size} or a configured button size, theme, or variant is invalid.
+     *
+     * @return string Rendered ButtonGroup markup.
+     */
     public function run(): string
     {
         BootstrapAsset::register($this->getView());
@@ -87,6 +94,10 @@ class ButtonGroup extends Widget
 
     /**
      * Renders the visible buttons separated by line breaks.
+     *
+     * @throws InvalidConfigException if a configured button has an invalid size, theme, or variant.
+     *
+     * @return string Visible button markup separated by line breaks.
      */
     protected function renderButtons(): string
     {

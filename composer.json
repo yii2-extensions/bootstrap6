@@ -2,6 +2,10 @@
     "name": "yii2-extensions/bootstrap6",
     "type": "yii2-extension",
     "description": "Bootstrap 6 widgets, forms, and asset bundles for Yii2.",
+    "homepage": "https://yii2-framework.github.io/docs/extensions/bootstrap6/",
+    "support": {
+        "docs": "https://yii2-framework.github.io/docs/extensions/bootstrap6/"
+    },
     "keywords": [
         "bootstrap",
         "bootstrap6",

@@ -78,6 +78,13 @@ class Placeholder extends Widget
         }
     }
 
+    /**
+     * Returns the placeholder element, wrapped in the container element when {@see $container} is `true`.
+     *
+     * @throws InvalidConfigException if {@see $size} or {@see $theme} is not a value of its enum.
+     *
+     * @return string Rendered Placeholder markup.
+     */
     public function run(): string
     {
         BootstrapAsset::register($this->getView());

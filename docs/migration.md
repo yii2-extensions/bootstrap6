@@ -1,17 +1,19 @@
 # Migrating from yii2-bootstrap5
 
-This guide maps `yiisoft/yii2-bootstrap5` to `yii2-extensions/bootstrap6`. Bootstrap 6 is a rewrite of many
-components, so expect markup changes in custom views as well as in widget calls. Read the upstream
+This guide maps `yiisoft/yii2-bootstrap5` to `yii2-extensions/bootstrap6`. Bootstrap 6 is a rewrite of many components,
+so expect markup changes in custom views as well as in widget calls. Read the upstream
 [migration guide](https://getbootstrap.com/docs/6.0/guides/migration/) for the CSS changes that do not involve widgets.
 
 > [!IMPORTANT]
-> Bootstrap 6 is an alpha (`6.0.0-alpha.1`) and drops browsers below Chrome/Edge 130, Firefox 132, and Safari 18.
-> Keep `yii2-bootstrap5` for applications that must support older browsers.
+>
+> Bootstrap 6 is an alpha (`6.0.0-alpha.1`) and drops browsers below Chrome/Edge 130, Firefox 132, and Safari 18. Keep
+> `yii2-bootstrap5` for applications that must support older browsers.
 
 ## Migration sequence
 
 1. Check the browser requirements and migrate on a branch with representative views available for testing.
-2. Replace the package, namespace, and asset classes, then configure the `@npm` alias as described in [installation](installation.md#point-the-npm-alias-to-the-install-directory).
+2. Replace the package, namespace, and asset classes, then configure the `@npm` alias as described in
+   [installation](installation.md#point-the-npm-alias-to-the-install-directory).
 3. Replace renamed widget options and custom CSS selectors; migrate plugin scripts to the ES module helper.
 4. Render and exercise dialogs, drawers, menus, tabs, toasts, and form validation before removing legacy styles.
 
@@ -40,15 +42,15 @@ array. Enumerations are new and live in `yii2\extensions\bootstrap6\enum`; asset
 | `yii\bootstrap5\BootstrapPluginAsset` | `yii2\extensions\bootstrap6\asset\BootstrapPluginAsset` | ES module.                                |
 | `yii\bootstrap5\BootstrapIconAsset`   | `yii2\extensions\bootstrap6\asset\BootstrapIconAsset`   | Same files.                               |
 
-`Accordion`, `ActiveField`, `ActiveForm`, `Alert`, `Breadcrumbs`, `Button`, `ButtonGroup`, `ButtonToolbar`,
-`Carousel`, `Html`, `LinkPager`, `Nav`, `NavBar`, `Progress`, `Tabs`, `Toast`, and `ToggleButtonGroup` keep their names.
-See the [gallery](examples.md) for components added in Bootstrap 6.
+`Accordion`, `ActiveField`, `ActiveForm`, `Alert`, `Breadcrumbs`, `Button`, `ButtonGroup`, `ButtonToolbar`, `Carousel`,
+`Html`, `LinkPager`, `Nav`, `NavBar`, `Progress`, `Tabs`, `Toast`, and `ToggleButtonGroup` keep their names. See the
+[gallery](examples.md) for components added in Bootstrap 6.
 
 ## JavaScript
 
-Do not replace `bootstrap.Modal` with `bootstrap.Dialog` in a classic inline script alone: the module still provides
-no global. Register the bundle and call its instance helper, as shown in the [Toast migration](#toast). A global
-exposure is a temporary compatibility option and does not restore removed Bootstrap 5 plugin names.
+Do not replace `bootstrap.Modal` with `bootstrap.Dialog` in a classic inline script alone: the module still provides no
+global. Register the bundle and call its instance helper, as shown in the [Toast migration](#toast). A global exposure
+is a temporary compatibility option and does not restore removed Bootstrap 5 plugin names.
 
 - `BootstrapPluginAsset` registers `bootstrap.bundle.js` with `type="module"`. The bundle has no `window.bootstrap`, so
   inline scripts such as `new bootstrap.Modal(...)` fail. Capture the instance returned by
@@ -56,11 +58,11 @@ exposure is a temporary compatibility option and does not restore removed Bootst
   `$bundle->moduleUrl($view)`, or set `exposeGlobal` to `true` while migrating; see the
   [examples](examples.md#javascript).
 - Popper is gone; Floating UI is inlined in the bundle. Rename `popperConfig` plugin options to `floatingConfig`.
-- Plugin names and events follow the components: `Modal` becomes `Dialog` (`*.bs.dialog`), `Offcanvas` becomes
-  `Drawer` (`*.bs.drawer`), and `Dropdown` becomes `Menu` (`*.bs.menu`).
+- Plugin names and events follow the components: `Modal` becomes `Dialog` (`*.bs.dialog`), `Offcanvas` becomes `Drawer`
+  (`*.bs.drawer`), and `Dropdown` becomes `Menu` (`*.bs.menu`).
 - A non-empty `clientOptions` array requests `getOrCreateInstance()` initialization; some widgets also initialize with
-  empty options. See [Plugin initialization](configuration.md#plugin-initialization).
-  `clientEvents` handlers are attached with `addEventListener` at `View::POS_END`.
+  empty options. See [Plugin initialization](configuration.md#plugin-initialization). `clientEvents` handlers are
+  attached with `addEventListener` at `View::POS_END`.
 - The Menu plugin binds to the toggle, so options and events of a menu belong on `ButtonMenu` (or the toggle element),
   not on a standalone `Menu`.
 - `Toast` creates the plugin instance but does not show the toast; call `show()` on the instance.
@@ -87,8 +89,8 @@ exposure is a temporary compatibility option and does not restore removed Bootst
 | `.btn-check` on the input                   | `.btn-check` on the `<label>` that wraps the input                       |
 | `data-bs-ride="carousel"`                   | `data-bs-autoplay="true"` (`Carousel::$autoplay`)                        |
 
-The default field container is `form-field mb-3`: `mb-3` is now 0.5rem, so add `mb-5` through
-`fieldConfig['options']` to keep the v5 spacing.
+The default field container is `form-field mb-3`: `mb-3` is now 0.5rem, so add `mb-5` through `fieldConfig['options']`
+to keep the v5 spacing.
 
 ## Translations
 
@@ -99,13 +101,13 @@ custom `i18n` configurations and in `Yii::t()` calls that reused the extension m
 
 ## Property changes
 
-Apply the replacements below to existing configurations. New options and their exact contracts are documented in
-the [generated API](https://yii2-framework.github.io/docs/extensions/bootstrap6/reference/). Enum-typed properties
-also accept a valid string value.
+Apply the replacements below to existing configurations. New options and their exact contracts are documented in the
+[generated API](https://yii2-framework.github.io/docs/extensions/bootstrap6/reference/). Enum-typed properties also
+accept a valid string value.
 
-Item arrays remain supported, but update renamed keys such as Accordion `expand` and `contentOptions`. Immutable
-item objects are an optional typed alternative and can be mixed with arrays; when chaining a `with*()` method, keep
-its returned copy. See [configuration](configuration.md#widgets).
+Item arrays remain supported, but update renamed keys such as Accordion `expand` and `contentOptions`. Immutable item
+objects are an optional typed alternative and can be mixed with arrays; when chaining a `with*()` method, keep its
+returned copy. See [configuration](configuration.md#widgets).
 
 ### Accordion
 
@@ -211,8 +213,7 @@ selectors: the native `<dialog>` replaces the nested v5 modal containers.
 | `clientOptions` `backdrop`, `keyboard` | `backdrop`, `keyboard` | Rendered as `data-bs-*` attributes.           |
 
 `title`, `titleOptions`, `headerOptions`, `bodyOptions`, `footer`, `footerOptions`, `closeButton`, `toggleButton`, and
-`scrollable` are unchanged. The title tag defaults to `h1` (v5 rendered `h5`) and accepts a `tag` key in
-`titleOptions`.
+`scrollable` are unchanged. The title tag defaults to `h1` (v5 rendered `h5`) and accepts a `tag` key in `titleOptions`.
 
 ### Nav
 
@@ -280,8 +281,8 @@ $this->registerJs($bundle->importJs(
 ));
 ```
 
-Verify that the notification appears on load, can be dismissed, and renders a body containing `<script>` as text.
-A `show` class displays markup but does not exercise custom module access. The `importJs()` call above must use the
+Verify that the notification appears on load, can be dismissed, and renders a body containing `<script>` as text. A
+`show` class displays markup but does not exercise custom module access. The `importJs()` call above must use the
 registered bundle instance, not a static call on its class.
 
 | yii2-bootstrap5      | bootstrap6          | Notes                  |
@@ -290,8 +291,8 @@ registered bundle instance, not a static call on its class.
 
 ### ToggleButtonGroup
 
-Move any custom `.btn-check` selectors from the input to its enclosing label. The input is now nested inside that
-label; use `inputOptions` for attributes of the actual input.
+Move any custom `.btn-check` selectors from the input to its enclosing label. The input is now nested inside that label;
+use `inputOptions` for attributes of the actual input.
 
 ### ActiveForm and ActiveField
 

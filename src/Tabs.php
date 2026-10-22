@@ -113,7 +113,12 @@ class Tabs extends Widget
     }
 
     /**
-     * @throws InvalidConfigException if an item has no `label`.
+     * Renders the tab headers and optional panes, and registers the required plugins.
+     *
+     * @throws InvalidConfigException if an item lacks a required label, or {@see $navType} is not a {@see NavStyle}
+     * value.
+     *
+     * @return string Rendered Tabs markup.
      */
     public function run(): string
     {
@@ -160,6 +165,8 @@ class Tabs extends Widget
      * `false`.
      *
      * @param list<string> $panes Rendered panes.
+     *
+     * @return string Tab content markup, or an empty `string` when pane rendering is disabled.
      */
     protected function renderPanes(array $panes): string
     {
@@ -184,7 +191,8 @@ class Tabs extends Widget
      *
      * @param array<array-key, string|TabItem> $items Tab items.
      *
-     * @return array<array-key, string|TabItem>
+     * @return array<array-key, string|TabItem> Items with the first eligible pane item activated, preserving their
+     * keys.
      */
     private function activateFirstTab(array $items): array
     {
@@ -210,6 +218,10 @@ class Tabs extends Widget
 
     /**
      * Returns the label of an item, HTML-encoded according to its `encode` flag and {@see $encodeLabels}.
+     *
+     * @param TabItem $item Tab whose label and encoding flag are used.
+     *
+     * @return string Tab label, encoded when requested by the item or widget.
      */
     private function encodeLabel(TabItem $item): string
     {
@@ -220,6 +232,8 @@ class Tabs extends Widget
      * Returns whether any visible item, including menu items, is explicitly active.
      *
      * @param array<array-key, MenuItem|string|TabItem> $items Tab items.
+     *
+     * @return bool Whether a visible item or one of its visible descendants is explicitly active.
      */
     private function hasActiveTab(array $items): bool
     {
@@ -239,7 +253,9 @@ class Tabs extends Widget
     /**
      * Returns {@see $linkOptions} merged with the item `linkOptions`.
      *
-     * @return array<array-key, mixed>
+     * @param TabItem $item Tab supplying the per-item button attributes.
+     *
+     * @return array<array-key, mixed> Widget button attributes overridden by the item attributes.
      */
     private function linkOptions(TabItem $item): array
     {
@@ -257,7 +273,7 @@ class Tabs extends Widget
      * @param string $menuSuffix Suffix inserted in the default `id` values of the tab buttons and panes.
      * @param bool $active Set to `true` when a tab, link, menu item, or nested menu at any depth is explicitly active.
      *
-     * @return list<MenuItem|string>
+     * @return list<MenuItem|string> Renderable menu children with tab buttons linked to their panes.
      */
     private function menuItems(array $items, string $menuSuffix, bool &$active): array
     {
@@ -320,7 +336,7 @@ class Tabs extends Widget
      *
      * @throws InvalidConfigException if an item has no `label`.
      *
-     * @return array<array-key, string|TabItem>
+     * @return array<array-key, string|TabItem> Normalized tab items with their original keys.
      */
     private function normalizeItems(): array
     {
@@ -336,9 +352,12 @@ class Tabs extends Widget
     /**
      * Renders a `.nav-item` holding a tab button, a link, or a menu toggle followed by its {@see Menu}.
      *
+     * @param TabItem $item Tab, link, or menu toggle to render.
      * @param string $tabSuffix Suffix of the default tab button `id`.
      * @param string $paneSuffix Suffix of the default pane `id`.
      * @param string $menuSuffix Suffix inserted in the default `id` values of the menu items.
+     *
+     * @return string Tab header markup, including the menu when applicable.
      */
     private function renderHeader(TabItem $item, string $tabSuffix, string $paneSuffix, string $menuSuffix): string
     {
@@ -404,13 +423,15 @@ class Tabs extends Widget
     }
 
     /**
-     * Adds the tab pane of an item to {@see $panes} and returns the tab button attributes that control it.
+     * Returns the tab button attributes, appending the pane to {@see $panes} only when {@see $renderTabContent}
+     * is `true`.
      *
+     * @param TabItem $item Tab supplying the pane content and attributes.
      * @param array<array-key, mixed> $linkOptions Tab button attributes.
      * @param string $tabSuffix Suffix of the default tab button `id`.
      * @param string $paneSuffix Suffix of the default pane `id`.
      *
-     * @return array<array-key, mixed>
+     * @return array<array-key, mixed> Tab button attributes targeting the pane, regardless of {@see $renderTabContent}.
      */
     private function renderPane(TabItem $item, array $linkOptions, string $tabSuffix, string $paneSuffix): array
     {

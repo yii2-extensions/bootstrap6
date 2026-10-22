@@ -77,7 +77,11 @@ class Breadcrumbs extends Widget
     public string $tag = 'ol';
 
     /**
+     * Renders the breadcrumb trail, or an empty `string` when there are no links.
+     *
      * @throws InvalidConfigException if an item has no `label`.
+     *
+     * @return string Rendered Breadcrumbs markup.
      */
     public function run(): string
     {
@@ -124,6 +128,8 @@ class Breadcrumbs extends Widget
 
     /**
      * Renders an item of the trail.
+     *
+     * @param BreadcrumbLink $link Breadcrumb link or active trail item to render.
      *
      * @return string Generated HTML.
      */

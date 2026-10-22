@@ -94,11 +94,15 @@ class ActiveForm extends \yii\widgets\ActiveForm
     public $validationStateOn = self::VALIDATION_STATE_ON_INPUT;
 
     /**
+     * Creates a Bootstrap field for the given model attribute.
+     *
      * @param \yii\base\Model $model Model holding the attribute.
      * @param string $attribute Attribute name or expression.
      * @param array<mixed> $options Field configuration merged over {@see $fieldConfig}.
      *
      * @throws InvalidConfigException if the configured field class does not extend {@see ActiveField}.
+     *
+     * @return ActiveField Field instance configured for the model attribute.
      */
     public function field($model, $attribute, $options = []): ActiveField
     {
@@ -114,6 +118,8 @@ class ActiveForm extends \yii\widgets\ActiveForm
     }
 
     /**
+     * Validates the form configuration, applies its layout, and registers the Bootstrap stylesheet.
+     *
      * @throws InvalidConfigException if {@see $layout} or {@see $nativeValidation} is invalid.
      */
     public function init(): void

@@ -87,6 +87,8 @@ final class IconSet extends BaseObject
      *
      * @param string|Stringable $icon Icon to render.
      * @param string $class Structural CSS class the Bootstrap stylesheet targets, for example `accordion-icon`.
+     *
+     * @return string Icon markup with the requested class applied to SVG instances.
      */
     public static function render(string|Stringable $icon, string $class): string
     {

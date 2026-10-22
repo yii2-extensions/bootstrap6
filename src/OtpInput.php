@@ -56,7 +56,7 @@ class OtpInput extends InputWidget
     /**
      * Initializes the widget and validates {@see $type}.
      *
-     * @throws InvalidConfigException if {@see $type} is invalid.
+     * @throws InvalidConfigException if neither a model attribute nor a name is set, or {@see $type} is invalid.
      */
     public function init(): void
     {
@@ -69,6 +69,11 @@ class OtpInput extends InputWidget
         }
     }
 
+    /**
+     * Returns the `.otp` container with the input and registers the `OtpInput` plugin on the container.
+     *
+     * @return string Rendered OtpInput markup.
+     */
     public function run(): string
     {
         $original = $this->options;
@@ -106,6 +111,8 @@ class OtpInput extends InputWidget
 
     /**
      * Returns the input `id` assigned by {@see init()}.
+     *
+     * @return string Input element identifier.
      */
     private function inputId(): string
     {

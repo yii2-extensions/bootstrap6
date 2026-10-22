@@ -134,6 +134,8 @@ class ActiveField extends \yii\widgets\ActiveField
     public array $wrapperOptions = [];
 
     /**
+     * Initializes the field with the defaults of its owning form layout.
+     *
      * @param array<string, mixed> $config Configuration merged over the defaults of {@see createLayoutConfig()}.
      */
     public function __construct($config = [])
@@ -164,6 +166,8 @@ class ActiveField extends \yii\widgets\ActiveField
      *
      * @see https://getbootstrap.com/docs/6.0/forms/checkbox/
      * @see https://getbootstrap.com/docs/6.0/forms/switch/
+     *
+     * @return $this The current instance for method chaining.
      */
     public function checkbox($options = [], $enclosedByLabel = false): static
     {
@@ -177,6 +181,8 @@ class ActiveField extends \yii\widgets\ActiveField
      *
      * @param array<mixed> $items Data items, value => label.
      * @param array<mixed> $options List options; `inline` defaults to {@see $inline}.
+     *
+     * @return $this The current instance for method chaining.
      */
     public function checkboxList($items, $options = []): static
     {
@@ -191,6 +197,8 @@ class ActiveField extends \yii\widgets\ActiveField
      * @param array<mixed> $options Input attributes.
      *
      * @see https://getbootstrap.com/docs/6.0/forms/form-control/#color
+     *
+     * @return $this The current instance for method chaining.
      */
     public function colorInput(array $options = []): static
     {
@@ -200,9 +208,13 @@ class ActiveField extends \yii\widgets\ActiveField
     }
 
     /**
+     * Renders a drop-down list with Bootstrap control classes.
+     *
      * @param array<mixed> $items Option data items.
      * @param array<mixed> $options Tag attributes; a `class` keeps `form-control`, and the `placeholder` of
      * {@see $inputOptions} is not inherited.
+     *
+     * @return $this The current instance for method chaining.
      */
     public function dropDownList($items, $options = []): static
     {
@@ -212,7 +224,11 @@ class ActiveField extends \yii\widgets\ActiveField
     }
 
     /**
+     * Configures the validation error element for the field.
+     *
      * @param array<mixed>|false $options Tag attributes, or `false` to omit the error element.
+     *
+     * @return $this The current instance for method chaining.
      */
     public function error($options = []): static
     {
@@ -226,6 +242,8 @@ class ActiveField extends \yii\widgets\ActiveField
      * default `['class' => 'form-control']`.
      *
      * @param array<mixed> $options Tag attributes; a `class` keeps `form-control`.
+     *
+     * @return $this The current instance for method chaining.
      */
     public function fileInput($options = []): static
     {
@@ -235,8 +253,12 @@ class ActiveField extends \yii\widgets\ActiveField
     }
 
     /**
+     * Configures the hint displayed with the field.
+     *
      * @param bool|string|null $content Hint content, `null` for the model hint, or `false` to omit it.
      * @param array<mixed> $options Tag attributes.
+     *
+     * @return $this The current instance for method chaining.
      */
     public function hint($content, $options = []): static
     {
@@ -249,6 +271,10 @@ class ActiveField extends \yii\widgets\ActiveField
      * Sets whether {@see checkboxList()} and {@see radioList()} lay out their items horizontally.
      *
      * Call it before the list method.
+     *
+     * @param bool $value Whether to arrange list items horizontally.
+     *
+     * @return $this The current instance for method chaining.
      */
     public function inline(bool $value = true): static
     {
@@ -258,8 +284,12 @@ class ActiveField extends \yii\widgets\ActiveField
     }
 
     /**
+     * Renders an input of the specified type for the model attribute.
+     *
      * @param string $type Input type.
      * @param array<mixed> $options Tag attributes merged over {@see $inputOptions}.
+     *
+     * @return $this The current instance for method chaining.
      */
     public function input($type, $options = []): static
     {
@@ -275,6 +305,8 @@ class ActiveField extends \yii\widgets\ActiveField
      *
      * @param bool|string|null $label Label content (not encoded), `null` for the model label, or a `bool`.
      * @param array<mixed>|null $options Tag attributes merged over {@see $labelOptions}.
+     *
+     * @return $this The current instance for method chaining.
      */
     public function label($label = null, $options = []): static
     {
@@ -300,9 +332,13 @@ class ActiveField extends \yii\widgets\ActiveField
     }
 
     /**
+     * Renders a list box with Bootstrap control classes.
+     *
      * @param array<mixed> $items Option data items.
      * @param array<mixed> $options Tag attributes; a `class` keeps `form-control`, and the `placeholder` of
      * {@see $inputOptions} is not inherited.
+     *
+     * @return $this The current instance for method chaining.
      */
     public function listBox($items, $options = []): static
     {
@@ -312,7 +348,11 @@ class ActiveField extends \yii\widgets\ActiveField
     }
 
     /**
+     * Renders a password input for the model attribute.
+     *
      * @param array<mixed> $options Tag attributes merged over {@see $inputOptions}.
+     *
+     * @return $this The current instance for method chaining.
      */
     public function passwordInput($options = []): static
     {
@@ -330,6 +370,8 @@ class ActiveField extends \yii\widgets\ActiveField
      * @param bool $enclosedByLabel Whether to render the input inside the label ({@see $checkEnclosedTemplate}).
      *
      * @see https://getbootstrap.com/docs/6.0/forms/radio/
+     *
+     * @return $this The current instance for method chaining.
      */
     public function radio($options = [], $enclosedByLabel = false): static
     {
@@ -343,6 +385,8 @@ class ActiveField extends \yii\widgets\ActiveField
      *
      * @param array<mixed> $items Data items, value => label.
      * @param array<mixed> $options List options; `inline` defaults to {@see $inline}.
+     *
+     * @return $this The current instance for method chaining.
      */
     public function radioList($items, $options = []): static
     {
@@ -358,6 +402,8 @@ class ActiveField extends \yii\widgets\ActiveField
      * class.
      *
      * @param array<mixed> $options Input attributes, for example `min`, `max`, `step`, or `list`.
+     *
+     * @return $this The current instance for method chaining.
      *
      * @see https://getbootstrap.com/docs/6.0/forms/range/
      */
@@ -381,8 +427,12 @@ class ActiveField extends \yii\widgets\ActiveField
     }
 
     /**
+     * Renders the field with its layout-specific label, wrapper, and validation feedback.
+     *
      * @param (callable(): mixed)|string|null $content Field content, or `null` to render the parts with
      * {@see $template}.
+     *
+     * @return string the rendered field content.
      */
     public function render($content = null): string
     {
@@ -427,6 +477,8 @@ class ActiveField extends \yii\widgets\ActiveField
      * @param array<mixed> $options Tag attributes; the `value` option replaces the attribute value.
      *
      * @see https://getbootstrap.com/docs/6.0/forms/form-control/#readonly-plain-text
+     *
+     * @return $this The current instance for method chaining.
      */
     public function staticControl(array $options = []): static
     {
@@ -440,7 +492,11 @@ class ActiveField extends \yii\widgets\ActiveField
     }
 
     /**
+     * Renders a multiline text input for the model attribute.
+     *
      * @param array<mixed> $options Tag attributes merged over {@see $inputOptions}.
+     *
+     * @return $this The current instance for method chaining.
      */
     public function textarea($options = []): static
     {
@@ -450,7 +506,11 @@ class ActiveField extends \yii\widgets\ActiveField
     }
 
     /**
+     * Renders a text input for the model attribute.
+     *
      * @param array<mixed> $options Tag attributes merged over {@see $inputOptions}.
+     *
+     * @return $this The current instance for method chaining.
      */
     public function textInput($options = []): static
     {
@@ -460,8 +520,12 @@ class ActiveField extends \yii\widgets\ActiveField
     }
 
     /**
+     * Renders an input widget for the model attribute.
+     *
      * @param string $class Widget class name.
      * @param array<mixed> $config Widget configuration.
+     *
+     * @return $this The current instance for method chaining.
      */
     public function widget($class, $config = []): static
     {
@@ -503,7 +567,9 @@ class ActiveField extends \yii\widgets\ActiveField
     /**
      * Returns a grid class of {@see $horizontalCssClasses}, or an empty array when it is unset or empty.
      *
-     * @return array<mixed>|string
+     * @param string $key Grid class key, such as `label`, `wrapper`, or `offset`.
+     *
+     * @return array<mixed>|string Configured grid classes, or an empty array when unavailable.
      */
     protected function horizontalCssClass(string $key): array|string
     {
@@ -512,6 +578,8 @@ class ActiveField extends \yii\widgets\ActiveField
 
     /**
      * Returns the layout of the owning form, or {@see ActiveForm::LAYOUT_DEFAULT} for a non-Bootstrap form.
+     *
+     * @return string Owning form layout, or the default layout for a non-Bootstrap form.
      */
     protected function layout(): string
     {
@@ -703,7 +771,9 @@ class ActiveField extends \yii\widgets\ActiveField
     /**
      * Returns the value when it is an array, or an empty array otherwise.
      *
-     * @return array<mixed>
+     * @param mixed $value Value to inspect.
+     *
+     * @return array<mixed> The array value, or an empty array for other types.
      */
     private static function arrayValue(mixed $value): array
     {
@@ -715,7 +785,7 @@ class ActiveField extends \yii\widgets\ActiveField
      *
      * @param array<mixed> $options Tag attributes.
      *
-     * @return array<mixed>
+     * @return array<mixed> Input attributes with the Bootstrap base class preserved.
      */
     private static function controlOptions(array $options): array
     {
@@ -727,7 +797,7 @@ class ActiveField extends \yii\widgets\ActiveField
      *
      * @param array<mixed> $instanceConfig Configuration passed to the constructor.
      *
-     * @return array<string, mixed>
+     * @return array<string, mixed> Horizontal layout defaults with the resolved grid classes.
      */
     private function createHorizontalLayoutConfig(array $instanceConfig): array
     {
@@ -766,7 +836,10 @@ class ActiveField extends \yii\widgets\ActiveField
     /**
      * Returns the value as a CSS class, or an empty array when it is empty or not a `string` or `array`.
      *
-     * @return array<mixed>|string
+     * @param mixed $value Configured CSS class value to inspect.
+     *
+     * @return array<mixed>|string The value as a CSS class, or an empty array when it is empty or not a `string` or
+     * `array`.
      */
     private static function cssClass(mixed $value): array|string
     {
@@ -775,6 +848,10 @@ class ActiveField extends \yii\widgets\ActiveField
 
     /**
      * Returns the layout of the form, or {@see ActiveForm::LAYOUT_DEFAULT} for a non-Bootstrap form.
+     *
+     * @param mixed $form Form instance whose layout is requested.
+     *
+     * @return string Bootstrap form layout, or the default layout for other values.
      */
     private static function layoutOf(mixed $form): string
     {
@@ -787,7 +864,7 @@ class ActiveField extends \yii\widgets\ActiveField
      * @param array<mixed> $options Tag attributes.
      * @param string $class Base class, for example `form-control`.
      *
-     * @return array<mixed>
+     * @return array<mixed> The options with the base class prepended.
      */
     private static function prependClass(array $options, string $class): array
     {
@@ -805,7 +882,7 @@ class ActiveField extends \yii\widgets\ActiveField
      *
      * @param array<mixed> $options Tag attributes.
      *
-     * @return array<mixed>
+     * @return array<mixed> The control options for the `<select>` element.
      */
     private static function selectOptions(array $options): array
     {
@@ -814,6 +891,10 @@ class ActiveField extends \yii\widgets\ActiveField
 
     /**
      * Returns the value when it is a `string`, or `null` otherwise.
+     *
+     * @param mixed $value The value to check.
+     *
+     * @return string|null The string value or `null` if it is not a string.
      */
     private static function stringValue(mixed $value): string|null
     {

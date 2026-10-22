@@ -68,6 +68,15 @@ class Strength extends Widget
         }
     }
 
+    /**
+     * Returns the strength meter, followed by the `.strength-text` element when {@see $showText} is `true`, and
+     * registers the `Strength` plugin.
+     *
+     * {@see $messages} is passed as the `messages` client option unless {@see $clientOptions} is `false` or
+     * already sets it.
+     *
+     * @return string Rendered Strength markup.
+     */
     public function run(): string
     {
         $options = $this->options;

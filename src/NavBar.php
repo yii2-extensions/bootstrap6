@@ -122,6 +122,10 @@ class NavBar extends Widget
 
     /**
      * Returns the complete navbar markup wrapping the captured content.
+     *
+     * @throws InvalidConfigException if {@see $expand} or the configured drawer placement is invalid.
+     *
+     * @return string Rendered NavBar markup.
      */
     public function run(): string
     {
@@ -149,7 +153,7 @@ class NavBar extends Widget
     /**
      * Returns {@see $togglerOptions} by reference.
      *
-     * @return array<mixed>
+     * @return array<mixed> Toggler attributes returned by reference for in-place updates.
      */
     protected function &togglerOptions(): array
     {
@@ -158,6 +162,8 @@ class NavBar extends Widget
 
     /**
      * Renders the `.navbar-brand` element, or an empty string when there is no brand image and no brand label.
+     *
+     * @return string Brand markup, or an empty `string` when no brand is configured.
      */
     protected function renderBrand(): string
     {
@@ -192,6 +198,10 @@ class NavBar extends Widget
 
     /**
      * Renders the opening part of the drawer: the `<dialog>`, its header, and the opening `.drawer-body` tag.
+     *
+     * @throws InvalidConfigException if the configured drawer placement is not a {@see DrawerPlacement} value.
+     *
+     * @return string Opening drawer markup including its header and body opening tag.
      */
     protected function renderDrawerBegin(): string
     {
@@ -236,6 +246,8 @@ class NavBar extends Widget
 
     /**
      * Renders the toggler button that opens the drawer.
+     *
+     * @return string Drawer toggle button markup.
      */
     protected function renderToggler(): string
     {
@@ -261,6 +273,8 @@ class NavBar extends Widget
 
     /**
      * Returns the `id` of the drawer.
+     *
+     * @return string Configured or generated drawer identifier.
      */
     private function drawerId(): string
     {
@@ -279,6 +293,10 @@ class NavBar extends Widget
 
     /**
      * Renders the opening part of the navbar up to the opening `.drawer-body` tag, and resolves {@see $tag}.
+     *
+     * @throws InvalidConfigException if {@see $expand} or the configured drawer placement is invalid.
+     *
+     * @return string Opening navbar markup through the drawer body opening tag.
      */
     private function renderBegin(): string
     {

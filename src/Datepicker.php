@@ -89,7 +89,8 @@ class Datepicker extends InputWidget
     /**
      * Initializes the widget and validates the closed option sets.
      *
-     * @throws InvalidConfigException if {@see $selectionMode}, {@see $placement} or {@see $firstWeekday} is invalid.
+     * @throws InvalidConfigException if neither a model attribute nor a name is set, or {@see $selectionMode},
+     * {@see $placement}, or {@see $firstWeekday} is invalid.
      */
     public function init(): void
     {
@@ -118,6 +119,12 @@ class Datepicker extends InputWidget
         }
     }
 
+    /**
+     * Returns the text input bound to the popup calendar, or the inline calendar when {@see $inline} is `true`,
+     * and registers the `Datepicker` plugin.
+     *
+     * @return string Rendered Datepicker markup.
+     */
     public function run(): string
     {
         if ($this->inline) {
@@ -143,7 +150,7 @@ class Datepicker extends InputWidget
      *
      * @param list<string> $selectedDates Preselected dates.
      *
-     * @return array<string, mixed>
+     * @return array<string, mixed> Plugin data attributes, including preselected dates when present.
      */
     protected function dataAttributes(array $selectedDates): array
     {
@@ -162,6 +169,18 @@ class Datepicker extends InputWidget
         ];
     }
 
+    /**
+     * Returns the plugin initialization, followed by a `setSelectedDates()` call for a popup datepicker with
+     * preselected dates.
+     *
+     * The `selectedDates` client option takes precedence over {@see $selectedDates}.
+     *
+     * @param string $name Plugin class exported by the bundle.
+     * @param string $element JavaScript expression selecting the plugin element.
+     * @param string $options JSON-encoded constructor options.
+     *
+     * @return string Plugin initialization JavaScript with popup preselection when applicable.
+     */
     protected function pluginInitialization(string $name, string $element, string $options): string
     {
         if (
@@ -183,6 +202,8 @@ class Datepicker extends InputWidget
 
     /**
      * Renders the inline calendar container with the hidden input that receives the selected dates.
+     *
+     * @return string Inline calendar markup with its hidden input.
      */
     protected function renderInline(): string
     {
@@ -225,6 +246,8 @@ class Datepicker extends InputWidget
 
     /**
      * Returns the input `id` assigned by {@see init()}.
+     *
+     * @return string Input element identifier.
      */
     private function inputId(): string
     {

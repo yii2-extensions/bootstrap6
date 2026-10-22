@@ -44,6 +44,12 @@ class Range extends InputWidget
      */
     public array $ticks = [];
 
+    /**
+     * Returns the `.form-range` wrapper with the range input, followed by the tick `<datalist>` when
+     * {@see $ticks} is set, and registers the `Range` plugin on the wrapper.
+     *
+     * @return string Rendered Range markup.
+     */
     public function run(): string
     {
         $original = $this->options;
@@ -87,6 +93,8 @@ class Range extends InputWidget
      * Renders the `<datalist>` with the tick marks.
      *
      * @param string $id `id` of the datalist.
+     *
+     * @return string Datalist markup with the configured ticks.
      */
     protected function renderTicks(string $id): string
     {
@@ -109,6 +117,8 @@ class Range extends InputWidget
 
     /**
      * Returns the input `id` assigned by {@see init()}.
+     *
+     * @return string Input element identifier.
      */
     private function inputId(): string
     {
