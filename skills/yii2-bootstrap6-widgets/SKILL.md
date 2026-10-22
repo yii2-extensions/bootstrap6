@@ -52,9 +52,11 @@ task needs configuration's `Dialog` section and `reference/dialog/index.md`; an 
   from Bootstrap 5.
 - Prefer Foxy `^0.4` with the application's root `config.foxy.manager: native` for published assets without Node.js; it
   needs PHP `ext-zlib`. The application selects its manager and maintains its own `foxy.lock`.
-- Point `@npm` to Foxy's actual install directory. Yii2 `2.0.x` defaults to `@vendor/npm`; Yii2 `22.x` defaults to
-  `@app/node_modules`. Follow the installation guide for root/base-path differences, dedicated native directories, and
-  optional build managers. Extension bootstrap registration supplies `yii.bootstrap6` translations.
+- Point `@npm` to Foxy's actual install directory; application configuration can override framework defaults. Common
+  Yii2 `2.0.x` templates use `@vendor/npm-asset`, while Yii2 `22.x` defaults to `@app/node_modules`. If Foxy installs
+  into `vendor/npm`, explicitly set `@npm` to `@vendor/npm`. Follow the installation guide for root/base-path
+  differences, dedicated native directories, and optional build managers. Extension bootstrap registration supplies
+  `yii.bootstrap6` translations.
 - `BootstrapPluginAsset` delivers an ES module, without `window.bootstrap` by default. Register the bundle, retain the
   returned instance, and call `$bundle->importJs($view, $code)` for custom plugin code. `importJs()` and `moduleUrl()`
   are instance methods; do not call them statically or add a classic script tag.

@@ -68,8 +68,9 @@ composer require php-forge/foxy:^0.4 yii2-extensions/bootstrap6:^0.1
 Foxy's native manager installs the frontend assets with PHP and `ext-zlib`; Node.js is unnecessary. Configure it in the
 application's root `composer.json` before requiring the extension. Its default install directory is `node_modules`.
 Point `@npm` to that actual directory; use `@app/node_modules` only when the application base path is the Composer
-project root. For Yii2 `2.0.x`, native installation into `vendor/npm` matches its default alias. See
-[installation](docs/installation.md) for the complete configuration and optional package managers.
+project root. Common Yii2 `2.0.x` application templates set `@npm` to `@vendor/npm-asset`; installing into `vendor/npm`
+requires setting `@npm` to `@vendor/npm`. See [installation](docs/installation.md) for the complete configuration and
+optional package managers.
 
 ### Basic usage
 

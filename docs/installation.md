@@ -65,10 +65,11 @@ manager's lockfile. These application settings are independent of this library's
 
 ## Point the `@npm` alias to the install directory
 
-Yii2 `22.x` defaults `@npm` to `@app/node_modules`; Yii2 `2.0.x` defaults it to `@vendor/npm`. Point the alias to the
-directory where Foxy actually installed the frontend packages. Use `@app/node_modules` only when the application base
-path is the Composer project root and Foxy uses its default directory. For an advanced template or a shared Composer
-root, configure each application with the shared directory's absolute path (replace the example path below):
+Yii2 `22.x` defaults `@npm` to `@app/node_modules`. Yii2 `2.0.x` defines `@vendor/npm` in the framework, but its common
+application templates override it with `@vendor/npm-asset`. Point the alias to the directory where Foxy actually
+installed the frontend packages. Use `@app/node_modules` only when the application base path is the Composer project
+root and Foxy uses its default directory. For an advanced template or a shared Composer root, configure each application
+with the shared directory's absolute path (replace the example path below):
 
 ```php
 // config/web.php
@@ -80,7 +81,7 @@ return [
 ```
 
 Alternatively, with Yii2 `2.0.x` and the default Composer vendor directory, configure the `native` manager to install
-into `vendor/npm`:
+into a dedicated `vendor/npm` directory:
 
 ```json
 {
@@ -91,6 +92,17 @@ into `vendor/npm`:
     }
   }
 }
+```
+
+Explicitly point the application's `@npm` alias to that directory, overriding any template setting:
+
+```php
+// config/web.php, or common/config/main.php for the advanced template
+return [
+    'aliases' => [
+        '@npm' => '@vendor/npm',
+    ],
+];
 ```
 
 `native-install-dir` is relative to Foxy's `root-package-json-dir` (the Composer project root by default). Use the
