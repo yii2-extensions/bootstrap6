@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 0.1.4 Under development
 
 - fix: reorder support section in `composer.json` for clarity.
+- docs: clarify Bootstrap6 PHPDoc and fix API reference links.
 
 ## 0.1.3 October 22, 2026
 

@@ -71,7 +71,7 @@ trait BootstrapWidgetTrait
     public array|false $clientOptions = [];
 
     /**
-     * Initializes the widget and assigns an `id` to {@see $options} when it is not set.
+     * Initializes the widget and assigns an `id` to its `options` property when it is not set.
      *
      * @throws \yii\base\InvalidConfigException if an input widget has neither a model attribute nor a name.
      */
