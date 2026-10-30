@@ -86,10 +86,14 @@ class ActiveField extends \yii\widgets\ActiveField
      */
     public bool $enableLabel = true;
     /**
+     * Default HTML attributes for the validation error element, merged with the options passed to {@see error()}.
+     *
      * @var array<mixed>
      */
     public $errorOptions = ['class' => 'invalid-feedback'];
     /**
+     * Default HTML attributes for the hint element, merged with the options passed to {@see hint()}.
+     *
      * @var array<mixed>
      */
     public $hintOptions = ['class' => 'form-text'];
@@ -105,6 +109,8 @@ class ActiveField extends \yii\widgets\ActiveField
      */
     public bool $inline = false;
     /**
+     * Default HTML attributes for input controls, merged with the options passed to the input methods.
+     *
      * @var array<mixed>
      */
     public $inputOptions = ['class' => 'form-control'];
@@ -113,10 +119,14 @@ class ActiveField extends \yii\widgets\ActiveField
      */
     public string|null $inputTemplate = null;
     /**
+     * Default HTML attributes for the label element, merged with the options passed to {@see label()}.
+     *
      * @var array<mixed>
      */
     public $labelOptions = ['class' => 'form-label'];
     /**
+     * HTML attributes for the field container rendered by {@see begin()}.
+     *
      * @var array<mixed>
      */
     public $options = ['class' => 'form-field mb-3'];
