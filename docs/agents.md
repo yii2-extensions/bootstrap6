@@ -66,4 +66,34 @@ To check setup, start a fresh client session at the application root, inspect th
 skill for one small widget task. Record discovery and activation separately from PHP lint, rendered output, and browser
 behavior. For automatic selection, repeat with a natural task prompt that does not name the skill.
 
+## Example prompts
+
+Start a fresh client session at the application root. The explicit example uses Codex's `$skill-name` notation; use
+`/yii2-bootstrap6-widgets` in Claude Code or the installed client's native skill mechanism. Do not paste the skill body
+and count that as native activation. These are tasks to execute and verify, not claims that an evaluation has passed.
+
+### Explicit invocation
+
+```text
+$yii2-bootstrap6-widgets
+Show a Bootstrap 6 Toast that becomes visible after rendering and can be dismissed. Use the installed asset bundle
+module API rather than window.bootstrap. Include the rendered markup and a browser verification plan.
+Inspect the installed revision first. Do not install dependencies or change files without authorization.
+```
+
+### Natural selection
+
+```text
+I am migrating a Yii view from Bootstrap 5 to Bootstrap 6. How should I replace Modal and its initialization without
+assuming that namespaces are the only difference?
+```
+
+### Verify the outcome
+
+Check the installed widget API, module registration and actual show/dismiss behavior; PHP markup alone does not prove
+JavaScript interaction. Record native loading evidence separately from configuration review, executable checks and
+browser/runtime results. For a negative selection control, ask an unrelated question in a fresh session and confirm this
+package skill is not loaded. Keep evaluation traces private; report unavailable checks rather than treating discovery as
+execution.
+
 [Back to documentation](../README.md#documentation)

@@ -1,6 +1,6 @@
 ---
 name: yii2-bootstrap6-widgets
-description: Use when implementing or migrating Yii2 views, forms, or assets with yii2-extensions/bootstrap6.
+description: Implement, configure or migrate Yii2 views, forms and assets with yii2-extensions/bootstrap6 widgets, its ES module plugin bundle and Html helper. Use for this package rather than yiisoft/yii2-bootstrap5 or another Bootstrap version, and not for general Yii application conventions.
 metadata:
   guide: https://yii2-framework.github.io/docs/extensions/bootstrap6/
 license: BSD-3-Clause
@@ -46,6 +46,9 @@ task needs configuration's `Dialog` section and `reference/dialog/index.md`; an 
 
 ## Apply the package's constraints
 
+Several of these look like bugs and are intended: no `window.bootstrap`, a Toast that stays hidden, encoded titles but
+raw body slots, and attribute methods that mutate the widget. Do not "fix" them in package or application code.
+
 - Widgets use Yii configuration arrays and public properties. Widget `widget()` returns HTML; attribute methods require
   an instance and mutate it. Item `with*()` methods return new immutable objects, so keep their results.
 - Prefer enum cases for widget choices. Valid string values also work; do not infer Bootstrap 6 values or class names
@@ -60,8 +63,8 @@ task needs configuration's `Dialog` section and `reference/dialog/index.md`; an 
 - `BootstrapPluginAsset` delivers an ES module, without `window.bootstrap` by default. Register the bundle, retain the
   returned instance, and call `$bundle->importJs($view, $code)` for custom plugin code. `importJs()` and `moduleUrl()`
   are instance methods; do not call them statically or add a classic script tag.
-- A Toast plugin instance stays hidden until `show()` is called. For automatic display, use the bundle helper to call
-  `bootstrap.Toast.getOrCreateInstance(element).show()`.
+- A Toast stays hidden until `show()` is called on its plugin instance or the `show` class is added through `options`.
+  For automatic display, use the bundle helper to call `bootstrap.Toast.getOrCreateInstance(element).show()`.
 - Menu plugin settings belong on `ButtonMenu` or its toggle, rather than a standalone `Menu` panel. A Popover's captured
   `begin()`/`end()` content is its trigger; its popup body is the `content` option.
 - Call matching `begin()` and `end()` as statements in views/layouts: both return widget instances, and `end()` echoes
@@ -69,6 +72,12 @@ task needs configuration's `Dialog` section and `reference/dialog/index.md`; an 
   HTML. Encode user-controlled text in those slots with `yii2\extensions\bootstrap6\Html::encode()`.
 - Use this package's `ActiveForm` for Bootstrap 6 fields. Browser validation styling does not replace server validation.
   A switch uses `checkbox(['switch' => true])`; floating forms have different label order from v5.
+- Widgets resolve their default SVG icons through `Yii::createObject(IconSet::class)`. Replace an icon globally with a
+  `container.definitions` entry for `IconSet`, not by post-processing widget HTML. Toggler attribute methods
+  (`addTogglerAttribute()`, `addTogglerClass()`, `addTogglerCssStyle()`) change the toggler, not the widget element.
+- `AttributesTrait` and `TogglerAttributesTrait` provide the attribute methods above. `Widget`, `InputWidget`,
+  `BaseHtml`, `AbstractNpmAsset`, `BootstrapWidgetTrait` and `item\ItemTrait` are the shared base of the widgets, assets
+  and items; they are out of scope for view work, so read their reference pages only when extending them.
 
 For migration, start with the migration guide rather than namespace replacement alone. `Modal`, `Offcanvas`, `Dropdown`,
 and `ButtonDropdown` become `Dialog`, `Drawer`, `Menu`, and `ButtonMenu`; plugin names, event suffixes, responsive

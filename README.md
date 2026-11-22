@@ -14,14 +14,14 @@
     <a href="https://github.com/yii2-extensions/bootstrap6/actions/workflows/build.yml" target="_blank">
         <img src="https://img.shields.io/github/actions/workflow/status/yii2-extensions/bootstrap6/build.yml?style=for-the-badge&label=PHPUnit&logo=github" alt="PHPUnit">
     </a>
+    <a href="https://codecov.io/github/yii2-extensions/bootstrap6" target="_blank">
+        <img src="https://img.shields.io/codecov/c/github/yii2-extensions/bootstrap6.svg?style=for-the-badge&logo=codecov&logoColor=white&label=Coverage" alt="Coverage">
+    </a>
     <a href="https://dashboard.stryker-mutator.io/reports/github.com/yii2-extensions/bootstrap6/main" target="_blank">
         <img src="https://img.shields.io/endpoint?style=for-the-badge&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fyii2-extensions%2Fbootstrap6%2Fmain" alt="Mutation Testing">
     </a>
     <a href="https://github.com/yii2-extensions/bootstrap6/actions/workflows/static.yml" target="_blank">
         <img src="https://img.shields.io/github/actions/workflow/status/yii2-extensions/bootstrap6/static.yml?style=for-the-badge&label=PHPStan&logo=github" alt="PHPStan">
-    </a>
-    <a href="https://github.com/yii2-extensions/bootstrap6/actions/workflows/security.yml" target="_blank">
-        <img src="https://img.shields.io/github/actions/workflow/status/yii2-extensions/bootstrap6/security.yml?style=for-the-badge&label=Security&logo=github" alt="Security">
     </a>
 </p>
 
@@ -38,15 +38,15 @@
 ## Features
 
 <picture>
-    <source media="(min-width: 768px)" srcset="./docs/svgs/features.svg">
-    <img src="./docs/svgs/features-mobile.svg" alt="Feature Overview" style="width: 100%;">
+    <source media="(min-width: 768px)" srcset="https://raw.githubusercontent.com/yii2-extensions/bootstrap6/main/docs/svgs/features.svg">
+    <img src="https://raw.githubusercontent.com/yii2-extensions/bootstrap6/main/docs/svgs/features-mobile.svg" alt="Feature Overview" style="width: 100%;">
 </picture>
 
 ## Quick start
 
 ### Installation
 
-Select the native manager in the application's root `composer.json`:
+Use Composer 2.10.2 or later. Select the native manager in the application's root `composer.json`:
 
 ```json
 {
@@ -69,8 +69,9 @@ Foxy's native manager installs the frontend assets with PHP and `ext-zlib`; Node
 application's root `composer.json` before requiring the extension. Its default install directory is `node_modules`.
 Point `@npm` to that actual directory; use `@app/node_modules` only when the application base path is the Composer
 project root. Common Yii2 `2.0.x` application templates set `@npm` to `@vendor/npm-asset`; installing into `vendor/npm`
-requires setting `@npm` to `@vendor/npm`. See [installation](docs/installation.md) for the complete configuration and
-optional package managers.
+requires setting `@npm` to `@vendor/npm`. See
+[installation](https://github.com/yii2-extensions/bootstrap6/blob/main/docs/installation.md) for the complete
+configuration and optional package managers.
 
 ### Basic usage
 
@@ -108,12 +109,11 @@ are encoded by default, while body and footer content require encoding when they
 
 Practical guides and complete examples, with API details generated from PHPDoc.
 
-- 📚 [Installation Guide](docs/installation.md): packages, aliases, assets, and CDN delivery.
-- ⚙️ [Configuration Guide](docs/configuration.md): practical choices for plugins, items, forms, and icons.
-- 💡 [Usage Examples](docs/examples.md): widget gallery and complete view recipes.
-- 🔄 [Migration from Bootstrap 5](docs/migration.md)
-- 🧪 [Testing Guide](docs/testing.md)
-- 📖 [Generated API Reference](https://yii2-framework.github.io/docs/extensions/bootstrap6/reference/)
+- 📚 [Installation Guide](https://github.com/yii2-extensions/bootstrap6/blob/main/docs/installation.md)
+- ⚙️ [Configuration Guide](https://github.com/yii2-extensions/bootstrap6/blob/main/docs/configuration.md)
+- 💡 [Usage Examples](https://github.com/yii2-extensions/bootstrap6/blob/main/docs/examples.md)
+- 🔄 [Migration from Bootstrap 5](https://github.com/yii2-extensions/bootstrap6/blob/main/docs/migration.md)
+- 🧪 [Testing Guide](https://github.com/yii2-extensions/bootstrap6/blob/main/docs/testing.md)
 
 The guides and the [API reference](https://yii2-framework.github.io/docs/extensions/bootstrap6/reference/) generated
 from the PHPDoc in `src/` are published at <https://yii2-framework.github.io/docs/extensions/bootstrap6/>.
@@ -125,7 +125,9 @@ of a page by appending `index.md` to its URL. The
 [AI agents guide](https://yii2-framework.github.io/docs/project/ai-agents/) covers skill installation, client setup and
 verification.
 
-- 🤖 [`yii2-bootstrap6-widgets` skill](docs/agents.md): Bootstrap 6 widgets.
+- 🤖 [`yii2-bootstrap6-widgets` skill](https://github.com/yii2-extensions/bootstrap6/blob/main/docs/agents.md):
+  Bootstrap 6 widgets, forms and assets in Yii views, ES module plugin code, output encoding and migration from
+  Bootstrap 5.
 - 🧭 [`yii2-framework` skill](https://yii2-framework.github.io/docs/guide/skills/yii2-framework/): Yii 22.0 application
   conventions.
 
@@ -143,10 +145,20 @@ the [changelog](CHANGELOG.md).
 
 ## Project status
 
-[![Codecov](https://img.shields.io/codecov/c/github/yii2-extensions/bootstrap6.svg?style=for-the-badge&logo=codecov&logoColor=white&label=Coverage)](https://codecov.io/github/yii2-extensions/bootstrap6)
 [![PHPStan Level Max](https://img.shields.io/badge/PHPStan-Level%20Max-4F5D95.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/yii2-extensions/bootstrap6/actions/workflows/static.yml)
 [![Quality](https://img.shields.io/github/actions/workflow/status/yii2-extensions/bootstrap6/quality.yml?style=for-the-badge&label=Quality&logo=github)](https://github.com/yii2-extensions/bootstrap6/actions/workflows/quality.yml)
 [![ECS](https://img.shields.io/github/actions/workflow/status/yii2-extensions/bootstrap6/ecs.yml?style=for-the-badge&label=ECS&logo=github)](https://github.com/yii2-extensions/bootstrap6/actions/workflows/ecs.yml)
+
+## Security
+
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/yii2-extensions/bootstrap6/badge?style=for-the-badge)](https://scorecard.dev/viewer/?uri=github.com/yii2-extensions/bootstrap6)
+[![Zizmor](https://img.shields.io/github/actions/workflow/status/yii2-extensions/bootstrap6/security.yml?style=for-the-badge&label=Zizmor&logo=github)](https://github.com/yii2-extensions/bootstrap6/actions/workflows/security.yml)
+
+## Built with AI
+
+[![Built with Claude Code](https://img.shields.io/badge/Built%20with-Claude%20Code-D97757.svg?style=for-the-badge&logo=claude&logoColor=white)](https://claude.com/claude-code)
+[![Built with Codex](https://img.shields.io/badge/Built%20with-Codex-10A37F.svg?style=for-the-badge&logo=openaigym&logoColor=white)](https://openai.com/codex)
+[![Reviewed by CodeRabbit](https://img.shields.io/badge/Reviewed%20by-CodeRabbit-FF570A.svg?style=for-the-badge&logo=coderabbit&logoColor=white)](https://www.coderabbit.ai)
 
 ## Our social networks
 
@@ -154,10 +166,6 @@ the [changelog](CHANGELOG.md).
 [![Follow on Facebook](https://img.shields.io/badge/-Follow%20on%20Facebook-1877F2.svg?style=for-the-badge&logo=facebook&logoColor=white&labelColor=000000)](https://www.facebook.com/wilmer.arambula.9)
 [![Join our Subreddit](https://img.shields.io/badge/-Join%20our%20Subreddit-FF4500.svg?style=for-the-badge&logo=reddit&logoColor=white&labelColor=000000)](https://www.reddit.com/r/Yii2/)
 [![Join on Telegram](https://img.shields.io/badge/-Join%20on%20Telegram-26A5E4.svg?style=for-the-badge&logo=telegram&logoColor=white&labelColor=000000)](https://t.me/yii_framework_in_english)
-
-## Built with AI
-
-[![Built with Codex](https://img.shields.io/badge/Built%20with-Codex-10A37F.svg?style=for-the-badge&logo=openaigym&logoColor=white)](https://openai.com/codex)
 
 ## License
 

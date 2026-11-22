@@ -1,0 +1,4 @@
+interface:
+  display_name: "Yii2 Bootstrap 6 Widgets"
+  short_description: "Build and migrate Yii2 views with Bootstrap 6 widgets"
+  default_prompt: "Use $yii2-bootstrap6-widgets to implement or migrate a Yii2 view with Bootstrap 6 widgets."
