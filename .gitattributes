@@ -26,8 +26,11 @@
 *.ttf   binary
 
 # Exclude files from the archive
-/.agents                        export-ignore
-/.claude                        export-ignore
+.env export-ignore
+.env.* export-ignore
+.env.example -export-ignore
+.agents                        export-ignore
+.claude                        export-ignore
 /.editorconfig                  export-ignore
 /.gitattributes                 export-ignore
 /.github                        export-ignore
@@ -55,3 +58,10 @@
 # Avoid merge conflicts in CHANGELOG
 # https://about.gitlab.com/2015/02/10/gitlab-reduced-merge-conflicts-by-90-percent-with-changelog-placeholders/
 /CHANGELOG.md merge=union
+
+# Exclude local dependencies from working-copy archives.
+/node_modules export-ignore
+/vendor export-ignore
+
+# Exclude local development files from working-copy archives.
+/composer.lock export-ignore
