@@ -27,7 +27,7 @@
     "require": {
         "php": ">=8.3",
         "ui-awesome/html-helper": "^0.7",
-        "ui-awesome/html-svg": "^0.6.1",
+        "ui-awesome/html-svg": "^0.7",
         "yiisoft/yii2": "~2.0.55 || ^22.0@dev"
     },
     "require-dev": {
