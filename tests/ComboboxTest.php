@@ -23,12 +23,12 @@ final class ComboboxTest extends TestCase
 {
     private const string CARET = <<<HTML
     <svg class="combobox-caret" width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0.46967 5.46967C0.762563 5.17678 1.23744 5.17678 1.53033 5.46967L5 8.93934L8.46967 5.46967C8.76256 5.17678 9.23744 5.17678 9.53033 5.46967C9.82322 5.76256 9.82322 6.23744 9.53033 6.53033L5.53033 10.5303C5.23744 10.8232 4.76256 10.8232 4.46967 10.5303L0.46967 6.53033C0.176777 6.23744 0.176777 5.76256 0.46967 5.46967Z" fill="currentcolor">
+    <path d="M0.46967 5.46967C0.762563 5.17678 1.23744 5.17678 1.53033 5.46967L5 8.93934L8.46967 5.46967C8.76256 5.17678 9.23744 5.17678 9.53033 5.46967C9.82322 5.76256 9.82322 6.23744 9.53033 6.53033L5.53033 10.5303C5.23744 10.8232 4.76256 10.8232 4.46967 10.5303L0.46967 6.53033C0.176777 6.23744 0.176777 5.76256 0.46967 5.46967Z" fill="currentcolor"/>
     </svg>
     HTML;
     private const string CHECK = <<<HTML
     <svg class="menu-item-check" width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 16 16">
-    <path d="m2 7 4 5 8-8">
+    <path d="m2 7 4 5 8-8"/>
     </svg>
     HTML;
     private const string IMPORT = 'import("/assets/js/bootstrap.bundle.js").then((bootstrap) => { ';
@@ -166,12 +166,12 @@ final class ComboboxTest extends TestCase
             <<<HTML
             <button type="button" id="w0" class="form-control combobox-toggle" data-bs-toggle="combobox" data-bs-name="option"><span class="combobox-value"></span>
             <svg class="my-caret combobox-caret">
-            <path d="m0 0">
+            <path d="m0 0"/>
             </svg></button>
             <div class="menu">
             <button type="button" class="menu-item" data-bs-value="1">One
             <svg class="my-check menu-item-check">
-            <path d="m1 1">
+            <path d="m1 1"/>
             </svg></button>
             </div>
             HTML,
@@ -219,12 +219,12 @@ final class ComboboxTest extends TestCase
             <<<HTML
             <button type="button" id="w0" class="form-control combobox-toggle" data-bs-toggle="combobox" data-bs-name="option"><span class="combobox-value"></span>
             <svg class="my-caret combobox-caret">
-            <path d="m0 0">
+            <path d="m0 0"/>
             </svg></button>
             <div class="menu">
             <button type="button" class="menu-item" data-bs-value="1">One
             <svg class="my-check menu-item-check">
-            <path d="m1 1">
+            <path d="m1 1"/>
             </svg></button>
             </div>
             HTML,
