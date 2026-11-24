@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+- ci: use shared quality and security defaults and remove redundant local linter configuration and Composer scripts.
+
 ## 0.1.4 October 30, 2026
 
 - fix: reorder support section in `composer.json` for clarity.
