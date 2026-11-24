@@ -59,21 +59,21 @@ final class AccordionTest extends TestCase
             <details class="my-item accordion-item" name="group" open>
             <summary class="my-header accordion-header"><b>Raw</b>
             <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m2 5 6 6 6-6">
+            <path d="m2 5 6 6 6-6"/>
             </svg></summary>
             <div class="my-body accordion-body">Body</div>
             </details>
             <details class="accordion-item" name="w0">
             <summary class="accordion-header">&lt;b&gt;Encoded&lt;/b&gt;
             <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m2 5 6 6 6-6">
+            <path d="m2 5 6 6 6-6"/>
             </svg></summary>
             <div class="accordion-body">Other</div>
             </details>
             <details class="accordion-item" name="w0">
             <summary class="accordion-header">Shown
             <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m2 5 6 6 6-6">
+            <path d="m2 5 6 6 6-6"/>
             </svg></summary>
             <div class="accordion-body">Shown</div>
             </details>
@@ -141,14 +141,14 @@ final class AccordionTest extends TestCase
             <details class="accordion-item" name="w0" open>
             <summary class="accordion-header">Item #1
             <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m2 5 6 6 6-6">
+            <path d="m2 5 6 6 6-6"/>
             </svg></summary>
             <div class="accordion-body"><strong>First</strong></div>
             </details>
             <details class="accordion-item" name="w0">
             <summary class="accordion-header">Item &amp; #2
             <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m2 5 6 6 6-6">
+            <path d="m2 5 6 6 6-6"/>
             </svg></summary>
             <div class="accordion-body">Second</div>
             </details>
@@ -191,7 +191,7 @@ final class AccordionTest extends TestCase
             <details class="accordion-item" name="w0">
             <summary class="accordion-header">Item
             <svg class="my-icon accordion-icon">
-            <path d="m0 0">
+            <path d="m0 0"/>
             </svg></summary>
             <div class="accordion-body">Body</div>
             </details>
@@ -233,7 +233,7 @@ final class AccordionTest extends TestCase
             <details class="accordion-item" name="w0">
             <summary class="accordion-header">Item
             <svg class="my-icon accordion-icon">
-            <path d="m0 0">
+            <path d="m0 0"/>
             </svg></summary>
             <div class="accordion-body">Body</div>
             </details>

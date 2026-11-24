@@ -13,6 +13,9 @@ c3.php
 # composer
 composer.lock
 
+# foxy
+/foxy.lock
+
 # gitHub copilot config (if present)
 .github/agents/**
 .github/copilot-instructions.md

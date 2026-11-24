@@ -5,11 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.1.4 October 30, 2026
+## 0.1.4 Under development
 
 - fix: reorder support section in `composer.json` for clarity.
 - docs: clarify Bootstrap6 PHPDoc and fix API reference links.
 - docs: add a `Security` section with OpenSSF Scorecard and Zizmor badges, complete `Built with AI` and refine the Bootstrap 6 widgets skill scope.
+- ci: use shared quality and security defaults and remove redundant local linter configuration and Composer scripts.
 
 ## 0.1.3 October 22, 2026
 
